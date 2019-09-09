@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class AppTipojustificacionConfig(AppConfig):
+class AppTipoJustificacionConfig(AppConfig):
     name = 'app_tipojustificacion'
