@@ -1,10 +1,10 @@
 from django.shortcuts import render
-
+from django.http import HttpResponse
 # Create your views here.
 
 
 def index(request):
-    return HttpResponse("Inicio Gestionar Justificaciones")
+    return render(request, 'app_tipojustificacion/index.html')
 
 def listado_tjust(request):
     return HttpResponse("Listado de Tipos de Justificaciones")
