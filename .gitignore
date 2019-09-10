@@ -1,2 +1,4 @@
 
 app_tipojustificacion/__pycache__/
+
+*.pyc
