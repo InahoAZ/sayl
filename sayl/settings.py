@@ -134,3 +134,8 @@ INTERNAL_IPS = [
     # ...
 ]
 
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda r: False,  # disables it
+    # '...
+}
+
