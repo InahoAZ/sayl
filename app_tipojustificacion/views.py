@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
+from .forms import TipoJustificacionForm
 # Create your views here.
 
 
@@ -14,11 +15,31 @@ def listado_tjust(request):
 def detalle_tjust(request, tipo_justificacion_id):
     return HttpResponse("Detalle del Tipo de Justificacion N° %s" % tipo_justificacion_id)
 
-def agregar_tjust(request, tipo_justificacion_id):
-    return HttpResponse("Agregar Tipo de Justificacion N° %s" % tipo_justificacion_id)
+def agregar_tjust(request):
+    if request.method == 'POST':
+        form = TipoJustificacionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = TipoJustificacionForm()
+    
+    return render(request, 'app_tipojustificacion/agregar_modal.html', {'form':form})
 
 def eliminar_tjust(request, tipo_justificacion_id):
-    return HttpResponse("Eliminar Tipo de Justificacion N° %s" % tipo_justificacion_id)
+    tjust = TipoJustificacion.objects.get(id=tipo_justificacion_id)    
+    tjust.delete()
+    return redirect('index')
+    
 
 def modificar_tjust(request, tipo_justificacion_id):
-    return HttpResponse("Modificar Tipo de Justificacion N° %s" % tipo_justificacion_id)
+    tjust = TipoJustificacion.objects.get(id=tipo_justificacion_id)
+    if request.method == 'GET':
+        form = TipoJustificacionForm(instance = tjust)
+    else:
+        form = TipoJustificacionForm(request.POST, instance = tjust)
+        if form.is_valid():
+            form.save()
+        return redirect('index')    
+    
+    return render(request, 'app_tipojustificacion/agregar_modal.html', {'form':form})
