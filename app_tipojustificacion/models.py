@@ -4,13 +4,11 @@ from django.db import models
 
 class TipoJustificacion(models.Model):
     motivo = models.CharField(max_length=200)
-    artcct = models.CharField(max_length=200)
-    se_lista = models.BooleanField()
+    artcct = models.CharField(max_length=200)    
     dia_trabajado = models.BooleanField()
     cant_mes = models.IntegerField()
     cant_año = models.IntegerField()
-    claustro = models.CharField(max_length=1)
-    borrado = models.BooleanField()
+    claustro = models.CharField(max_length=1)   
 
     def __str__(self):
         return self.motivo
