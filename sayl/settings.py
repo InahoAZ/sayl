@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'sweetify'
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,4 @@ DEBUG_TOOLBAR_CONFIG = {
     # '...
 }
 
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'

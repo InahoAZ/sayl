@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
 from .forms import TipoJustificacionForm
+import sweetify
 # Create your views here.
 
 
@@ -27,6 +28,7 @@ def agregar_tjust(request):
     return render(request, 'app_tipojustificacion/agregar_modal.html', {'form':form})
 
 def eliminar_tjust(request, tipo_justificacion_id):
+
     tjust = TipoJustificacion.objects.get(id=tipo_justificacion_id)    
     tjust.delete()
     return redirect('index')
