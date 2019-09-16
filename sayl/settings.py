@@ -57,7 +57,7 @@ ROOT_URLCONF = 'sayl.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "sayl","templates")],
+        'DIRS': [os.path.join(BASE_DIR, "sayl","templates"),os.path.join(BASE_DIR, "app_horarios","templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
