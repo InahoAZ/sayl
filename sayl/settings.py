@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'app_tipojustificacion.apps.AppTipoJustificacionConfig',
+    'app_horarios.apps.AppHorariosConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
