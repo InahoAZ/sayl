@@ -4,4 +4,4 @@ from .models import TipoJustificacion
 class TipoJustificacionForm(forms.ModelForm):
     class Meta:
         model = TipoJustificacion
-        fields = ['motivo', 'artcct', 'dia_trabajado','cant_mes', 'cant_año', 'claustro']
+        fields = ['motivo', 'cargo', 'artcct', 'dia_trabajado','cant_mes', 'cant_año', 'claustro']
