@@ -1,4 +1,8 @@
-{% extends "sayl/base_site.html" %} {% load staticfiles %} {% block title %} Gestionar Tipos de Justificacion {% endblock title %} {% block stylesheets %} {{ block.super }}
+{% extends "sayl/base_site.html" %} 
+{% load staticfiles %} 
+{% block title %} Gestionar Tipos de Justificacion {% endblock title %} 
+{% block stylesheets %} 
+{{ block.super }}
 <link href=" {% static '/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %} " rel="stylesheet">
 <link href=" {% static '/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %} " rel="stylesheet">
 <link href=" {% static '/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %} " rel="stylesheet">
@@ -41,8 +45,8 @@
                             Estos registros seran usados a la hora de notificar una inasistencia al seleccionar el tipo de justificación.
                         </p>
                         <div class="row">
-                            <<!--<div class="col-md-2"><a class="btn btn-success" data-toggle="modal" data-target=".modal_agregar"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>-->
-                            <div class="col-md-2"><a class="btn btn-success" href="agregar_tjust"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>
+                            <div class="col-md-2"><a class="btn btn-success" data-toggle="modal" data-target=".modal_agregar"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>
+                            <!--<div class="col-md-2"><a class="btn btn-success" href="agregar_tjust"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>-->
                             <div class="modal fade modal_agregar" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
@@ -51,18 +55,19 @@
                                             </button>
                                             <h4 class="modal-title" id="myModalLabel{{tipojust.pk}}">Modal title</h4>
                                         </div>
-                                        <div class="modal-body">
-                                          
-                                          <form action="" method="post">
+                                        <div class="modal-body">                                          
+                                          <form action="" method="POST">
+                                          <input type="hidden" name="accion" value="add">
                                             {% csrf_token %}
-                                            {{form.as_p}}
-                                            <button type="submit">Crear</button>
-                                          </form>
+                                            {{form_tj.as_p}}
+                                            
+                                          
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
-                                            <button type="button" class="btn btn-default">
+                                            <button type="submit" class="btn btn-default">
                                                 <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
                                             </button>
+                                            </form>
                                         </div>
 
                                     </div>
@@ -73,6 +78,7 @@
                             <thead>
                                 <tr>
                                     <th>Motivo</th>
+                                    <th>Cargo</th>
                                     <th>Art.CCT</th>
                                     <th>Dia Trabajado</th>
                                     <th>Cant. Mes</th>
@@ -85,6 +91,7 @@
                                 {% for tipojust in tiposjust %}
                                 <tr>
                                     <td>{{tipojust.motivo}}</td>
+                                    <td>{{tipojust.cargo}}</td>
                                     <td>{{tipojust.artcct}}</td>
                                     <td>{{tipojust.dia_trabajado}}</td>
                                     <td>{{tipojust.cant_mes}}</td>
@@ -92,30 +99,9 @@
                                     <td>{{tipojust.claustro}}</td>
                                     <td class=" last">
                                         <div class="btn-group">
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg{{tipojust.pk}}"><i class="fa fa-eye"></i></button>
-                                            <div class="modal fade bs-example-modal-lg{{tipojust.pk}}" id="myModal{{tipojust.pk}}" tabindex="-1" role="dialog" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                                                            </button>
-                                                            <h4 class="modal-title" id="myModalLabel{{tipojust.pk}}">Modal title</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <h4>{{tipojust.motivo}}</h4>
-                                                            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-                                                            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <a class="btn btn-warning" type="button" href="modificar_tjust/{{tipojust.pk}}"><i class="fa fa-edit"></i></a>
-                                            <a class="btn btn-danger test" type="button" id="test"><i class="fa fa-trash"></i></a>
+                                            <a type="button" class="btn btn-warning" href="modificar_tjust/{{tipojust.pk}}"><i class="fa fa-edit"></i></button>
+                                                                                       
+                                            <a class="btn btn-danger" type="button" href="eliminar_tjust/{{tipojust.pk}}"><i class="fa fa-trash"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -124,7 +110,6 @@
                         </table>
                         <div class="row">
                             <div class="col-md-2 col-md-offset-10"><a href="/" class="btn btn-dark"><span class="fa fa-mail-reply"></span> VOLVER</a></div>
-                            <div class="col-md-2 col-md-offset-10"><a id="test" class="btn btn-dark"><span class="fa fa-mail-reply"></span> Test</a></div>
                         </div>
 
                     </div>

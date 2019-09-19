@@ -28,6 +28,8 @@ class TipoJustificacion(models.Model):
         return self.motivo
 
 
+
+
 '''
 class Cargo(models.Model):
     descripcion = models.CharField(max_length=200)

@@ -2,13 +2,18 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
 from .forms import TipoJustificacionForm
-import sweetify
+from sayl.services import *
+
 # Create your views here.
 
 
 def index(request):
     tiposjust = TipoJustificacion.objects.all()
-    return render(request, 'app_tipojustificacion/index.html', {'tiposjust':tiposjust})
+    form_tj = TipoJustificacionForm()    
+    cargos = get_categorias()
+    if request.method == 'POST' and request.POST['accion'] == 'add':        
+        agregar_tjust(request)
+    return render(request, 'app_tipojustificacion/index.html', {'tiposjust':tiposjust, 'form_tj':form_tj})
 
 def listado_tjust(request):
     return HttpResponse("Listado de Tipos de Justificaciones")
@@ -23,12 +28,11 @@ def agregar_tjust(request):
             form.save()
             return redirect('index')
     else:
-        form = TipoJustificacionForm()
+        form = TipoJustificacionForm()        
     
-    return render(request, 'app_tipojustificacion/agregar_modal.html', {'form':form})
+    #return render(request, 'app_tipojustificacion/agregar_modal.html', {'form':form})
 
 def eliminar_tjust(request, tipo_justificacion_id):
-
     tjust = TipoJustificacion.objects.get(id=tipo_justificacion_id)    
     tjust.delete()
     return redirect('index')
