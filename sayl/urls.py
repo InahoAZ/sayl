@@ -24,6 +24,18 @@ urlpatterns = [
     path('app_tipojustificacion/', include('app_tipojustificacion.urls')),
 ]
 
+
+
+
+
+
+
+
+
+
+
+
+
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
