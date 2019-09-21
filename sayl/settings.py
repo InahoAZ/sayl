@@ -59,7 +59,12 @@ ROOT_URLCONF = 'sayl.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "sayl","templates"),os.path.join(BASE_DIR, "app_horarios","templates")],
+        'DIRS': [
+            os.path.join(BASE_DIR, "sayl","templates"),
+            os.path.join(BASE_DIR, "app_horarios","templates"),
+            os.path.join(BASE_DIR, "app_tipojustificacion","templates"),
+            os.path.join(BASE_DIR, "login","templates"),
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -108,11 +113,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'login.CustomUser'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-AR'
 
 TIME_ZONE = 'UTC'
 
@@ -143,4 +150,8 @@ DEBUG_TOOLBAR_CONFIG = {
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login'
+
+# Para simular mandar correos. Los "correos" se guardan en la carpeta sent_emails
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
