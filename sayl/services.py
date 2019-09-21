@@ -8,6 +8,14 @@ def get_agentes():
     respuesta = resp.json()
     return respuesta
 
+def get_agente(legajo):
+    url = "http://mapuche.siu.edu.ar/mapuche/rest/agentes/" + legajo
+    user = 'demo'
+    password =  'demo'
+    resp = req.get(url, auth=(user,password))
+    respuesta = resp.json()
+    return respuesta
+
 def get_categorias(cod_categ = ''):
     url = "http://mapuche.siu.edu.ar/mapuche/rest/categorias" 
     user = 'demo'
