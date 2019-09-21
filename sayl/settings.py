@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'app_tipojustificacion.apps.AppTipoJustificacionConfig',
-    'login.apps.LoginConfig',
+    'app_horarios.apps.AppHorariosConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    'sweetify'
+    'login.apps.LoginConfig',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +59,7 @@ ROOT_URLCONF = 'sayl.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "sayl","templates")],
+        'DIRS': [os.path.join(BASE_DIR, "sayl","templates"),os.path.join(BASE_DIR, "app_horarios","templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

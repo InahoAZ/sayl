@@ -1,0 +1,146 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+manage.py	../manage.py	1;"	kind:file	line:1
+__init__.py	../app_tipojustificacion/migrations/__init__.py	1;"	kind:file	line:1
+0002_remove_tipojustificacion_borrado.py	../app_tipojustificacion/migrations/0002_remove_tipojustificacion_borrado.py	1;"	kind:file	line:1
+Migration	../app_tipojustificacion/migrations/0002_remove_tipojustificacion_borrado.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:6
+dependencies	../app_tipojustificacion/migrations/0002_remove_tipojustificacion_borrado.py	/^    dependencies = [$/;"	kind:variable	line:8
+operations	../app_tipojustificacion/migrations/0002_remove_tipojustificacion_borrado.py	/^    operations = [$/;"	kind:variable	line:12
+model_name	../app_tipojustificacion/migrations/0002_remove_tipojustificacion_borrado.py	/^            model_name='tipojustificacion',$/;"	kind:variable	line:14
+name	../app_tipojustificacion/migrations/0002_remove_tipojustificacion_borrado.py	/^            name='borrado',$/;"	kind:variable	line:15
+0001_initial.py	../app_tipojustificacion/migrations/0001_initial.py	1;"	kind:file	line:1
+Migration	../app_tipojustificacion/migrations/0001_initial.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:6
+initial	../app_tipojustificacion/migrations/0001_initial.py	/^    initial = True$/;"	kind:variable	line:8
+dependencies	../app_tipojustificacion/migrations/0001_initial.py	/^    dependencies = [$/;"	kind:variable	line:10
+operations	../app_tipojustificacion/migrations/0001_initial.py	/^    operations = [$/;"	kind:variable	line:13
+name	../app_tipojustificacion/migrations/0001_initial.py	/^            name='Cargo',$/;"	kind:variable	line:15
+fields	../app_tipojustificacion/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:16
+name	../app_tipojustificacion/migrations/0001_initial.py	/^            name='TipoJustificacion',$/;"	kind:variable	line:24
+fields	../app_tipojustificacion/migrations/0001_initial.py	/^            fields=[$/;"	kind:variable	line:25
+model_name	../app_tipojustificacion/migrations/0001_initial.py	/^            model_name='cargo',$/;"	kind:variable	line:38
+name	../app_tipojustificacion/migrations/0001_initial.py	/^            name='tipo_justificacion',$/;"	kind:variable	line:39
+field	../app_tipojustificacion/migrations/0001_initial.py	/^            field=models.ManyToManyField(to='app_tipojustificacion.TipoJustificacion'),$/;"	kind:variable	line:40
+0003_remove_tipojustificacion_se_lista.py	../app_tipojustificacion/migrations/0003_remove_tipojustificacion_se_lista.py	1;"	kind:file	line:1
+Migration	../app_tipojustificacion/migrations/0003_remove_tipojustificacion_se_lista.py	/^class Migration(migrations.Migration):$/;"	kind:class	line:6
+dependencies	../app_tipojustificacion/migrations/0003_remove_tipojustificacion_se_lista.py	/^    dependencies = [$/;"	kind:variable	line:8
+operations	../app_tipojustificacion/migrations/0003_remove_tipojustificacion_se_lista.py	/^    operations = [$/;"	kind:variable	line:12
+model_name	../app_tipojustificacion/migrations/0003_remove_tipojustificacion_se_lista.py	/^            model_name='tipojustificacion',$/;"	kind:variable	line:14
+name	../app_tipojustificacion/migrations/0003_remove_tipojustificacion_se_lista.py	/^            name='se_lista',$/;"	kind:variable	line:15
+apps.py	../app_tipojustificacion/apps.py	1;"	kind:file	line:1
+AppTipoJustificacionConfig	../app_tipojustificacion/apps.py	/^class AppTipoJustificacionConfig(AppConfig):$/;"	kind:class	line:4
+name	../app_tipojustificacion/apps.py	/^    name = 'app_tipojustificacion'$/;"	kind:variable	line:5
+views.py	../app_tipojustificacion/views.py	1;"	kind:file	line:1
+index	../app_tipojustificacion/views.py	/^def index(request):$/;"	kind:function	line:9
+listado_tjust	../app_tipojustificacion/views.py	/^def listado_tjust(request):$/;"	kind:function	line:16
+detalle_tjust	../app_tipojustificacion/views.py	/^def detalle_tjust(request, tipo_justificacion_id):$/;"	kind:function	line:19
+agregar_tjust	../app_tipojustificacion/views.py	/^def agregar_tjust(request):$/;"	kind:function	line:22
+eliminar_tjust	../app_tipojustificacion/views.py	/^def eliminar_tjust(request, tipo_justificacion_id):$/;"	kind:function	line:33
+modificar_tjust	../app_tipojustificacion/views.py	/^def modificar_tjust(request, tipo_justificacion_id):$/;"	kind:function	line:39
+admin.py	../app_tipojustificacion/admin.py	1;"	kind:file	line:1
+__init__.py	../app_tipojustificacion/__init__.py	1;"	kind:file	line:1
+tests.py	../app_tipojustificacion/tests.py	1;"	kind:file	line:1
+urls.py	../app_tipojustificacion/urls.py	1;"	kind:file	line:1
+urlpatterns	../app_tipojustificacion/urls.py	/^urlpatterns = [$/;"	kind:variable	line:5
+models.py	../app_tipojustificacion/models.py	1;"	kind:file	line:1
+TipoJustificacion	../app_tipojustificacion/models.py	/^class TipoJustificacion(models.Model):$/;"	kind:class	line:5
+motivo	../app_tipojustificacion/models.py	/^    motivo = models.CharField(max_length=200)$/;"	kind:variable	line:6
+artcct	../app_tipojustificacion/models.py	/^    artcct = models.CharField(max_length=200)    $/;"	kind:variable	line:7
+dia_trabajado	../app_tipojustificacion/models.py	/^    dia_trabajado = models.BooleanField()$/;"	kind:variable	line:8
+cant_mes	../app_tipojustificacion/models.py	/^    cant_mes = models.IntegerField()$/;"	kind:variable	line:9
+claustro	../app_tipojustificacion/models.py	/^    claustro = models.CharField(max_length=1)   $/;"	kind:variable	line:11
+__str__	../app_tipojustificacion/models.py	/^    def __str__(self):$/;"	kind:member	line:13
+Cargo	../app_tipojustificacion/models.py	/^class Cargo(models.Model):$/;"	kind:class	line:17
+descripcion	../app_tipojustificacion/models.py	/^    descripcion = models.CharField(max_length=200)$/;"	kind:variable	line:18
+requisitos	../app_tipojustificacion/models.py	/^    requisitos = models.CharField(max_length=200)$/;"	kind:variable	line:19
+horas	../app_tipojustificacion/models.py	/^    horas = models.IntegerField()$/;"	kind:variable	line:20
+tipo_justificacion	../app_tipojustificacion/models.py	/^    tipo_justificacion = models.ManyToManyField('TipoJustificacion')$/;"	kind:variable	line:21
+__str__	../app_tipojustificacion/models.py	/^    def __str__(self):$/;"	kind:member	line:23
+forms.py	../app_tipojustificacion/forms.py	1;"	kind:file	line:1
+TipoJustificacionForm	../app_tipojustificacion/forms.py	/^class TipoJustificacionForm(forms.ModelForm):$/;"	kind:class	line:4
+Meta	../app_tipojustificacion/forms.py	/^    class Meta:$/;"	kind:class	line:5
+model	../app_tipojustificacion/forms.py	/^        model = TipoJustificacion$/;"	kind:variable	line:6
+fields	../app_tipojustificacion/forms.py	/^        fields = ['motivo', 'artcct', 'dia_trabajado','cant_mes', 'cant_año', 'claustro']/;"	kind:variable	line:7
+jqvmap.py	../sayl/static/vendors/jqvmap/create/jqvmap.py	1;"	kind:file	line:1
+JQVMap	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^class JQVMap:$/;"	kind:class	line:15
+__init__	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def __init__(self, name, language):$/;"	kind:member	line:16
+addPath	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def addPath(self, path, code, name):$/;"	kind:member	line:24
+getJSCode	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def getJSCode(self):$/;"	kind:member	line:27
+Converter	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^class Converter:$/;"	kind:class	line:34
+__init__	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def __init__(self, config):$/;"	kind:member	line:35
+convert	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def convert(self, data_source, output_file):$/;"	kind:member	line:112
+renderMapInset	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def renderMapInset(self, data_source, codes, left, top, width):$/;"	kind:member	line:161
+Geometry	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^class Geometry:$/;"	kind:class	line:203
+__init__	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def __init__(self, geometry, properties):$/;"	kind:member	line:204
+GeometryProperty	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^class GeometryProperty(Variable):$/;"	kind:class	line:209
+operations	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  operations = set(["equality", "membership"])$/;"	kind:variable	line:210
+__init__	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def __init__(self, name):$/;"	kind:member	line:212
+equals	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def equals(self, value, context):$/;"	kind:member	line:215
+belongs_to	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def belongs_to(self, value, context):$/;"	kind:member	line:218
+is_subset	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def is_subset(self, value, context):$/;"	kind:member	line:221
+to_python	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def to_python(self, value):$/;"	kind:member	line:224
+DataSource	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^class DataSource:$/;"	kind:class	line:228
+__init__	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def __init__(self, config):$/;"	kind:member	line:229
+load_data	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def load_data(self):$/;"	kind:member	line:243
+create_grammar	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def create_grammar(self):$/;"	kind:member	line:278
+output	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def output(self, output):$/;"	kind:member	line:295
+output_ogr	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def output_ogr(self, output):$/;"	kind:member	line:301
+output_jvm	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def output_jvm(self, output):$/;"	kind:member	line:337
+PolygonSimplifier	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^class PolygonSimplifier:$/;"	kind:class	line:346
+__init__	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def __init__(self, geometries):$/;"	kind:member	line:347
+simplifyRing	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def simplifyRing(self, ring):$/;"	kind:member	line:389
+simplifyPolygon	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def simplifyPolygon(self, polygon):$/;"	kind:member	line:434
+simplify	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def simplify(self):$/;"	kind:member	line:445
+Processor	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^class Processor:$/;"	kind:class	line:469
+__init__	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def __init__(self, config):$/;"	kind:member	line:470
+process	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def process(self):$/;"	kind:member	line:473
+read_data	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def read_data(self, config, data_source):$/;"	kind:member	line:478
+write_data	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def write_data(self, config, data_source):$/;"	kind:member	line:482
+union	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def union(self, config, data_source):$/;"	kind:member	line:485
+merge	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def merge(self, config, data_source):$/;"	kind:member	line:500
+join_data	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def join_data(self, config, data_source):$/;"	kind:member	line:510
+remove	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def remove(self, config, data_source):$/;"	kind:member	line:527
+remove_fields	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def remove_fields(self, config, data_source):$/;"	kind:member	line:531
+remove_other_fields	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def remove_other_fields(self, config, data_source):$/;"	kind:member	line:534
+buffer	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def buffer(self, config, data_source):$/;"	kind:member	line:537
+simplify_adjancent_polygons	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def simplify_adjancent_polygons(self, config, data_source):$/;"	kind:member	line:541
+intersect_rect	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def intersect_rect(self, config, data_source):$/;"	kind:member	line:546
+remove_small_polygons	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  def remove_small_polygons(self, config, data_source):$/;"	kind:member	line:554
+args	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^args = {}$/;"	kind:variable	line:565
+paramsJson	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  paramsJson = open(sys.argv[1], 'r').read()$/;"	kind:variable	line:567
+paramsJson	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^  paramsJson = sys.stdin.read()$/;"	kind:variable	line:569
+paramsJson	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^paramsJson = json.loads(paramsJson)$/;"	kind:variable	line:570
+processor	../sayl/static/vendors/jqvmap/create/jqvmap.py	/^processor = Processor(paramsJson)$/;"	kind:variable	line:572
+settings.py	../sayl/settings.py	1;"	kind:file	line:1
+BASE_DIR	../sayl/settings.py	/^BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))$/;"	kind:variable	line:16
+DEBUG	../sayl/settings.py	/^DEBUG = True$/;"	kind:variable	line:26
+ALLOWED_HOSTS	../sayl/settings.py	/^ALLOWED_HOSTS = []$/;"	kind:variable	line:28
+INSTALLED_APPS	../sayl/settings.py	/^INSTALLED_APPS = [$/;"	kind:variable	line:33
+MIDDLEWARE	../sayl/settings.py	/^MIDDLEWARE = [$/;"	kind:variable	line:44
+ROOT_URLCONF	../sayl/settings.py	/^ROOT_URLCONF = 'sayl.urls'$/;"	kind:variable	line:55
+TEMPLATES	../sayl/settings.py	/^TEMPLATES = [$/;"	kind:variable	line:57
+WSGI_APPLICATION	../sayl/settings.py	/^WSGI_APPLICATION = 'sayl.wsgi.application'$/;"	kind:variable	line:73
+DATABASES	../sayl/settings.py	/^DATABASES = {$/;"	kind:variable	line:79
+AUTH_PASSWORD_VALIDATORS	../sayl/settings.py	/^AUTH_PASSWORD_VALIDATORS = [$/;"	kind:variable	line:94
+LANGUAGE_CODE	../sayl/settings.py	/^LANGUAGE_CODE = 'en-us'$/;"	kind:variable	line:113
+TIME_ZONE	../sayl/settings.py	/^TIME_ZONE = 'UTC'$/;"	kind:variable	line:115
+USE_I18N	../sayl/settings.py	/^USE_I18N = True$/;"	kind:variable	line:117
+USE_L10N	../sayl/settings.py	/^USE_L10N = True$/;"	kind:variable	line:119
+USE_TZ	../sayl/settings.py	/^USE_TZ = True$/;"	kind:variable	line:121
+STATIC_URL	../sayl/settings.py	/^STATIC_URL = '\/static\/'$/;"	kind:variable	line:127
+STATICFILES_DIRS	../sayl/settings.py	/^STATICFILES_DIRS = (os.path.join(BASE_DIR, 'sayl', 'static'),)$/;"	kind:variable	line:129
+INTERNAL_IPS	../sayl/settings.py	/^INTERNAL_IPS = [$/;"	kind:variable	line:131
+DEBUG_TOOLBAR_CONFIG	../sayl/settings.py	/^DEBUG_TOOLBAR_CONFIG = {$/;"	kind:variable	line:137
+wsgi.py	../sayl/wsgi.py	1;"	kind:file	line:1
+application	../sayl/wsgi.py	/^application = get_wsgi_application()$/;"	kind:variable	line:16
+views.py	../sayl/views.py	1;"	kind:file	line:1
+home	../sayl/views.py	/^def home(request):$/;"	kind:function	line:7
+__init__.py	../sayl/__init__.py	1;"	kind:file	line:1
+urls.py	../sayl/urls.py	1;"	kind:file	line:1
+urlpatterns	../sayl/urls.py	/^urlpatterns = [$/;"	kind:variable	line:21
+urlpatterns	../sayl/urls.py	/^    urlpatterns = [$/;"	kind:variable	line:41
+services.py	../sayl/services.py	1;"	kind:file	line:1
+get_agentes	../sayl/services.py	/^def get_agentes():$/;"	kind:function	line:3
