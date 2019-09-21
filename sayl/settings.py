@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'app_tipojustificacion.apps.AppTipoJustificacionConfig',
+    'login.apps.LoginConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,4 +141,6 @@ DEBUG_TOOLBAR_CONFIG = {
     # '...
 }
 
-SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login'
+

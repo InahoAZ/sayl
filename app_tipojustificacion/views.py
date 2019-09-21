@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
+from django.contrib.auth.decorators import login_required
+
 from .forms import TipoJustificacionForm
 from sayl.services import *
 
 # Create your views here.
 
-
+@login_required
 def index(request):
     tiposjust = TipoJustificacion.objects.all()
     form_tj = TipoJustificacionForm()    
