@@ -36,6 +36,7 @@
 
   <body class="{% block body_class %}nav-md {% endblock body_class %}">
     {% block body %}
+    {% if user.is_authenticated %}
       <div class="container body">
         <div class="main_container">
 
@@ -62,6 +63,10 @@
           {% endblock footer %}
         </div>
       </div>
+      {% else %}
+        <p>You are not logged in</p>
+        <a href="{% url 'login' %}">login</a>
+      {% endif %}
 
       {% block javascripts %}
         <!-- jQuery -->
@@ -100,6 +105,9 @@
       {% endblock %}
       <!-- Custom Theme Scripts -->
       <script src="{% static '/build/js/custom.js' %}"></script>
+      <script src="{% static 'build/js/sweetalert2.all.min.js' %}"></script>
+      <script src="{% static 'build/js/alertas.js' %}"></script>
+      
     {% endblock body %}
   </body>
 </html>
