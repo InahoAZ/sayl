@@ -5,8 +5,11 @@ import json
 # Create your views here.
 
 def home(request):
-    context = get_agentes()
-    return render(request, 'sayl/pruebaapi.html', {'agentes':context})
+    if request.user.is_authenticated:
+        agente = get_agente(request.user.legajo)
+        context = {'agente':agente}    
+        return render(request, 'sayl/pruebaapi.html', {'agente':agente})
+    return render(request, 'sayl/pruebaapi.html')
 
 def profile(request):
     agente = get_agente(request.user.legajo)
