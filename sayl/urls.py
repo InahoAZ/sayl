@@ -24,6 +24,7 @@ urlpatterns = [
     path('perfil/', views.profile, name='perfil' ),
     path('app_tipojustificacion/', include('app_tipojustificacion.urls')),
     path('app_horarios/', include('app_horarios.urls')),
+    path('app_justificacion/', include('app_justificacion.urls')),
     path('login/', include('login.urls')),
     path('accounts/', include('django.contrib.auth.urls'))
 ]

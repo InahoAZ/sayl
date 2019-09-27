@@ -1,0 +1,108 @@
+{% extends 'sayl/index.html' %}
+{% load staticfiles %}
+{% block content %}
+<div class="right_col" role="main">
+    <div class="">
+        <div class="col-md-8">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Solicitudes de Justificaciones <small></small></h2>              
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              
+              <table id="datatable-selectable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Legajo</th>
+                                    <th>Agente</th>
+                                    <th>Tipo Justificacion</th>
+                                    <th>Fecha de Solicitud</th>                        
+                                </tr>
+                            </thead>
+                            <tbody>                                
+                                <tr>
+                                    <td><div class="col-md-6">
+                                    <div class="user-profile"><img src="/static/images/img.jpg" alt="..." class="img-circle profile_table"></div>                                   
+                                    </div>
+                                    <div class="col-md-2">LS9933</div>
+                                    </td>
+                                    <td>Fulano de Tarso </td>
+                                    <td>Licencia Medica</td>
+                                    <td>19/10/2019</td>                                  
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Solicitud Seleccionada <small></small></h2>              
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+            <div class="row">
+                <div class="text-center">
+                    <div class="col-md-12">
+                        <img src="/static/images/img.jpg" alt="..." class="img-thumbnail">
+                    </div>
+                </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <h4 for="Coso">Legajo:</h4>
+                    </div>
+                    <div class="col-md-8">
+                        <h4 class="text-left">1234</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <h4 for="Coso">Apellido:</h4>
+                    </div>
+                    <div class="col-md-8">
+                        <h4 class="text-left text-uppercase">de Tarso</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <h4 for="Coso">Nombre:</h4>
+                    </div>
+                    <div class="col-md-8">
+                        <h4 class="text-left">Fulano</h4>                        
+                    </div>
+                <hr />
+                </div>                
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                <p class="text-divider"><span>Datos de Solicitud</span></p>
+                </div>                
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <h4 for="Coso">Tipo:</h4>
+                    </div>
+                    <div class="col-md-8">
+                        <h4 class="text-left">Lic. Medica</h4>                        
+                    </div>
+                <hr />
+                </div>                
+            </div>
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

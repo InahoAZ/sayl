@@ -2606,6 +2606,8 @@ function init_DataTables() {
 
     $('#datatable-responsive').DataTable();
 
+    $('.dataTables_filterinput[type="search"]').css({ 'width': '260px', 'display': 'inline-block' });
+
     $('#datatable-scroller').DataTable({
         ajax: "js/datatables/json/scroller-demo.json",
         deferRender: true,
@@ -2616,6 +2618,10 @@ function init_DataTables() {
 
     $('#datatable-fixed-header').DataTable({
         fixedHeader: true
+    });
+
+    $('#datatable-selectable').DataTable({
+        select: true
     });
 
     var $datatable = $('#datatable-checkbox');
@@ -5120,4 +5126,11 @@ $(document).ready(function() {
     init_autosize();
     init_autocomplete();
 
+    var table = $('#tabla-just').DataTable({
+        "dom": '<"top"i>rt<"bottom"><"clear">'
+    });
+
+    $('#buscar-just').on('keyup click', function() {
+        table.search($('#mySearchText').val()).draw();
+    });
 });

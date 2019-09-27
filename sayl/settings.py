@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'app_tipojustificacion.apps.AppTipoJustificacionConfig',
     'app_horarios.apps.AppHorariosConfig',
+    'app_justificacion.apps.AppJustificacionConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,6 +64,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, "sayl","templates"),
             os.path.join(BASE_DIR, "app_horarios","templates"),
             os.path.join(BASE_DIR, "app_tipojustificacion","templates"),
+            os.path.join(BASE_DIR, "app_justificacion","templates"),
             os.path.join(BASE_DIR, "login","templates"),
             ],
         'APP_DIRS': True,
