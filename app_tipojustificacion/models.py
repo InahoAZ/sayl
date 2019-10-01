@@ -10,10 +10,10 @@ class TipoJustificacion(models.Model):
         ]
     
     LISTA_CARGOS = []
-    categorias = get_categorias()
+    '''categorias = get_categorias()
     for categoria in categorias:        
         t = (categoria.get('categoria'), categoria.get('desc_categ'))
-        LISTA_CARGOS.append(t)
+        LISTA_CARGOS.append(t)'''
     motivo = models.CharField(max_length=200)
     artcct = models.CharField(max_length=200)    
     dia_trabajado = models.BooleanField()

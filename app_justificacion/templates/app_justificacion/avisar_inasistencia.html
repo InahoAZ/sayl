@@ -1,0 +1,188 @@
+{% extends 'sayl/base_site.html' %}
+{% load staticfiles %}
+{% block content %}
+<div class="right_col" role="main">
+<!--MINI PERFIL DEL USUARIO-->
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                <div class="x_title">
+                    <h2>Perfil </h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                        </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                    <div class="col-md-2 col-sm-3 col-xs-12 profile_left">
+                        <div class="profile_img">
+                            <div id="crop-avatar">
+                                <!-- Current avatar -->
+                                <img class="img-responsive avatar-view" src="/static/images/picture.jpg" alt="Avatar" title="Change the avatar">
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="col-md-6">
+                        <h3>Samuel Doe</h3>
+                        <ul class="list-unstyled user_data">
+                        <li><i class="fa fa-map-marker user-profile-icon"></i> LS1234</li>                        
+                        <li><i class="fa fa-map-marker user-profile-icon"></i> No Docente Cat 7.</li>                        
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--AVISAR INASISTENCIA c/tabla-->
+
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Avisar Inasistencia </h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Settings 1</a>
+                            </li>
+                            <li><a href="#">Settings 2</a>
+                            </li>
+                            </ul>
+                        </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="row">
+                            <!--FORMULARIO AVISO INASISTENCIA-->
+                            <div class="col-md-12">
+                                <form action="" method="post" class="form-horizontal form-label-left">
+                                {% csrf_token %}
+                                {% for field in form_justificacion %}
+                                    <div class="form-group">
+                                        <label for="{{field.id_for_label}}" class="control-label col-md-3 col-sm-3 col-xs-12">{{field.html_name}}</label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            {{field}}
+                                        </div>
+                                        </div>
+                                {% endfor %}
+                                <div class="text-center">
+                                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                                <button type="submit" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
+                                </button>
+                                </div>
+                                </form>
+                            </div>
+                            <!--FIN FORMULARIO AVISO INASISTENCIA-->
+                        </div>
+                        <!--JUSTIFICACIONES SOLICITADAS-->
+                        <div class="row">
+                            <div class="col-md-12">
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+<!--FIN AVISAR INASISTENCIA-->
+
+<!--CALENDARIO-->
+        
+            <div class="col-md-4">
+                <div class="">
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                <h2>Typography </h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                    <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#">Settings 1</a>
+                                        </li>
+                                        <li><a href="#">Settings 2</a>
+                                        </li>
+                                        </ul>
+                                    </li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                    </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!--FIN CALENDARIO-->
+<!--ULTIMAS INASISTENCIAS-->         
+                <div class="">
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                <h2>Typography </h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                    <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#">Settings 1</a>
+                                        </li>
+                                        <li><a href="#">Settings 2</a>
+                                        </li>
+                                        </ul>
+                                    </li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                    </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!--FIN ULTIMAS INASISTENCIAS-->
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</div>
+</div>
+{% endblock content %}
