@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from .forms import TipoJustificacionForm
 from sayl.services import *
@@ -35,9 +36,13 @@ def agregar_tjust(request):
     #return render(request, 'app_tipojustificacion/agregar_modal.html', {'form':form})
 
 def eliminar_tjust(request, tipo_justificacion_id):
+    
     tjust = TipoJustificacion.objects.get(id=tipo_justificacion_id)    
-    tjust.delete()
-    return redirect('index')
+    try:
+        tjust.delete()
+    except:
+        messages.error(request, 'No se puede eliminar el tipo de justificacion')
+    return redirect('/app_tipojustificacion')
     
 
 def modificar_tjust(request, tipo_justificacion_id):

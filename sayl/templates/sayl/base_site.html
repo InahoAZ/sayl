@@ -1,12 +1,13 @@
 {% load staticfiles %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     {% block head %}
       {% block meta %}
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- Meta, title, CSS, favicons, etc. -->
         <meta charset="utf-8">
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
       {% endblock meta %}
@@ -103,11 +104,7 @@
         <!-- starrr -->
         <script src="{% static '/vendors/starrr/dist/starrr.js' %}"></script>
       {% endblock %}
-      <!-- Custom Theme Scripts -->
-      <script src="{% static '/build/js/custom.js' %}"></script>
-      <script src="{% static 'build/js/sweetalert2.all.min.js' %}"></script>
-      <script src="{% static 'build/js/alertas.js' %}"></script>
-      
+      <!--DataTable-->
       <script src="{% static '/vendors/datatables.net/js/jquery.dataTables.min.js'%}"></script>
       <script src="{% static '/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'%}"></script>
       <script src="{% static '/vendors/datatables.net-buttons/js/dataTables.buttons.min.js'%}"></script>
@@ -123,6 +120,16 @@
       <script src="{% static '/vendors/jszip/dist/jszip.min.js'%}"></script>
       <script src="{% static '/vendors/pdfmake/build/pdfmake.min.js'%}"></script>
       <script src="{% static '/vendors/pdfmake/build/vfs_fonts.js'%}"></script>
+      <!-- Custom Theme Scripts -->
+      <script src="{% static '/build/js/custom.js' %}"></script>
+      <script src="{% static 'build/js/sweetalert2.all.min.js' %}"></script>
+      <script src="{% static 'build/js/alertas.js' %}"></script>
+      <script src="{% static 'build/js/recustom.js' %}"></script>
+      <script src="{% static 'build/js/date-euro.js' %}"></script>
+      
+      
+      
+      
     {% endblock body %}
   </body>
 </html>

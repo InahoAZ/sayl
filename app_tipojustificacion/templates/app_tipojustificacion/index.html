@@ -44,6 +44,20 @@
                         <p class="text-muted font-13 m-b-30">
                             Estos registros seran usados a la hora de notificar una inasistencia al seleccionar el tipo de justificación.
                         </p>
+                        {% if messages %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% for message in messages %}
+                                <!--<div class="text-center"><p{% if message.tags %} {% endif %}>{{ message }} {{tipojust.motivo}} </p></div>-->
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Error</strong> {{ message }} {{tipojust.motivo}}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
                         <div class="row">
                             <div class="col-md-2"><a class="btn btn-success" data-toggle="modal" data-target=".modal_agregar"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>
                             <!--<div class="col-md-2"><a class="btn btn-success" href="agregar_tjust"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>-->
@@ -115,13 +129,15 @@
                                     <td>{{tipojust.cant_año}}</td>
                                     <td>{{tipojust.claustro}}</td>
                                     <td class=" last">
-                                        <div class="btn-group">
-                                            <a type="button" class="btn btn-warning" href="modificar_tjust/{{tipojust.pk}}"><i class="fa fa-edit"></i></button>
-                                                                                       
-                                            <a class="btn btn-danger" type="button" href="eliminar_tjust/{{tipojust.pk}}"><i class="fa fa-trash"></i></a>
-                                        </div>
+                                        
+                                        <a type="button" class="btn btn-warning" href="modificar_tjust/{{tipojust.pk}}"><i class="fa fa-edit"></i></a>
+                                                                                    
+                                        <button class="btn btn-danger" type="button" data-toggle="modal" data-target=".modal_confirmar_eliminar{{tipojust.pk}}"><i class="fa fa-trash"></i></button>
+                                        {% include 'app_tipojustificacion/confirmar_eliminar.html' %}
+                                        
                                     </td>
                                 </tr>
+                                
                                 {% endfor %}
                             </tbody>
                         </table>

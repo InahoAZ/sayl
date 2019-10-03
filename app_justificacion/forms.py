@@ -8,9 +8,8 @@ class JustificacionForm(forms.ModelForm):
         widgets = {
             'descripcion' : forms.TextInput(attrs={'class' : 'form-control col-md-7 col-xs-12'}),
             'tipo_justificacion' : forms.Select(attrs={'class' : 'form-control col-md-7 col-xs-12'}),
-            'fecha_inicio' : forms.TextInput(attrs={'class' : 'form-control col-md-7 col-xs-12'}),
-            'fecha_fin' : forms.TextInput(attrs={'class' : 'form-control col-md-7 col-xs-12'}),
-            'cant_mes' : forms.NumberInput(attrs={'class' : 'form-control col-md-7 col-xs-12'}),          
-            'cant_año' : forms.NumberInput(attrs={'class' : 'form-control col-md-7 col-xs-12'}),
-            'claustro' : forms.Select(attrs={'class' : 'form-control col-md-7 col-xs-12'}),          
+            'fecha_inicio' : forms.DateInput(attrs={'type':'text','class' : 'form-control has-feedback-left col-md-7 col-xs-12','id':'single_cal4','aria-describedby':'inputSuccess2Status2'}),
+            'fecha_fin' : forms.DateInput(attrs={'type':'text','class' : 'form-control has-feedback-left col-md-7 col-xs-12','id':'single_cal3','aria-describedby':'inputSuccess2Status3'}),
+            
+                      
         }
