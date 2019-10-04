@@ -125,31 +125,47 @@
                         <!--JUSTIFICACIONES SOLICITADAS-->
                         <div class="row">
                             <div class="col-md-12">
-                            <h3>Mis Solicitudes</h3>
-                                <table id="midatatable" class="table table-striped table-bordered hover">
-                                        <thead>
-                                        <tr>
-                                            <th>Descripcion</th>
-                                            <th>Tipo</th>
-                                            <th>Desde</th>
-                                            <th>Hasta</th>
-                                            <th>Estado</th>
-                                            
-                                        </tr>
-                                        </thead>
+                                <h3>Mis Solicitudes</h3>
+                                <div class="row">
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6"><label for="Buscar">Buscar: <input type="text" name="" id="midtbusqueda"></label></div>
+                                </div>
+                                <div class="row">
+                                <p id="date_filter">
+                                    <div class="col-md-6"><span id="date-label-from" class="date-label">From: </span><input class="date_range_filter date" type="text" id="min" /></div>
+                                    <div class="col-md-6"><span id="date-label-to" class="date-label">To:<input class="date_range_filter date" type="text" id="max" /></div>
+                                </p>
+                                </div>                                                            
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table id="midatatable" class="table table-striped table-bordered hover">
+                                            <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                                <th>Tipo</th>
+                                                <th>Desde</th>
+                                                <th>Hasta</th>
+                                                <th>Estado</th>
+                                                
+                                            </tr>
+                                            </thead>
 
-                                        <tbody>
-                                        {% for justificacion in justificaciones %}
-                                        <tr>
-                                            <td>{{justificacion.descripcion}}</td>
-                                            <td>{{justificacion.tipo_justificacion}}</td>
-                                            <td>{{justificacion.fecha_inicio}}</td>
-                                            <td>{{justificacion.fecha_fin}}</td>
-                                            <td><button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="right" title="Queda pendiente a aprobacion por el Supervisor de AyL">{{justificacion.estado}}</button></p></td>
-                                            
-                                        </tr>
-                                        {% endfor %}                                        
-                                    </table>
+                                            <tbody>
+                                            {% for justificacion in justificaciones %}
+                                            <tr>
+                                                <td>{{justificacion.pk}}</td>
+                                                <td>{{justificacion.descripcion}}</td>
+                                                <td>{{justificacion.tipo_justificacion}}</td>
+                                                <td>{{justificacion.fecha_inicio|date:'d-m-Y'}}</td>
+                                                <td>{{justificacion.fecha_fin}}</td>
+                                                <td><button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="right" title="Queda pendiente a aprobacion por el Supervisor de AyL">{{justificacion.estado}}</button></p></td>
+                                                
+                                            </tr>
+                                            {% endfor %}                                        
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
