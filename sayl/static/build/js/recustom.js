@@ -26,11 +26,14 @@ $(".fechona").blur(function() { //Para los input con la clase fechona, cuando se
 $(document).ready(function() { //Falta Ordenar por fecha
     midatatable = $('#midatatable').DataTable({
         "lengthMenu": [
-            [5, 25, 50, -1],
-            [5, 25, 50, "All"]
+            [5, 10, 25, 50, -1],
+            [5, 10, 25, 50, "Todos"]
         ],
         //"dom": '<"row"<"col-md-6"l><"col-md-6"f>><"row"rt><"row"<"col-md-6"i><"col-md-6"p>>',
-        "dom": 'lrtip',
+        "dom": 'Bfrtip',
+        "buttons": ['pdf', 'print'],
+        "pageLength": 100,
+        "processing": false,
         'columnDefs': [
             { 'sortable': true, 'searchable': false, 'visible': false, 'type': 'num', 'targets': [0] }
         ],
@@ -149,6 +152,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 }
             },
             function(start, end, label) {
+                $('#min').val(start.format('DD-MM-YYYY'));
                 console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
             });
 
@@ -177,7 +181,25 @@ $(document).ready(function() { //Falta Ordenar por fecha
         $('#min, #max').change(function() {
             table.draw();
         });
+
+        $('#headingTwo').click(function() {
+            $('#min').val('');
+            $('#max').val('');
+            $('#midtbusqueda').val('');
+            midatatable.search('').draw();
+            table.draw();
+        });
+
+        $('#cleanfilters').click(function() {
+            $('#min').val('');
+            $('#max').val('');
+            $('#midtbusqueda').val('');
+            midatatable.search('').draw();
+            table.draw();
+        });
     });
+
+
 
 
 

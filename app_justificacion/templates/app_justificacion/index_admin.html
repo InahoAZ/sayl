@@ -11,35 +11,39 @@
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
-              
-              <table id="datatable-selectable" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>Legajo</th>
-                                    <th>Agente</th>
-                                    <th>Tipo Justificacion</th>
-                                    <th>Fecha de Solicitud</th>                        
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for justificacion in justificaciones %}                                
-                                <tr>
-                                
-                                    <td><div class="col-md-6">
-                                    <div class="user-profile"><img src="/static/images/img.jpg" alt="..." class="img-circle profile_table"></div>                                   
-                                    </div>
-                                    <div class="col-md-2"><a href="#" onclick="prueba7('{{justificacion.legajo}}','{{justificacion.nombre}}','{{justificacion.apellido}}','{{justificacion.tipo_justificacion}}');">{{justificacion.legajo}}</a></div>
-                                    </td>
-                                    <td>Fulano de Tarso </td>
-                                    <td>Licencia Medica</td>
-                                    <td>19/10/2019</td>  
-                                                                
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                <div class="row">
+                    {% include 'sayl/filtros.html' %}
+                </div>            
+                <table id="midatatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Legajo</th>
+                            <th>Agente</th>
+                            <th>Fecha de Solicitud</th> 
+                            <th>Tipo Justificacion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for justificacion in justificaciones %}                                
+                        <tr>
+                            <td></td>
+                            <td><div class="col-md-6">
+                            <div class="user-profile"><img src="/static/images/img.jpg" alt="..." class="img-circle profile_table"></div>                                   
+                            </div>
+                            <div class="col-md-2"><a href="#" onclick="prueba7('{{justificacion.legajo}}','{{justificacion.nombre}}','{{justificacion.apellido}}','{{justificacion.tipo_justificacion}}');">{{justificacion.legajo}}</a></div>
+                            </td>
+                            <td>Fulano de Tarso </td>
+                            <td>19/10/2019</td> 
+                            <td>Licencia Medica</td>
+                             
+                                                        
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-          </div>
+        </div>
         </div>
 
         <div class="col-md-4">
