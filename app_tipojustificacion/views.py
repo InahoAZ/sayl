@@ -14,6 +14,7 @@ def index(request):
     tiposjust = TipoJustificacion.objects.all()
     form_tj = TipoJustificacionForm()    
     cargos = get_categorias()
+    print(cargos)
     if request.method == 'POST' and request.POST['accion'] == 'add':        
         agregar_tjust(request)
     return render(request, 'app_tipojustificacion/index.html', {'tiposjust':tiposjust, 'form_tj':form_tj})
