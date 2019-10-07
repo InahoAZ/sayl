@@ -29,7 +29,7 @@ def get_categorias(cod_categ = ''):
     user = 'demo'
     password = 'demo'
     try:
-        resp = req.get(url, auth=(user,password),timeout=1)
+        resp = req.get(url, auth=(user,password),timeout=0.0001)
         respuesta = resp.json()
     except (ConnectTimeout, HTTPError, ReadTimeout, Timeout, ConnectionError):
         respuesta = None         

@@ -22,8 +22,7 @@ class JSONResponse(HttpResponse):
 
 
 def index(request):
-    justificaciones = Justificacion.objects.select_related('tipo_justificacion','legajo')
-    
+    justificaciones = Justificacion.objects.all()
     return render(request, 'app_justificacion/index_admin.html', {'justificaciones':justificaciones})
 
 def avisar_inasistencia(request):
@@ -32,10 +31,9 @@ def avisar_inasistencia(request):
 
     if request.method == 'POST':
         form_justificacion = JustificacionForm(request.POST)
-        print(form_justificacion.errors)
         if form_justificacion.is_valid():
             just = form_justificacion.save(commit=False)
-            just.legajo =  request.user            
+            just.legajo =  request.user.legajo            
             just.save()
             return redirect('avisar_inasistencia')
     else:
@@ -47,12 +45,12 @@ def avisar_inasistencia(request):
     return render(request, 'app_justificacion/avisar_inasistencia.html',context)
 
 @csrf_exempt
-def justificaciones_list(request, id_justificacion):
+def justificaciones_list(request):
     """
     List all code serie, or create a new serie.
     """
     if request.method == 'GET':
-        justificaciones = Justificacion.objects.prefetch_related('tipo_justificacion','legajo').filter(pk=id_justificacion)
+        justificaciones = Justificacion.objects.all()
         serializer = JustificacionSerializer(justificaciones, many=True)
         result = dict()
         result['data'] = serializer.data
