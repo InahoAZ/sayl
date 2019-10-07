@@ -34,6 +34,8 @@ $(document).ready(function() { //Falta Ordenar por fecha
         "buttons": [{
             extend: 'pdfHtml5',
             text: 'PDF',
+            //Aca le digo que solo los <th> que NO tengan la class="noExport" aparezcan en el reporte
+
             filename: 'reporte_pdf',
             orientation: 'portrait', //landscape
             pageSize: 'A4', //A3 , A5 , A6 , legal , letter
@@ -90,7 +92,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
                             {
                                 alignment: 'right',
                                 fontSize: 10,
-                                text: [{ text: 'Filtros: ', styles: { bold: true } }, '']
+                                text: [{ text: 'Filtros: ', bold: true }, { text: 'Hola' }]
                             }
                         ],
                         margin: 20
@@ -143,7 +145,10 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 objLayout['paddingLeft'] = function(i) { return 4; };
                 objLayout['paddingRight'] = function(i) { return 4; };
                 doc.content[0].layout = objLayout;
-            }
+            },
+            exportOptions: {
+                columns: ":visible"
+            },
         }, 'print'],
         "pageLength": 100,
         "processing": false,
@@ -182,6 +187,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
             }
         }
     });
+    midatatable.rows({ selected: true }).data();
 
     $('#midtbusqueda').keyup(function() {
         midatatable.search($(this).val()).draw();
