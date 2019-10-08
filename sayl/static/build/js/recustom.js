@@ -8,6 +8,7 @@ function prueba7(legajo, nombre, apellido, licenciaMedica) {
 };
 
 
+
 $(".fechona").blur(function() { //Para los input con la clase fechona, cuando se pierde el foco en el mismo (blur)
     var date = Date.parse($(this).val()); //guardo lo que hay en el input y lo transformo a fecha para poder comparar
     if (date < Date.now()) { //Si la fecha del input es menor a la de hoy...
@@ -23,7 +24,11 @@ $(".fechona").blur(function() { //Para los input con la clase fechona, cuando se
 
 });
 
+
+
 $(document).ready(function() { //Falta Ordenar por fecha
+    $('#min').val('');
+    $('#max').val('');
     midatatable = $('#midatatable').DataTable({
         "lengthMenu": [
             [5, 10, 25, 50, -1],
@@ -31,17 +36,41 @@ $(document).ready(function() { //Falta Ordenar por fecha
         ],
         //"dom": '<"row"<"col-md-6"l><"col-md-6"f>><"row"rt><"row"<"col-md-6"i><"col-md-6"p>>',
         "dom": 'Blrtip',
+        "iDisplayLength": 5,
         "buttons": [{
             extend: 'pdfHtml5',
-            text: 'PDF',
+            className: '',
+            text: '<i class="fa fa-file-pdf-o"></i>PDF',
             //Aca le digo que solo los <th> que NO tengan la class="noExport" aparezcan en el reporte
-
+            exportOptions: {
+                columns: ':not(.noExport)'
+            },
+            select: true,
             filename: 'reporte_pdf',
             orientation: 'portrait', //landscape
             pageSize: 'A4', //A3 , A5 , A6 , legal , letter
             customize: function(doc) {
+                //El titulo lo saco de un input oculto para poder usar esta misma configuracion para reportes distintos, entonces cambia el titulo segun el reporte.
+                var titulo = $('#titulo_reporte').val();
+                var usuario = $('#usuario_reporte').val();
+                var filtros = [];
+                var inputs = $(".filter");
+
+                //Voy agregando a un array todos los filtros que se hayan usado (los inputs tienen que tener la class="filter" y un name, ya que el name le da el titulo del filtro.)
+                for (var i = 0; i < inputs.length; i++) {
+                    if ($(inputs[i]).val() != "") {
+                        filtros.push($(inputs[i]).attr("name") + ": " + $(inputs[i]).val() + "\n")
+                    }
+                }
+                if (filtros.length == 0) {
+                    filtros.push("No se aplicaron Filtros");
+                }
+                //Transformo todo en un string.
+                var filtrostr = filtros.join(" ");
                 //quitamos el titulo por defecto del pdfhtml5 eliminando el primer elemento del pdf que esta en el array content.
-                doc.content.splice(0, 1);
+                //doc.content.splice(0, 1);
+                doc.content[0] = [{ text: titulo + "\n", bold: true, alignment: "left", fontSize: 10 }, { text: 'Filtros: ', bold: true, alignment: "left" }, { text: filtrostr, alignment: "left" }];
+                console.log(doc.content[0]);
                 //Fecha para usar en el reporte mas adelante
                 var now = new Date();
                 var jsDate = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
@@ -55,14 +84,15 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 //#endregion
 
 
+
                 // Ahora establecemos los margenes: [left,top,right,bottom] o [horizontal,vertical]
                 // si ponemos solo un numero se establece ese mismo para todos los margenes
-                doc.pageMargins = [20, 100, 20, 50];
+                doc.pageMargins = [20, 135, 20, 50];
 
                 // Tamaño de fuente de todo el documento
-                doc.defaultStyle.fontSize = 7;
+                doc.defaultStyle.fontSize = 9;
                 // Tamaño de fuente del encabezado
-                doc.styles.tableHeader.fontSize = 7;
+                doc.styles.tableHeader.fontSize = 10;
 
                 //Al elemento 0 (porque borre el titulo al principio) del contenido o sea la tabla
                 //lo centramos forzadamente
@@ -72,46 +102,80 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 // Creamos un encabezado con 3 columnas
                 // A la izquierda: Logo
                 // En el medio: Titulo
-                // A la derecha: algo xd
-
-                //El titulo lo saco de un input oculto para poder usar esta misma configuracion para reportes distintos, entonces cambia el titulo segun el reporte.
-                var titulo = document.getElementById('titulo_reporte').value;
+                // A la derecha: algo xd               
                 doc['header'] = (function() {
                     return {
                         columns: [{
                                 image: logo,
-                                width: 80
+                                width: 100,
+                                margin: [0, 50, 0, 0]
                             },
                             {
                                 alignment: 'center',
-                                italics: false,
-                                text: titulo,
-                                fontSize: 18,
-                                margin: [10, 10]
+                                text: [{ text: "Facultad de Ciencias Económicas" + '\n', bold: true, fontSize: 12 }, { text: "Carlos Pellegrini 269, N3350 Apóstoles, Misiones \n Teléfono: 03758 42-3232 \n \n \n" }],
+                                fontSize: 10,
+                                margin: [0, 20, 0, 0]
                             },
                             {
                                 alignment: 'right',
-                                fontSize: 10,
-                                text: [{ text: 'Filtros: ', bold: true }, { text: 'Hola' }]
+                                fontSize: 9,
+                                text: [{ text: 'Fecha: ', bold: true }, { text: jsDate.toString() }, { text: '\n Generado por: ', bold: true }, { text: usuario + "\n" }],
+                                width: 80,
+                                margin: [0, 10, 0, 0],
+                                alignment: 'left'
                             }
                         ],
                         margin: 20
                     }
                 });
-
+                // Create a footer object with 2 columns
+                // Left side: report creation date
+                // Right side: current page and total pages
+                doc['footer'] = (function(page, pages) {
+                    return {
+                        columns: [{
+                                alignment: 'left',
+                                text: ['Generado el: ', { text: jsDate.toString() }],
+                                fontSize: 9,
+                            },
+                            {
+                                alignment: 'right',
+                                text: ['Pagina ', { text: page.toString() }, ' de ', { text: pages.toString() }],
+                                fontSize: 9,
+                            }
+                        ],
+                        margin: 20
+                    }
+                });
                 //Funcion que pone cada columna en tamaño *, para que se ajuste automagicamente. cuenta cada <td> del data table y genera array del tipo [*,*,*,..,n] y establece dicho array como width.
                 var colCount = new Array();
-                $("#midatatable").find('tbody tr:first-child td').each(function() {
-                    if ($(this).attr('colspan')) {
-                        for (var j = 1; j <= $(this).attr('colspan'); $j++) {
-                            colCount.push('*');
-                        }
-                    } else { colCount.push('*'); }
-                });
-                //console.log(colCount);
-                colCount.push('*'); //Le pongo uno mas porque tengo un td oculto (el id)
+                console.log(table.data().count());
 
-                doc.content[0].table.widths = colCount;
+                //Para saber si la tabla esta vacia o nel pastel.
+                var esVacio;
+                //Captura el mensaje del datatable cuando esta vacio
+                var tdvacio = $('.dataTables_empty').html()
+                if (tdvacio == 'No se encontraron resultados') {
+                    esVacio = true;
+                } else {
+                    esVacio = false;
+                }
+
+                if (!esVacio) {
+                    $("#midatatable").find('tbody tr:first-child td').each(function() {
+                        if ($(this).attr('colspan')) {
+                            for (var j = 1; j <= $(this).attr('colspan'); $j++) {
+                                colCount.push('*');
+                            }
+                        } else { colCount.push('*'); }
+                    });
+                    doc.content[1].table.widths = colCount;
+                }
+
+                //console.log(colCount);
+                //colCount.push('*'); //Le pongo uno mas porque tengo un td oculto (el id)
+
+
                 //Es equivalente a: doc.content[0].table.widths = ['*', '*', '*', '*', '*', '*'];
 
 
@@ -119,37 +183,34 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 // Creamos un objeto de pie de pagina con dos columnas
                 // Lado izquierdo: Fecha de creacion del reporte
                 // Lado derecho: pagina actual y total de pagina
-                doc['footer'] = (function(page, pages) {
-                    return {
-                        columns: [{
-                                alignment: 'left',
-                                text: ['Fecha de Generacion: ', { text: jsDate.toString() }]
-                            },
-                            {
-                                alignment: 'right',
-                                text: ['pagina ', { text: page.toString() }, ' de ', { text: pages.toString() }]
-                            }
-                        ],
-                        margin: 20
-                    }
-                });
+                // doc['footer'] = (function(page, pages) {
+                //     return {
+                //         columns: [{
+                //                 alignment: 'left',
+                //                 text: ['Fecha de Generacion: ', { text: jsDate.toString() }]
+                //             },
+                //             {
+                //                 alignment: 'right',
+                //                 text: ['pagina ', { text: page.toString() }, ' de ', { text: pages.toString() }]
+                //             }
+                //         ],
+                //         margin: 20
+                //     }
+                // });
 
                 // Change dataTable layout (Table styling)
                 // To use predefined layouts uncomment the line below and comment the custom lines below
                 // doc.content[0].layout = 'lightHorizontalLines'; // noBorders , headerLineOnly
                 var objLayout = {};
-                objLayout['hLineWidth'] = function(i) { return .5; };
-                objLayout['vLineWidth'] = function(i) { return .5; };
-                objLayout['hLineColor'] = function(i) { return '#fff'; };
-                objLayout['vLineColor'] = function(i) { return '#fff'; };
+                objLayout['hLineWidth'] = function(i) { return 1; };
+                objLayout['vLineWidth'] = function(i) { return 1; };
+                objLayout['hLineColor'] = function(i) { return '#aaa'; };
+                objLayout['vLineColor'] = function(i) { return '#aaa'; };
                 objLayout['paddingLeft'] = function(i) { return 4; };
                 objLayout['paddingRight'] = function(i) { return 4; };
-                doc.content[0].layout = objLayout;
+                doc.content[1].layout = objLayout;
             },
-            exportOptions: {
-                columns: ":visible"
-            },
-        }, 'print'],
+        }],
         "pageLength": 100,
         "processing": false,
         'columnDefs': [
@@ -210,7 +271,15 @@ $(document).ready(function() { //Falta Ordenar por fecha
 
     //I got mine working base on https://www.datatables.net/examples/plug-ins/range_filtering.html. Here is my jsfiddle https://jsfiddle.net/bindrid/2bkbx2y3/6/
 
+
+
+
     $(document).ready(function() {
+        $('#min').val('');
+        $('#max').val('');
+        $('#midtbusqueda').val('');
+        midatatable.search('').draw();
+        midatatable.draw();
         /*$.fn.dataTable.ext.search.push(
             function(settings, data, dataIndex) {
                 var min = $('#min').val();
@@ -295,7 +364,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
         });
 
         var table = $('#midatatable').DataTable();
-
+        table.rows({ selected: true }).data();
         // Event listener to the two range filtering inputs to redraw on input
         $('#min, #max').change(function() {
             table.draw();
@@ -314,11 +383,40 @@ $(document).ready(function() { //Falta Ordenar por fecha
             $('#max').val('');
             $('#midtbusqueda').val('');
             midatatable.search('').draw();
-            table.draw();
+            table.draw()
         });
+
+        //para hacer seleccionable las filas de mi datatable
+        $('#midatatable tbody').on('click', 'tr', function() {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            } else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+
+        });
+    });
+    var table = $('#midatatable').DataTable();
+    $('#midatatable tbody').on('click', 'tr', function() {
+        var datos = table.row(this).data()
+        console.log(datos[0]);
+        $.ajax({
+            url: 'justificaciones_list/' + datos[0],
+            type: 'get',
+            dataType: 'json',
+            success: function(data) {
+                console.log(table.row('.selected').data());
+                console.log(data);
+                console.log("AJAX OK");
+            }
+        });
+
     });
 
 
+    $('#min').val('');
+    $('#max').val('');
 
 
 
