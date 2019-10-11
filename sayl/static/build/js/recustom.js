@@ -417,6 +417,25 @@ $(document).ready(function() { //Falta Ordenar por fecha
 
     $('#min').val('');
     $('#max').val('');
+    $('#select-cargo').change(function() {
+        var cg = $(this).val();
+
+        $.ajax({
+            url: '/app_tipojustificacion/tipos_justificacion_list',
+            data: {
+                'cargo': cg,
+            },
+            dataType: 'json',
+            success: function(data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+
+                    html += "<option value='" + data[i].pk + "'>" + data[i].motivo + "</option>";
+                }
+                $('#select-just').html(html);
+            }
+        })
+    });
 
 
 

@@ -22,7 +22,13 @@
                         <h3>{{user.first_name}} {{user.last_name}} </h3>
                         <ul class="list-unstyled user_data">
                         <li><i class="fa fa-map-marker user-profile-icon"></i> {{user.legajo}}</li>                        
-                        <li><i class="fa fa-map-marker user-profile-icon"></i> No Docente Cat 7.</li>                        
+                        <li>
+                            <label for="">Mis Cargos:</label><select name="" id="select-cargo" class="form-control col-md-7 col-xs-12">
+                            {% for cargo_user in cargos_user%}
+                                <option value="{{cargo_user.categoria}}">{{cargo_user.desc_categ}}</option>
+                            {% endfor %}
+                            </select>
+                        </li>                        
                     </div>                    
                 </div>
             </div>

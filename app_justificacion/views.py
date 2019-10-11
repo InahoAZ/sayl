@@ -28,12 +28,14 @@ def index(request):
 def avisar_inasistencia(request):
     form_justificacion = JustificacionForm()
     justificaciones = Justificacion.objects.all()
+    usuario_actual = request.user
+    cargos = usuario_actual.get_cargos()
 
     if request.method == 'POST':
         form_justificacion = JustificacionForm(request.POST)
         if form_justificacion.is_valid():
             just = form_justificacion.save(commit=False)
-            just.legajo =  request.user.legajo            
+            just.legajo =  request.user            
             just.save()
             return redirect('avisar_inasistencia')
     else:
@@ -41,7 +43,11 @@ def avisar_inasistencia(request):
         
 
 
-    context = {'form_justificacion':form_justificacion, 'justificaciones':justificaciones}
+    context = {
+        'form_justificacion':form_justificacion, 
+        'justificaciones':justificaciones,
+        'cargos_user':cargos,
+        }
     return render(request, 'app_justificacion/avisar_inasistencia.html',context)
 
 @csrf_exempt
@@ -55,4 +61,6 @@ def justificaciones_list(request):
         result = dict()
         result['data'] = serializer.data
         return JSONResponse(result)
+
+
 

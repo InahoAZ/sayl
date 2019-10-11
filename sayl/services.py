@@ -6,7 +6,7 @@ def get_agentes():
     user = 'demo'
     password =  'demo'
     try:
-        resp = req.get(url, auth=(user,password), timeout=0.0001)
+        resp = req.get(url, auth=(user,password), timeout=1)
         respuesta = resp.json()
     except (ConnectTimeout, HTTPError, ReadTimeout, Timeout, ConnectionError):
         respuesta = None            
@@ -18,7 +18,7 @@ def get_agente(legajo):
     user = 'demo'
     password =  'demo'
     try:
-        resp = req.get(url, auth=(user,password),timeout=0.0001)
+        resp = req.get(url, auth=(user,password),timeout=1)
         respuesta = resp.json()
     except (ConnectTimeout, HTTPError, ReadTimeout, Timeout, ConnectionError):
         respuesta = None            
@@ -29,7 +29,7 @@ def get_categorias(cod_categ = ''):
     user = 'demo'
     password = 'demo'
     try:
-        resp = req.get(url, auth=(user,password),timeout=0.0001)
+        resp = req.get(url, auth=(user,password),timeout=1)
         respuesta = resp.json()
     except (ConnectTimeout, HTTPError, ReadTimeout, Timeout, ConnectionError):
         respuesta = None         
@@ -38,6 +38,20 @@ def get_categorias(cod_categ = ''):
             if categoria["categoria"].strip() == cod_categ:
                 return r
 
+    return respuesta
+
+def get_cargos_api(legajo):
+    url = "http://mapuche.siu.edu.ar/mapuche/rest/agentes/"+legajo+"/cargos" 
+    user = 'demo'
+    password = 'demo'
+    
+    print(url)
+    try:
+        resp = req.get(url, auth=(user,password),timeout=1)
+        respuesta = resp.json()
+    except (ConnectTimeout, HTTPError, ReadTimeout, Timeout, ConnectionError):
+        respuesta = None
+    
     return respuesta
 
 

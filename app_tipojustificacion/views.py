@@ -1,13 +1,29 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import *
+from .models import TipoJustificacion
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
+from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+# from .serializers import JustificacionSerializer
+from .serializers import TipoJustificacionSerializer
 
 from .forms import TipoJustificacionForm
 from sayl.services import *
 
 # Create your views here.
+
+class JSONResponse(HttpResponse):
+    """
+    An HttpResponse that renders its content into JSON.
+    """
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
 
 @login_required
 def index(request):
@@ -56,3 +72,18 @@ def modificar_tjust(request, tipo_justificacion_id):
         return redirect('index')    
     
     return render(request, 'app_tipojustificacion/agregar_modal.html', {'form':form})
+
+
+@csrf_exempt
+def tipos_justificacion_list(request):
+    cg = request.GET.get('cargo', None)    
+    if request.method == 'GET':
+        if cg != 0:
+            tipos_justificacion = TipoJustificacion.objects.filter(cargo=cg)
+        else:
+            tipos_justificacion = TipoJustificacion.objects.all()
+        serializer = TipoJustificacionSerializer(tipos_justificacion, many=True)
+
+        result = dict()
+        result = serializer.data
+        return JSONResponse(result)
