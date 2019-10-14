@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import JustificacionForm
 from .models import Justificacion
+from app_tipojustificacion.models import TipoJustificacion
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
@@ -51,15 +52,16 @@ def avisar_inasistencia(request):
     return render(request, 'app_justificacion/avisar_inasistencia.html',context)
 
 @csrf_exempt
-def justificaciones_list(request):
+def justificaciones_list(request, pk):
     """
     List all code serie, or create a new serie.
     """
     if request.method == 'GET':
-        justificaciones = Justificacion.objects.all()
+        justificaciones = Justificacion.objects.prefetch_related('tipo_justificacion', 'legajo').filter(pk=pk)
         serializer = JustificacionSerializer(justificaciones, many=True)
         result = dict()
-        result['data'] = serializer.data
+        result = serializer.data
+        print("No ta")
         return JSONResponse(result)
 
 

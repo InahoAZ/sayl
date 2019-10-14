@@ -417,6 +417,9 @@ $(document).ready(function() { //Falta Ordenar por fecha
 
     $('#min').val('');
     $('#max').val('');
+    $('#select-cargo').ready(function() {
+        $('.selDiv option:eq(2)');
+    });
     $('#select-cargo').change(function() {
         var cg = $(this).val();
 
