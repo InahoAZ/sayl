@@ -1,6 +1,7 @@
 from django.db import models
 from app_tipojustificacion.models import TipoJustificacion
 from login.models import CustomUser
+from simple_history.models import HistoricalRecords
 
 # Create your models here.
 
@@ -18,5 +19,6 @@ class Justificacion(models.Model):
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
     descripcion = models.CharField(max_length=255)
+    history = HistoricalRecords(table_name='justificacion_historial')
     
 

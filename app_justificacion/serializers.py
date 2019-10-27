@@ -7,6 +7,6 @@ class JustificacionSerializer(serializers.ModelSerializer):
     tipo_justificacion = TipoJustificacionSerializer()
     legajo = CustomUserSerializer()
     class Meta:
-        model = Justificacion        
+        model = Justificacion
         fields = ['pk','legajo','descripcion','tipo_justificacion', 'fecha_solicitud','fecha_inicio', 'fecha_fin','estado']
         

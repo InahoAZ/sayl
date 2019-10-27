@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'app_tipojustificacion.apps.AppTipoJustificacionConfig',
     'app_horarios.apps.AppHorariosConfig',
     'app_justificacion.apps.AppJustificacionConfig',
+    'auditoria.apps.AuditoriaConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'login.apps.LoginConfig',
-    'rest_framework'
+    'rest_framework',
+    'reversion',
+    'simple_history',
+    
 ]
 
 MIDDLEWARE = [
@@ -54,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'sayl.urls'

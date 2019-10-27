@@ -7,6 +7,9 @@ function prueba7(legajo, nombre, apellido, licenciaMedica) {
     document.getElementById("licenciaMedicaNoFake").textContent = licenciaMedica;
 };
 
+function formato(texto) {
+    return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g, '$3-$2-$1');
+}
 
 
 $(".fechona").blur(function() { //Para los input con la clase fechona, cuando se pierde el foco en el mismo (blur)
@@ -407,17 +410,31 @@ $(document).ready(function() { //Falta Ordenar por fecha
             dataType: 'json',
             success: function(data) {
                 console.log(table.row('.selected').data());
-                console.log(data);
+                console.log(data[0]);
                 console.log("AJAX OK");
+                $('#legajo-txt').html(String(data[0]['legajo']['pk']));
+                $('#apellido-txt').html(data[0]['legajo']['last_name']);
+                $('#nombre-txt').html(data[0]['legajo']['first_name']);
+                $('#tjust-txt').html(data[0]['tipo_justificacion']['motivo']);
+                $('#fsol-txt').html(formato(data[0]['fecha_solicitud']));
+                $('#fdesde-txt').html(formato(data[0]['fecha_inicio']));
+                $('#fhasta-txt').html(formato(data[0]['fecha_fin']));
+                $('#btn-aprobar').attr("href", "/app_justificacion/aprobar_just/" + data[0]['pk']);
+                $('#btn-rechazar').attr("href", "/app_justificacion/rechazar_just/" + data[0]['pk']);
+
             }
         });
+
+        // 
+        // 
+        // //
 
     });
 
 
     $('#min').val('');
     $('#max').val('');
-    $('#select-cargo').ready(function() {
+    $('#select-cargo').ready(function() { //no anda
         $('.selDiv option:eq(2)');
     });
     $('#select-cargo').change(function() {

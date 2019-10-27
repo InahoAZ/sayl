@@ -44,7 +44,9 @@ def agregar_tjust(request):
     if request.method == 'POST':
         form = TipoJustificacionForm(request.POST)
         if form.is_valid():
-            form.save()
+            tjust = form.save(commit=False)
+            tjust.changeReason = 'Creacion de Tipo de Justificacion'
+            tjust.save()
             return redirect('index')
     else:
         form = TipoJustificacionForm()        
@@ -55,6 +57,7 @@ def eliminar_tjust(request, tipo_justificacion_id):
     
     tjust = TipoJustificacion.objects.get(id=tipo_justificacion_id)    
     try:
+        tjust.changeReason='Eliminacion de Tipo de Justificacion'
         tjust.delete()
     except:
         messages.error(request, 'No se puede eliminar el tipo de justificacion')
@@ -68,7 +71,8 @@ def modificar_tjust(request, tipo_justificacion_id):
     else:
         form = TipoJustificacionForm(request.POST, instance = tjust)
         if form.is_valid():
-            form.save()
+            tjust = form.save(commit=False)
+            tjust.changeReason = 'Modificacion de Tipo de Justificacion'
         return redirect('index')    
     
     return render(request, 'app_tipojustificacion/agregar_modal.html', {'form':form})

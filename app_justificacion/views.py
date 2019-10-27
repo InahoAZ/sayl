@@ -23,7 +23,7 @@ class JSONResponse(HttpResponse):
 
 
 def index(request):
-    justificaciones = Justificacion.objects.all()
+    justificaciones = Justificacion.objects.exclude(estado=['Aprobado','Rechazado'])
     return render(request, 'app_justificacion/index_admin.html', {'justificaciones':justificaciones})
 
 def avisar_inasistencia(request):
@@ -36,7 +36,8 @@ def avisar_inasistencia(request):
         form_justificacion = JustificacionForm(request.POST)
         if form_justificacion.is_valid():
             just = form_justificacion.save(commit=False)
-            just.legajo =  request.user            
+            just.legajo =  request.user
+            just.changeReason = 'Aviso de Inasistencia'            
             just.save()
             return redirect('avisar_inasistencia')
     else:
@@ -50,6 +51,14 @@ def avisar_inasistencia(request):
         'cargos_user':cargos,
         }
     return render(request, 'app_justificacion/avisar_inasistencia.html',context)
+
+def aprobar_just(request, pk):
+    justificacion = Justificacion.objects.filter(pk=pk).update(estado='Aprobado')
+    return redirect('/app_justificacion')
+
+def rechazar_just(request, pk):
+    justificacion = Justificacion.objects.filter(pk=pk).update(estado='Rechazado')
+    return redirect('/app_justificacion')
 
 @csrf_exempt
 def justificaciones_list(request, pk):

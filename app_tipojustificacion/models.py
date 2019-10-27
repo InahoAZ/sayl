@@ -1,5 +1,7 @@
 from django.db import models
 from sayl.services import *
+from simple_history.models import HistoricalRecords
+
 
 # Create your models here.
 
@@ -24,7 +26,8 @@ class TipoJustificacion(models.Model):
     claustro = models.CharField(
         max_length=11,
         choices=CLAUSTRO)
-    cargo  = models.CharField(max_length=20, choices=LISTA_CARGOS)  
+    cargo  = models.CharField(max_length=20, choices=LISTA_CARGOS)
+    history = HistoricalRecords(table_name='tjustificacion_historial')
 
     def __str__(self):
         return self.motivo
