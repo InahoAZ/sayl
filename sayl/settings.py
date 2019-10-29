@@ -164,3 +164,8 @@ LOGOUT_REDIRECT_URL = '/accounts/login'
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
+#Lugar donde se guardan las imagenes
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
+MEDIA_URL = '/media/'
+
+

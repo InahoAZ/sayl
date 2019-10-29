@@ -73,7 +73,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 //quitamos el titulo por defecto del pdfhtml5 eliminando el primer elemento del pdf que esta en el array content.
                 //doc.content.splice(0, 1);
                 doc.content[0] = [{ text: titulo + "\n", bold: true, alignment: "left", fontSize: 10 }, { text: 'Filtros: ', bold: true, alignment: "left" }, { text: filtrostr, alignment: "left" }];
-                console.log(doc.content[0]);
+                //console.log(doc.content[0]);
                 //Fecha para usar en el reporte mas adelante
                 var now = new Date();
                 var jsDate = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
@@ -152,7 +152,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 });
                 //Funcion que pone cada columna en tamaño *, para que se ajuste automagicamente. cuenta cada <td> del data table y genera array del tipo [*,*,*,..,n] y establece dicho array como width.
                 var colCount = new Array();
-                console.log(table.data().count());
+                //console.log(table.data().count());
 
                 //Para saber si la tabla esta vacia o nel pastel.
                 var esVacio;
@@ -172,6 +172,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
                             }
                         } else { colCount.push('*'); }
                     });
+                    console.log(colCount);
                     doc.content[1].table.widths = colCount;
                 }
 
@@ -274,7 +275,16 @@ $(document).ready(function() { //Falta Ordenar por fecha
 
     //I got mine working base on https://www.datatables.net/examples/plug-ins/range_filtering.html. Here is my jsfiddle https://jsfiddle.net/bindrid/2bkbx2y3/6/
 
+    $(document).ready(function() {
+        var interval = setInterval(function() {
+            var momentNow = moment();
+            $('#date-part').html(momentNow.format('YYYY MMMM DD') + ' ' +
+                momentNow.format('dddd')
+                .substring(0, 3).toUpperCase());
+            $('#time-part').html(momentNow.format('A hh:mm:ss'));
+        }, 100);
 
+    });
 
 
     $(document).ready(function() {

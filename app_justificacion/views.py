@@ -8,6 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from .serializers import JustificacionSerializer
+from django.contrib import messages
+import inflect
 
 # Create your views here.
 
@@ -23,22 +25,35 @@ class JSONResponse(HttpResponse):
 
 
 def index(request):
-    justificaciones = Justificacion.objects.exclude(estado=['Aprobado','Rechazado'])
+    justificaciones = Justificacion.objects.exclude(estado='Aprobado').exclude(estado='Rechazado')
+    
     return render(request, 'app_justificacion/index_admin.html', {'justificaciones':justificaciones})
 
 def avisar_inasistencia(request):
     form_justificacion = JustificacionForm()
-    justificaciones = Justificacion.objects.all()
+    justificaciones = Justificacion.objects.filter(legajo=request.user)
+    
+    print(justificaciones)
     usuario_actual = request.user
     cargos = usuario_actual.get_cargos()
 
     if request.method == 'POST':
         form_justificacion = JustificacionForm(request.POST)
+        print(request.user.legajo)
         if form_justificacion.is_valid():
             just = form_justificacion.save(commit=False)
+            print(just.tipo_justificacion)
+            #Cuenta la cantidad de licencias que pidio el usuario de ese tipo.
+            cantjustificacion = Justificacion.objects.filter(tipo_justificacion=just.tipo_justificacion, legajo=request.user).count()
+            
             just.legajo =  request.user
-            just.changeReason = 'Aviso de Inasistencia'            
-            just.save()
+            just.changeReason = 'Aviso de Inasistencia'
+            #Pregunta si la cantidad que pidio no supera el limite.
+            if cantjustificacion <= just.tipo_justificacion.cant_mes:
+                just.save()
+            else:
+                p = inflect.engine()
+                messages.error(request, 'Has ocupado todas tus justificaciones de este tipo por este mes')
             return redirect('avisar_inasistencia')
     else:
         form_justificacion = JustificacionForm()
@@ -51,6 +66,14 @@ def avisar_inasistencia(request):
         'cargos_user':cargos,
         }
     return render(request, 'app_justificacion/avisar_inasistencia.html',context)
+
+def cancelar_aviso(request, pk):
+    aviso = Justificacion.objects.get(pk=pk)    
+    try:
+        aviso.delete()
+    except:
+        messages.error(request, 'No se puede eliminar el tipo de justificacion')
+    return redirect('/app_justificacion/avisar_inasistencia')
 
 def aprobar_just(request, pk):
     justificacion = Justificacion.objects.filter(pk=pk).update(estado='Aprobado')

@@ -28,7 +28,7 @@ class JSONResponse(HttpResponse):
 @login_required
 def index(request):
     tiposjust = TipoJustificacion.objects.all()
-    form_tj = TipoJustificacionForm()    
+    form_tj = TipoJustificacionForm()
     cargos = get_categorias()
     if request.method == 'POST' and request.POST['accion'] == 'add':        
         agregar_tjust(request)
@@ -68,14 +68,18 @@ def modificar_tjust(request, tipo_justificacion_id):
     tjust = TipoJustificacion.objects.get(id=tipo_justificacion_id)
     if request.method == 'GET':
         form = TipoJustificacionForm(instance = tjust)
+        cargos = get_categorias()
     else:
         form = TipoJustificacionForm(request.POST, instance = tjust)
+        print(form.errors)
         if form.is_valid():
+            cargos = None
             tjust = form.save(commit=False)
             tjust.changeReason = 'Modificacion de Tipo de Justificacion'
-        return redirect('index')    
+            tjust.save()
+        return redirect('/app_tipojustificacion')    
     
-    return render(request, 'app_tipojustificacion/agregar_modal.html', {'form':form})
+    return render(request, 'app_tipojustificacion/agregar_modal.html', {'form':form, 'cargos':cargos})
 
 
 @csrf_exempt

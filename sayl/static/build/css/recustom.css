@@ -1,0 +1,19 @@
+.time-frame {
+    background-color: #000000;
+    color: #ffffff;
+    width: 300px;
+    font-family: Arial;
+}
+
+.time-frame>div {
+    width: 100%;
+    text-align: center;
+}
+
+#date-part {
+    font-size: 1.2em;
+}
+
+#time-part {
+    font-size: 1em;
+}

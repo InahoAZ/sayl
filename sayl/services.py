@@ -37,7 +37,7 @@ def get_categorias(cod_categ = ''):
         for r in respuesta:
             if categoria["categoria"].strip() == cod_categ:
                 return r
-
+    print(respuesta)
     return respuesta
 
 def get_cargos_api(legajo):

@@ -55,6 +55,9 @@
                         </div>
                         {% endif %}
                         <div class="row">
+                            <div class="col-md-12">{% include 'sayl/filtros.html' %}</div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-2"><a class="btn btn-success" data-toggle="modal" data-target=".modal_agregar"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>
                             <!--<div class="col-md-2"><a class="btn btn-success" href="agregar_tjust"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>-->
                             <div class="modal fade modal_agregar" tabindex="-1" role="dialog" aria-hidden="true">
@@ -63,7 +66,7 @@
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                                             </button>
-                                            <h4 class="modal-title" id="myModalLabel{{tipojust.pk}}">Modal title</h4>
+                                            <h4 class="modal-title" id="myModalLabel{{tipojust.pk}}">Agregar un Nuevo Tipo de Justificacion</h4>
                                         </div>
                                         <div class="modal-body">
                                         <div class="clearfix"></div>
@@ -101,10 +104,12 @@
                                 </div>
                             </div>
                         </div>
-                        <table id="datatable" class="table table-striped table-bordered">
+                        <input type=hidden id="titulo_reporte" value="Tipos de Justificaciones"></input>
+                        <input type="hidden" id="usuario_reporte" value="{{user.last_name}} {{user.first_name}}">                        
+                        <table id="midatatable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Pk</th>
+                                    <th class="noExport">Pk</th>
                                     <th>Motivo</th>
                                     <th>Cargo</th>
                                     <th>Art.CCT</th>
@@ -112,7 +117,7 @@
                                     <th>Cant. Mes</th>
                                     <th>Cant. Año</th>
                                     <th>Claustro</th>
-                                    <th>Acciones</th>
+                                    <th class="noExport">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>

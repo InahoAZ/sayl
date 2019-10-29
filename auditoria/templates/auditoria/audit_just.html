@@ -62,20 +62,20 @@
                             <thead>
                                 <tr>
                                     <th>Pk</th>
-                                    <th>Tipo de Justificacion</th>
+                                    <th>Justificacion</th>
                                     <th>Movimiento</th>
                                     <th>Fecha</th>
                                     <th>Usuario</th>                                    
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for audit_tjust in audit_tjusts %}
+                                {% for audit_just in audit_justs %}
                                 <tr>
-                                    <td>{{audit_tjust.history_id}}</td>
-                                    <td>{{audit_tjust.motivo}}</td>
-                                    <td>{{audit_tjust.history_change_reason}}</td>
-                                    <td>{{audit_tjust.history_date}}</td>
-                                    <td>{{audit_tjust.history_user}}</td>
+                                    <td>{{audit_just.history_id}}</td>
+                                    <td>{{audit_just.descripcion}}</td>
+                                    <td>{{audit_just.history_change_reason}}</td>
+                                    <td>{{audit_just.history_date}}</td>
+                                    <td>{{audit_just.history_user}}</td>
                                     
                                 </tr>
                                 
