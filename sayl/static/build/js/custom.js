@@ -962,8 +962,9 @@ function init_autosize() {
 
 };
 
-/* PARSLEY */
 
+/* PARSLEY */
+/* 
 function init_parsley() {
 
     if (typeof(parsley) === 'undefined') {
@@ -971,24 +972,26 @@ function init_parsley() {
     }
     console.log('init_parsley');
 
-    $ /*.listen*/ ('parsley:field:validate', function() {
-        validateFront();
-    });
-    $('#demo-form .btn').on('click', function() {
-        $('#demo-form').parsley().validate();
-        validateFront();
-    });
-    var validateFront = function() {
-        if (true === $('#demo-form').parsley().isValid()) {
-            $('.bs-callout-info').removeClass('hidden');
-            $('.bs-callout-warning').addClass('hidden');
-        } else {
-            $('.bs-callout-info').addClass('hidden');
-            $('.bs-callout-warning').removeClass('hidden');
-        }
-    };
+    $ /*.listen*/
+/* ('parsley:field:validate', function() {
+       validateFront();
+   });
+   $('#demo-form .btn').on('click', function() {
+       $('#demo-form').parsley().validate();
+       validateFront();
+   });
+   var validateFront = function() {
+       if (true === $('#demo-form').parsley().isValid()) {
+           $('.bs-callout-info').removeClass('hidden');
+           $('.bs-callout-warning').addClass('hidden');
+       } else {
+           $('.bs-callout-info').addClass('hidden');
+           $('.bs-callout-warning').removeClass('hidden');
+       }
+   };
 
-    $ /*.listen*/ ('parsley:field:validate', function() {
+   $ /*.listen*/
+/* ('parsley:field:validate', function() {
         validateFront();
     });
     $('#demo-form2 .btn').on('click', function() {
@@ -1011,7 +1014,7 @@ function init_parsley() {
 
 };
 
-
+*/
 /* INPUTS */
 
 function onAddTag(tag) {
@@ -1699,18 +1702,18 @@ function init_daterangepicker_right() {
         timePickerIncrement: 1,
         timePicker12Hour: true,
         ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            'Hoy': [moment(), moment()],
+            'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Ultimos 7 Dias': [moment().subtract(6, 'days'), moment()],
+            'Ultimos 30 Dias': [moment().subtract(29, 'days'), moment()],
+            'Este mes': [moment().startOf('month'), moment().endOf('month')],
+            'Ultimo Mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         },
         opens: 'right',
         buttonClasses: ['btn btn-default'],
         applyClass: 'btn-small btn-primary',
         cancelClass: 'btn-small',
-        format: 'MM/DD/YYYY',
+        format: 'DD/MM/YYYY',
         separator: ' to ',
         locale: {
             applyLabel: 'Submit',
@@ -1718,9 +1721,9 @@ function init_daterangepicker_right() {
             fromLabel: 'From',
             toLabel: 'To',
             customRangeLabel: 'Custom',
-            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            firstDay: 1
+            daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            firstDay: 2
         }
     };
 
@@ -1764,7 +1767,18 @@ function init_daterangepicker_single_call() {
 
     $('#single_cal1').daterangepicker({
         singleDatePicker: true,
-        singleClasses: "picker_1"
+        singleClasses: "picker_1",
+        locale: {
+            format: 'DD/MM/YYYY',
+            applyLabel: 'Submit',
+            cancelLabel: 'Clear',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: 'Custom',
+            daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            firstDay: 1
+        }
     }, function(start, end, label) {
         console.log(start.toISOString(), end.toISOString(), label);
     });
@@ -1775,14 +1789,40 @@ function init_daterangepicker_single_call() {
         console.log(start.toISOString(), end.toISOString(), label);
     });
     $('#single_cal3').daterangepicker({
+        startDate: moment().subtract(29, 'days'),
+        endDate: moment(),
+        minDate: new Date(),
         singleDatePicker: true,
-        singleClasses: "picker_3"
+        singleClasses: "picker_4",
+        locale: {
+            format: 'DD/MM/YYYY',
+            applyLabel: 'Submit',
+            cancelLabel: 'Clear',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: 'Custom',
+            daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            firstDay: 1
+        }
     }, function(start, end, label) {
         console.log(start.toISOString(), end.toISOString(), label);
     });
     $('#single_cal4').daterangepicker({
+        minDate: new Date(),
         singleDatePicker: true,
-        singleClasses: "picker_4"
+        singleClasses: "picker_4",
+        locale: {
+            format: 'DD/MM/YYYY',
+            applyLabel: 'Submit',
+            cancelLabel: 'Clear',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: 'Custom',
+            daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            firstDay: 1
+        }
     }, function(start, end, label) {
         console.log(start.toISOString(), end.toISOString(), label);
     });
@@ -5102,7 +5142,7 @@ $(document).ready(function() {
     init_IonRangeSlider();
     init_ColorPicker();
     init_TagsInput();
-    init_parsley();
+    /*init_parsley();*/
     init_daterangepicker();
     init_daterangepicker_right();
     init_daterangepicker_single_call();
@@ -5130,7 +5170,9 @@ $(document).ready(function() {
         "dom": '<"top"i>rt<"bottom"><"clear">'
     });
 
-    $('#buscar-just').on('keyup click', function() {
-        table.search($('#mySearchText').val()).draw();
-    });
+
+
+
+
+
 });

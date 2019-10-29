@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'app_tipojustificacion.apps.AppTipoJustificacionConfig',
     'app_horarios.apps.AppHorariosConfig',
     'app_justificacion.apps.AppJustificacionConfig',
+    'auditoria.apps.AuditoriaConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'login.apps.LoginConfig',
+    'rest_framework',
+    'reversion',
+    'simple_history',
+    
 ]
 
 MIDDLEWARE = [
@@ -53,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'sayl.urls'
@@ -157,4 +163,9 @@ LOGOUT_REDIRECT_URL = '/accounts/login'
 # Para simular mandar correos. Los "correos" se guardan en la carpeta sent_emails
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+#Lugar donde se guardan las imagenes
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
+MEDIA_URL = '/media/'
+
 

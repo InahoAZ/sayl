@@ -1,0 +1,27 @@
+<!-- start accordion -->
+<div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel">
+        <a class="panel-heading collapsed" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <h4 class="panel-title"><i class="fa fa-filter" aria-hidden="true"></i>Filtros</h4>
+        </a>
+        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3"><span id="date-label-to" class="date-label">Buscar: </span><input class="filter" type="text" id="midtbusqueda" name="Buscado por"/></div>
+                    <div class="col-md-3"><span id="date-label-from" class="date-label">Desde: </span><input class="date_range_filter date filter" name="Desde" type="text" id="min" value="" /></div>
+                    <div class="col-md-3"><span id="date-label-to" class="date-label">Hasta: </span><input class="date_range_filter date filter" name="Hasta" type="text" id="max" value="" /></div>
+                    <br>
+                    <div class="col-md-2"><button type="button" class="btn btn-danger" id="cleanfilters">Limpiar</button></div>
+                </div>
+            </div>
+        </div>
+    </div>                                 
+</div>
+{% comment %} <div class="row">
+    <div class="col-md-3"><span id="date-label-to" class="date-label">Buscar: </span><input class="filter" type="text" id="midtbusqueda" name="Buscado por"/></div>
+    <div class="col-md-3"><span id="date-label-from" class="date-label">Desde: </span><input class="date_range_filter date filter" name="Desde" type="text" id="min" value="" /></div>
+    <div class="col-md-3"><span id="date-label-to" class="date-label">Hasta: </span><input class="date_range_filter date filter" name="Hasta" type="text" id="max" value="" /></div>
+    <br>
+    <div class="col-md-2"><button type="button" class="btn btn-danger" id="cleanfilters">Limpiar</button></div>
+</div> {% endcomment %}
+<!-- end of accordion -->

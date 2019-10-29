@@ -1,0 +1,36 @@
+<!--<div class="col-md-2"><a class="btn btn-success" data-toggle="modal" data-target=".modal_agregar"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>-->
+<!--<div class="col-md-2"><a class="btn btn-success" href="agregar_tjust"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>-->
+<div class="modal fade modal_confirmar_eliminar{{tipojust.pk}}" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel{{tipojust.pk}}">Confirmar Eliminacion</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">                                              
+                            <div class="x_content">
+
+                                <p>¿Está Seguro de <strong>eliminar</strong> el tipo de justificacion {{tipojust.motivo}}?</p>
+
+                            </div>
+
+                        </div>  
+                    </div> 
+                </div>
+            </div> 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                <a type="button" class="btn btn-warning" href="eliminar_tjust/{{tipojust.pk}}"><i class="fa fa-trash"></i></a>
+                
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
