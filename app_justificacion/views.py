@@ -33,16 +33,16 @@ def avisar_inasistencia(request):
     form_justificacion = JustificacionForm()
     justificaciones = Justificacion.objects.filter(legajo=request.user)
     
-    print(justificaciones)
+    #print(justificaciones)
     usuario_actual = request.user
     cargos = usuario_actual.get_cargos()
 
     if request.method == 'POST':
         form_justificacion = JustificacionForm(request.POST)
-        print(request.user.legajo)
+        #print(request.user.legajo)
         if form_justificacion.is_valid():
             just = form_justificacion.save(commit=False)
-            print(just.tipo_justificacion)
+            #print(just.tipo_justificacion)
             #Cuenta la cantidad de licencias que pidio el usuario de ese tipo.
             cantjustificacion = Justificacion.objects.filter(tipo_justificacion=just.tipo_justificacion, legajo=request.user).count()
             
@@ -52,7 +52,6 @@ def avisar_inasistencia(request):
             if cantjustificacion <= just.tipo_justificacion.cant_mes:
                 just.save()
             else:
-                p = inflect.engine()
                 messages.error(request, 'Has ocupado todas tus justificaciones de este tipo por este mes')
             return redirect('avisar_inasistencia')
     else:
@@ -93,7 +92,7 @@ def justificaciones_list(request, pk):
         serializer = JustificacionSerializer(justificaciones, many=True)
         result = dict()
         result = serializer.data
-        print("No ta")
+        #print("No ta")
         return JSONResponse(result)
 
 

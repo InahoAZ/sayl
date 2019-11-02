@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings    
 from django.urls import path, include
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
@@ -28,6 +29,7 @@ urlpatterns = [
     path('login/', include('login.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('auditoria/', include('auditoria.urls')),
+    path('asistencias/', include('asistencias.urls')),
 ]
 
 if settings.DEBUG:

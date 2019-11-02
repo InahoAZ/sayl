@@ -1,9 +1,9 @@
 from django import forms
-from .models import Justificacion
+from .models import Asistencia
 
-class JustificacionForm(forms.ModelForm):
+class AsistenciaForm(forms.ModelForm):
     class Meta:
-        model = Justificacion
+        model = Asistencia
         fields = ['descripcion','tipo_justificacion', 'fecha_inicio', 'fecha_fin']
         widgets = {
             'descripcion' : forms.TextInput(attrs={'class' : 'form-control col-md-7 col-xs-12'}),

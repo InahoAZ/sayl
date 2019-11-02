@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'app_horarios.apps.AppHorariosConfig',
     'app_justificacion.apps.AppJustificacionConfig',
     'auditoria.apps.AuditoriaConfig',
+    'asistencias.apps.AsistenciasConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'reversion',
     'simple_history',
+    'background_task'
     
 ]
 
@@ -72,6 +74,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, "app_tipojustificacion","templates"),
             os.path.join(BASE_DIR, "app_justificacion","templates"),
             os.path.join(BASE_DIR, "login","templates"),
+            os.path.join(BASE_DIR, "asistencias","templates"),
             ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -80,6 +83,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -165,7 +169,7 @@ EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 #Lugar donde se guardan las imagenes
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') 
 MEDIA_URL = '/media/'
 
 
