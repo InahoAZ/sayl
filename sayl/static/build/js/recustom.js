@@ -33,6 +33,8 @@ $(document).ready(function() { //Falta Ordenar por fecha
     $('#min').val('');
     $('#max').val('');
     midatatable = $('#midatatable').DataTable({
+        "orderCellsTop": true,
+        "fixedHeader": true,
         "lengthMenu": [
             [5, 10, 25, 50, -1],
             [5, 10, 25, 50, "Todos"]
@@ -249,6 +251,26 @@ $(document).ready(function() { //Falta Ordenar por fecha
             "buttons": {
                 "copy": "Copiar",
                 "colvis": "Visibilidad"
+            },
+            "initComplete": function() {
+                this.api().columns().every(function() {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function(d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                });
             }
         }
     });
@@ -278,7 +300,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
     $(document).ready(function() {
         var interval = setInterval(function() {
             var momentNow = moment();
-            $('#date-part').html(momentNow.format('YYYY MMMM DD') + ' ' +
+            $('#date-part').html(momentNow.format('DD MM YYYY') + ' ' +
                 momentNow.format('dddd')
                 .substring(0, 3).toUpperCase());
             $('#time-part').html(momentNow.format('A hh:mm:ss'));
@@ -422,7 +444,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 console.log(table.row('.selected').data());
                 console.log(data[0]);
                 console.log("AJAX OK");
-                $('#legajo-txt').html(String(data[0]['legajo']['pk']));
+                $('#legajo-txt').html(String(data[0]['legajo']['legajo']));
                 $('#apellido-txt').html(data[0]['legajo']['last_name']);
                 $('#nombre-txt').html(data[0]['legajo']['first_name']);
                 $('#tjust-txt').html(data[0]['tipo_justificacion']['motivo']);
@@ -447,6 +469,8 @@ $(document).ready(function() { //Falta Ordenar por fecha
     $('#select-cargo').ready(function() { //no anda
         $('.selDiv option:eq(2)');
     });
+
+    //Dos combobox, al seleccionar uno se hace una consulta a la bd y se rellena el otro.
     $('#select-cargo').change(function() {
         var cg = $(this).val();
 
@@ -466,6 +490,28 @@ $(document).ready(function() { //Falta Ordenar por fecha
             }
         })
     });
+
+    //Para filtrar cada columna de un datatable.
+    $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+        $('#midatatabl thead tr').clone(true).appendTo('#midatatabl thead');
+        $('#midatatabl thead tr:eq(1) th').each(function(i) {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Buscar por ' + title + '" />');
+
+            $('input', this).on('keyup change', function() {
+                if (table.column(i).search() !== this.value) {
+                    table
+                        .column(i)
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+
+    });
+
 
 
 

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Asistencia
 from django.utils import timezone
+from .forms import AsistenciaForm
 
 
 # Create your views here.
@@ -33,4 +34,20 @@ def simular_marcaje(request):
             marcaje.condicion = "Asistió"
             marcaje.save()
     return redirect('index')
+
+def corregir_marcaje(request, pk):
+    asistencia = Asistencia.objects.get(pk=pk)
+    if request.method == 'GET':
+        form = AsistenciaForm(instance = asistencia)
+    else:
+        form = AsistenciaForm(request.POST, instance = asistencia)
+        print(form.errors)
+        if form.is_valid():
+            asist = form.save(commit=False)
+            asist.changeReason = 'Correccion de Asistencia'
+            asist.save()
+        return redirect('index')
+    context = {'form_corregir_marcaje': form}
+    return render(request, 'asistencias/corregir_marcaje.html', context)
+    
 
