@@ -1,6 +1,7 @@
 {% extends 'sayl/index.html' %}
 {% load staticfiles %}
 {% block content %}
+
 <div class="right_col" role="main">
     <div class="">
         <div class="col-md-12">
@@ -38,7 +39,7 @@
                             <td>{{asistencia.hora_salida}}</td>
                             <td>{{asistencia.horas_trabajadas}}</td>
                             <td>{{asistencia.condicion}}</td>                            
-                            <td><a href="#" class="btn btn-success"><span class="fa fa-edit"></span></a></td>                            
+                            <td><a href="corregir_marcaje/{{asistencia.pk}}" class="btn btn-success"><span class="fa fa-edit"></span></a></td>                            
                         </tr>
                         {% endfor %}
                     </tbody>

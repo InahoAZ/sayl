@@ -82,6 +82,11 @@ def rechazar_just(request, pk):
     justificacion = Justificacion.objects.filter(pk=pk).update(estado='Rechazado')
     return redirect('/app_justificacion')
 
+def justificaciones_encurso(request):
+    just_encurso = Justificacion.objects.filter(estado="Aprobado").order_by('fecha_solicitud')
+    context = {'just_encurso': just_encurso}
+    return render(request, 'app_justificacion/justificaciones_encurso.html', context)
+
 @csrf_exempt
 def justificaciones_list(request, pk):
     """

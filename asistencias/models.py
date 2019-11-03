@@ -7,11 +7,18 @@ from datetime import date, datetime
 # Create your models here.
 
 class Asistencia(models.Model):
+    CONDICIONES = [
+        ('Asistencia','Asistencia'), 
+        ('Inasistencia Injustificada','Inasistencia Injustificada'),
+        ('Inasistencia Justificada','Inasistencia Justificada'),
+        ('Inconsistencia Marcaje','Inconsistencia Marcaje'),
+        ('Correccion Inconsistencia', 'Correccion Inconsistencia')
+        ]
     legajo = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
     fecha_marcaje = models.DateField()
     hora_entrada = models.TimeField()
     hora_salida = models.TimeField(null=True, blank=True)
-    condicion = models.CharField(max_length=50)
+    condicion = models.CharField(max_length=50, choices=CONDICIONES)
     history = HistoricalRecords()
 
     @property
