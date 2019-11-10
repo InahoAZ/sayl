@@ -512,6 +512,16 @@ $(document).ready(function() { //Falta Ordenar por fecha
 
     });
 
+    $('#just-cargo').change(function() {
+        console.log("Algo");
+        if (this.checked) {
+            $('#select-cargo').collapse('show')
+        } else {
+            $('#select-cargo').collapse('hide')
+        }
+    });
+
+
 
 
 

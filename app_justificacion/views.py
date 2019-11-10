@@ -87,6 +87,8 @@ def justificaciones_encurso(request):
     context = {'just_encurso': just_encurso}
     return render(request, 'app_justificacion/justificaciones_encurso.html', context)
 
+    
+
 @csrf_exempt
 def justificaciones_list(request, pk):
     """

@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Asistencia
 from django.utils import timezone
+import datetime
 from .forms import AsistenciaForm
+from login.models import CustomUser
 
 
 # Create your views here.
@@ -49,5 +51,13 @@ def corregir_marcaje(request, pk):
         return redirect('index')
     context = {'form_corregir_marcaje': form}
     return render(request, 'asistencias/corregir_marcaje.html', context)
+
+def inasistencia_automatica(request):
+    asist_dehoy = Asistencia.objects.filter(fecha_marcaje=datetime.date.today()) 
+    print(asist_dehoy)
+    users_sinmarcar = CustomUser.objects.exclude(pk__in=asist_dehoy)
+    print(users_sinmarcar)
+
+    return redirect('index')
     
 
