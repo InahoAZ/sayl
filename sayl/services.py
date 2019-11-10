@@ -37,7 +37,7 @@ def get_categorias(cod_categ = ''):
         for r in respuesta:
             if categoria["categoria"].strip() == cod_categ:
                 return r
-    print(respuesta)
+    #print(respuesta)
     return respuesta
 
 def get_cargos_api(legajo):
@@ -45,7 +45,7 @@ def get_cargos_api(legajo):
     user = 'demo'
     password = 'demo'
     
-    print(url)
+    #print(url)
     try:
         resp = req.get(url, auth=(user,password),timeout=1)
         respuesta = resp.json()

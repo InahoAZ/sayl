@@ -11,5 +11,4 @@ class JustificacionForm(forms.ModelForm):
             'fecha_inicio' : forms.DateInput(format=('%d-%m-%Y'), attrs={'type':'text','class' : 'form-control has-feedback-left col-md-7 col-xs-12','id':'single_cal4','aria-describedby':'inputSuccess2Status2'}),
             'fecha_fin' : forms.DateInput(format=('%d-%m-%Y'),attrs={'type':'text','class' : 'form-control has-feedback-left col-md-7 col-xs-12','id':'single_cal3','aria-describedby':'inputSuccess2Status3'}),
             
-                      
         }

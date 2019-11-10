@@ -9,5 +9,6 @@ urlpatterns = [
     path('aprobar_just/<int:pk>', views.aprobar_just, name='aprobar_just'),
     path('rechazar_just/<int:pk>', views.rechazar_just, name='rechazar_just'),
     path('cancelar_aviso/<int:pk>', views.cancelar_aviso, name='cancelar_aviso'),
+    path('justificaciones_encurso', views.justificaciones_encurso, name='justificaciones_encurso'),
 
 ]

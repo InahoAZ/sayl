@@ -69,7 +69,7 @@ Select2 supports multiple languages by simply including the right language JS
 file (`dist/js/i18n/it.js`, `dist/js/i18n/nl.js`, etc.) after
 `dist/js/select2.js`.
 
-Missing a language? Just copy `src/js/select2/i18n/en.js`, translate it, and
+Missing a language? Just copy `src/js/select2/i18n/es.js`, translate it, and
 make a pull request back to Select2 here on GitHub.
 
 Documentation
