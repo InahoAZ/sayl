@@ -26,7 +26,7 @@ class TipoJustificacion(models.Model):
     claustro = models.CharField(
         max_length=11,
         choices=CLAUSTRO)
-    cargo  = models.CharField(max_length=20, choices=LISTA_CARGOS)
+    cargo  = models.CharField(max_length=20, choices=LISTA_CARGOS, blank=True)
     history = HistoricalRecords(table_name='tjustificacion_historial')
 
     def __str__(self):

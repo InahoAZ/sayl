@@ -5,7 +5,7 @@ from sayl.services import get_cargos_api
 
 class CustomUser(AbstractUser):
     legajo = models.CharField(max_length=12)
-    image_profile = models.ImageField(upload_to='images/')
+    image_profile = models.ImageField(upload_to='images/', blank=True)
     
     
     def get_cargos(self):
