@@ -1,6 +1,8 @@
 # Integrar WhatsApp API a tu Aplicacion
+## Aclaracion
+Esto no es un tutorial en si, mas bien es algo que estuve probando y le puede servir a otros y a veces no esta tan a mano o no sabemos como buscar. La idea es que entren en los links mas que en seguir lo que dice acá.
 ## Problema de Version Oficial de WP API
-La idea principal era poder usar la API que tiene Whatsapp Buissines (https://www.whatsapp.com/business/api?lang=es)  para integrar el mismo con mi aplicacion, pero esta API esta en una fase Beta, y solo se puede usar solicitando acceso a WhatsApp y para ello se necesita ser una empresa.
+Este documento surge de la necesidad de poder implementar la API que tiene Whatsapp Buissines (https://www.whatsapp.com/business/api?lang=es) en mi proyecto final, pero esta API esta en una fase Beta, y solo se puede usar solicitando acceso a WhatsApp y para ello se necesita ser una empresa, entre otras limitaciones y requerimientos que no podia cumplir.
 ## Solucion usando Twilio
 Para poder mandar y recibir mensajes por medio de la API de WP, encontre otra solucion que es usar una plataforma que ofrece distintos tipos de servicios de mensajeria para empresas llamado Twilio (www.twilio.com/referral/bOcjxu) donde uno de sus servicios es de hacer de mediador entre WhatsApp y nuestra Aplicacion.
 
@@ -36,3 +38,5 @@ En el caso de Python la libreria se descarga mediante pip (https://www.twilio.co
 
 	Basicamente para mandar mensajes seguir este tutorial:
 https://www.twilio.com/docs/sms/whatsapp/quickstart/python
+
+Cabe aclarar que el te da unos 15usd de prueba constando cada mensaje por wpp algo de 0.04 centavos de dolar, para pruebas creo que si no se abusa de las mismas alcanza, ahora para produccion habria que ver si es mas viable usar el servicio de twilio o ver la posibilidad de ser aprobado por WhatsApp y usar la API oficial.
