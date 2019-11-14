@@ -71,6 +71,7 @@
                             <div class="col-md-12">
                                 <form action="" method="post" class="form-horizontal form-label-left">
                                 {% csrf_token %}
+                                                                                                            
                                     <div class="form-group">
                                         <label for="{{field.id_for_label}}" class="control-label col-md-3 col-sm-3 col-xs-12">{{form_justificacion.descripcion.label}}</label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">                                             
@@ -118,7 +119,18 @@
                                             </fieldset>                                                                              
                                         </div>
                                     </div>                                    
-
+                                    <div class="form-group">
+                                        <label for="" class="control-label col-md-3 col-sm-3 col-xs-12">Avisar a: </label>
+                                        <div class="">                                             
+                                            <select class="to col-md-6 col-sm-6 col-xs-12" name="usuarios[]" multiple="multiple">
+                                                {% for user in users %}
+                                                    <option value="{{user.pk}}">{{user.last_name}} {{user.first_name}}</option>
+                                                {% endfor %}
+                                                
+                                                
+                                            </select>                                    
+                                        </div>
+                                    </div>
                                 <div class="text-center">
                                 <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
                                 <button type="submit" class="btn btn-default">

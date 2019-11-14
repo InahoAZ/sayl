@@ -525,4 +525,13 @@ $(document).ready(function() { //Falta Ordenar por fecha
 
 
 
+    //Select 2 multiple, para mandar mensajes a usuarios.
+    $(document).ready(function() {
+        $('.to').select2();
+    });
+
+
+
+
+
 });
