@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import JustificacionForm
 from .models import Justificacion
+from login.models import CustomUser
 from app_tipojustificacion.models import TipoJustificacion
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
@@ -32,6 +33,7 @@ def index(request):
 def avisar_inasistencia(request):
     form_justificacion = JustificacionForm()
     justificaciones = Justificacion.objects.filter(legajo=request.user)
+    users = CustomUser.objects.all().order_by('last_name')
     
     #print(justificaciones)
     usuario_actual = request.user
@@ -39,6 +41,9 @@ def avisar_inasistencia(request):
 
     if request.method == 'POST':
         form_justificacion = JustificacionForm(request.POST)
+        avisar_a = request.POST.getlist('usuarios[]')
+        print(avisar_a)
+        
         #print(request.user.legajo)
         if form_justificacion.is_valid():
             just = form_justificacion.save(commit=False)
@@ -48,6 +53,10 @@ def avisar_inasistencia(request):
             
             just.legajo =  request.user
             just.changeReason = 'Aviso de Inasistencia'
+
+            #Calcular cantidad de licencias segun rango de dias
+            
+
             #Pregunta si la cantidad que pidio no supera el limite.
             if cantjustificacion <= just.tipo_justificacion.cant_mes:
                 just.save()
@@ -63,6 +72,7 @@ def avisar_inasistencia(request):
         'form_justificacion':form_justificacion, 
         'justificaciones':justificaciones,
         'cargos_user':cargos,
+        'users':users,
         }
     return render(request, 'app_justificacion/avisar_inasistencia.html',context)
 
