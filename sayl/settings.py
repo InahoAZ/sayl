@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'app_justificacion.apps.AppJustificacionConfig',
     'auditoria.apps.AuditoriaConfig',
     'asistencias.apps.AsistenciasConfig',
+    'edificios.apps.EdificiosConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
