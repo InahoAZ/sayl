@@ -10,7 +10,9 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from .serializers import JustificacionSerializer
 from django.contrib import messages
+from mensajeria.views import mandar_whatsapp, mandar_mail
 import inflect
+from datetime import datetime
 
 # Create your views here.
 
@@ -42,7 +44,10 @@ def avisar_inasistencia(request):
     if request.method == 'POST':
         form_justificacion = JustificacionForm(request.POST)
         avisar_a = request.POST.getlist('usuarios[]')
+        
         print(avisar_a)
+        
+        
         
         #print(request.user.legajo)
         if form_justificacion.is_valid():
@@ -59,6 +64,28 @@ def avisar_inasistencia(request):
 
             #Pregunta si la cantidad que pidio no supera el limite.
             if cantjustificacion <= just.tipo_justificacion.cant_mes:
+                
+                #Armado del mensaje predeterminado de Aviso de Inasistencia.
+                motivo = form_justificacion.cleaned_data['tipo_justificacion']
+                motivo = motivo.motivo
+                desde = form_justificacion.cleaned_data['fecha_inicio']
+                hasta = form_justificacion.cleaned_data['fecha_fin']
+                desde = desde.strftime("%d/%m/%Y")
+                hasta = hasta.strftime("%d/%m/%Y")
+
+                mensaje = request.user.first_name + " "
+                mensaje += request.user.last_name
+                mensaje += " ha notificado que se ausentara por: " + motivo           
+                
+                mensaje += " desde: " + desde
+                mensaje += " hasta: " + hasta
+                
+                if request.user.suscripto_telefono:  
+                    pass              
+                    #mandar_whatsapp(avisar_a, mensaje)
+                if request.user.suscripto_mail:
+                    print("Sus mail")
+                    mandar_mail(avisar_a, "Sobre Aviso de Inasistencia", mensaje)
                 just.save()
             else:
                 messages.error(request, 'Has ocupado todas tus justificaciones de este tipo por este mes')

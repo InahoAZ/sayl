@@ -6,7 +6,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'first_name','last_name', 'email', 'legajo','image_profile') #Legajo para pruebas, despues tiene que ser automatico
+        fields = ('username', 'legajo', 'first_name','last_name', 'email', 'suscripto_mail', 'suscripto_telefono'  ) #Legajo para pruebas, despues tiene que ser automatico
 
 class CustomUserChangeForm(UserChangeForm):
 

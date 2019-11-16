@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'auditoria.apps.AuditoriaConfig',
     'asistencias.apps.AsistenciasConfig',
     'edificios.apps.EdificiosConfig',
+    'mensajeria.apps.MensajeriaConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -76,6 +77,8 @@ TEMPLATES = [
             os.path.join(BASE_DIR, "app_justificacion","templates"),
             os.path.join(BASE_DIR, "login","templates"),
             os.path.join(BASE_DIR, "asistencias","templates"),
+            os.path.join(BASE_DIR, "edificios","templates"),
+            os.path.join(BASE_DIR, "mensajeria","templates"),
             ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -165,9 +168,16 @@ DEBUG_TOOLBAR_CONFIG = {
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login'
 
-# Para simular mandar correos. Los "correos" se guardan en la carpeta sent_emails
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+# # Para simular mandar correos. Los "correos" se guardan en la carpeta sent_emails
+# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'supervisoraylunam@gmail.com'
+EMAIL_HOST_PASSWORD = 'supervisor1234'
 
 #Lugar donde se guardan las imagenes
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') 
