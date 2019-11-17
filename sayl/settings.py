@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'reversion',
     'simple_history',
-    'background_task'
+    'background_task',
+    'django_crontab'
     
 ]
 
@@ -172,6 +173,8 @@ LOGOUT_REDIRECT_URL = '/accounts/login'
 # EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 # EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
+
+#Configuracion para correo gmail
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
@@ -183,4 +186,12 @@ EMAIL_HOST_PASSWORD = 'supervisor1234'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') 
 MEDIA_URL = '/media/'
 
+#Aca se dicen cuando y que se va a ejecutar en el cron. (Tareas Automaticas)
+#Se usa el formato de crontab de unix para establecer el cuando 
+#(https://www.redeszone.net/2017/01/09/utilizar-cron-crontab-linux-programar-tareas/)
+#(https://gutsytechster.wordpress.com/2019/06/24/how-to-setup-a-cron-job-in-django/)
+
+CRONJOBS = [
+    ('* * * * *', 'asistencias.cron.asignar_inasistencia', '>> /home/bjar/Documents/scheduled_job.log')
+]
 

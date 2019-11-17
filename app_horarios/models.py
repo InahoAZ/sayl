@@ -1,4 +1,5 @@
 from django.db import models
+from edificios.models import Edificio
 
 # Create your models here.
 class PeriodoLectivo(models.Model):
@@ -7,11 +8,18 @@ class PeriodoLectivo(models.Model):
     actual = models.BooleanField()
     descripcion = models.CharField(max_length=200)
 
-class Modulo(models.Model):
-    descripcion = models.CharField(max_length=200)
+
+class Horario(models.Model):    
+    edificio = models.ForeignKey(Edificio, on_delete = models.PROTECT, blank=True)
+    periodo_lectivo = models.ForeignKey('PeriodoLectivo', on_delete = models.PROTECT, blank=True)
+    legajo = models.CharField(max_length=12)    
+    cant_modificaciones = models.IntegerField()
+    
 
 
-class Horario(models.Model):
+class DetalleHorario(models.Model):
+    horario = models.ForeignKey('Horario', on_delete = models.PROTECT)
+    
     DIAS = [
         ('Lunes', 'Lunes'),
         ('Martes','Martes'),
@@ -21,16 +29,12 @@ class Horario(models.Model):
         ('Sabado', 'Sabado'),
         ('Domingo','Domingo')
     ]
-    modulo = models.ForeignKey('Modulo', on_delete = models.PROTECT)
-    periodo_lectivo = models.ForeignKey('PeriodoLectivo', on_delete = models.PROTECT)
-    legajo = models.CharField(max_length=12)
     desde = models.TimeField()
     hasta = models.TimeField()
     dia = models.CharField(
         max_length=10,
         choices = DIAS
     )
-    cant_modificaciones = models.IntegerField()
     descripcion = models.CharField(max_length=200)
     
     

@@ -1,7 +1,7 @@
 from django import forms
-from .models import Horario
+from .models import DetalleHorario
 
-class HorarioForm(forms.ModelForm):
+class DetalleHorarioForm(forms.ModelForm):
     class Meta:
-        model = Horario
-        fields = ['desde', 'hasta',]
+        model = DetalleHorario
+        fields = ['descripcion', 'dia', 'desde', 'hasta']

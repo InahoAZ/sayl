@@ -80,9 +80,8 @@ def avisar_inasistencia(request):
                 mensaje += " desde: " + desde
                 mensaje += " hasta: " + hasta
                 
-                if request.user.suscripto_telefono:  
-                    pass              
-                    #mandar_whatsapp(avisar_a, mensaje)
+                if request.user.suscripto_telefono:             
+                    mandar_whatsapp(avisar_a, mensaje)
                 if request.user.suscripto_mail:
                     print("Sus mail")
                     mandar_mail(avisar_a, "Sobre Aviso de Inasistencia", mensaje)

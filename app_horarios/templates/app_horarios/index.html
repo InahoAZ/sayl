@@ -59,12 +59,12 @@
                                             <h4 class="modal-title" id="myModalLabel{{tipojust.pk}}">Modal title</h4>
                                         </div>
                                         <div class="modal-body">                                          
-                                          <form action="" method="POST">
-                                          <input type="hidden" name="accion" value="add">
+                                        <form action="" method="POST">
+                                        <input type="hidden" name="accion" value="add">
                                             {% csrf_token %}
-                                            {{form_horarios.as_p}}
+                                            {{form_detalle_horario.as_p}}
                                             
-                                          
+                                        
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
                                             <button type="submit" class="btn btn-default">
@@ -77,31 +77,30 @@
                                 </div>
                             </div>
                         </div>
-                        <table id="datatable" class="table table-striped table-bordered">
+                        <table id="midatatable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Motivo</th>
-                                    <th>Art.CCT</th>
-                                    <th>Dia Trabajado</th>
-                                    <th>Cant. Mes</th>
-                                    <th>Cant. Año</th>
-                                    <th>Claustro</th>
+                                    <th>Pk</th>
+                                    <th>Descripcion</th>
+                                    <th>Día</th>
+                                    <th>Desde</th>
+                                    <th>Hasta</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for tipojust in tiposjust %}
+                                {% for horario in horarios %}
                                 <tr>
-                                    <td>{{tipojust.motivo}}</td>
-                                    <td>{{tipojust.artcct}}</td>
-                                    <td>{{tipojust.dia_trabajado}}</td>
-                                    <td>{{tipojust.cant_mes}}</td>
-                                    <td>{{tipojust.cant_año}}</td>
-                                    <td>{{tipojust.claustro}}</td>
+                                    <td>{{horario.pk}}</td>
+                                    <td>{{horario.descripcion}}</td>
+                                    <td>{{horario.dia}}</td>
+                                    <td>{{horario.desde}}</td>
+                                    <td>{{horario.hasta}}</td>                                    
+                                    
                                     <td class=" last">
                                         <div class="btn-group">
                                             <a type="button" class="btn btn-warning" href="modificar_tjust/{{tipojust.pk}}"><i class="fa fa-edit"></i></button>
-                                                                                       
+
                                             <a class="btn btn-danger" type="button" href="eliminar_tjust/{{tipojust.pk}}"><i class="fa fa-trash"></i></a>
                                         </div>
                                     </td>
