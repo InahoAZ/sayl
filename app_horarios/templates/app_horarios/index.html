@@ -47,6 +47,20 @@
                         <p class="text-muted font-13 m-b-30">
                             Estos horarios seran los que se deberan cumplir
                         </p>
+                        {% if messages %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% for message in messages %}
+                                <!--<div class="text-center"><p{% if message.tags %} {% endif %}>{{ message }} {{tipojust.motivo}} </p></div>-->
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Error</strong> {{ message }} {{tipojust.motivo}}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
                         <div class="row">
                             <div class="col-md-2"><a class="btn btn-success" data-toggle="modal" data-target=".modal_agregar"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>
                             <!--<div class="col-md-2"><a class="btn btn-success" href="agregar_tjust"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>-->
@@ -89,19 +103,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for horario in horarios %}
+                                {% for d_horario in d_horarios %}
                                 <tr>
-                                    <td>{{horario.pk}}</td>
-                                    <td>{{horario.descripcion}}</td>
-                                    <td>{{horario.dia}}</td>
-                                    <td>{{horario.desde}}</td>
-                                    <td>{{horario.hasta}}</td>                                    
+                                    <td>{{d_horario.pk}}</td>
+                                    <td>{{d_horario.descripcion}}</td>
+                                    <td>{{d_horario.dia}}</td>
+                                    <td>{{d_horario.desde}}</td>
+                                    <td>{{d_horario.hasta}}</td>                                    
                                     
                                     <td class=" last">
                                         <div class="btn-group">
-                                            <a type="button" class="btn btn-warning" href="modificar_tjust/{{tipojust.pk}}"><i class="fa fa-edit"></i></button>
-
-                                            <a class="btn btn-danger" type="button" href="eliminar_tjust/{{tipojust.pk}}"><i class="fa fa-trash"></i></a>
+                                            {% comment %} <a type="button" class="btn btn-warning" href="modificar_detalle_horario/{{d_horario.pk}}"><i class="fa fa-edit"></i></button> {% endcomment %}
+                                            {% if not horario.activo %}
+                                            <a class="btn btn-danger" type="button" href="eliminar_detalle_horario/{{d_horario.pk}}"><i class="fa fa-trash"></i></a>
+                                            {% endif %}
                                         </div>
                                     </td>
                                 </tr>

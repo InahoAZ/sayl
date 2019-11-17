@@ -10,10 +10,12 @@ class PeriodoLectivo(models.Model):
 
 
 class Horario(models.Model):    
-    edificio = models.ForeignKey(Edificio, on_delete = models.PROTECT, blank=True)
+    #EDIFICIO DEBERIA IR EN CADA DETALLE DE HORARIO, MODIFICAR.
+    edificio = models.ForeignKey(Edificio, on_delete = models.PROTECT, blank=True)    
     periodo_lectivo = models.ForeignKey('PeriodoLectivo', on_delete = models.PROTECT, blank=True)
     legajo = models.CharField(max_length=12)    
     cant_modificaciones = models.IntegerField()
+    #activo = models.BooleanField(default=False) #Añadir.
     
 
 
