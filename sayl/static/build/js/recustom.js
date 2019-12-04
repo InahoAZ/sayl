@@ -107,7 +107,10 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 // Creamos un encabezado con 3 columnas
                 // A la izquierda: Logo
                 // En el medio: Titulo
-                // A la derecha: algo xd               
+                // A la derecha: algo xd
+                var univ = $('#universidad').val()
+                var facultad = $('#facultad').val()
+                var direccion = $('#direccion').val()
                 doc['header'] = (function() {
                     return {
                         columns: [{

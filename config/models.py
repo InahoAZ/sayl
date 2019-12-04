@@ -4,7 +4,7 @@ from django.db import models
 
 class Configuraciones(models.Model):
     nombre_config = models.CharField(max_length=200)
-    valor_config = models.FloatField()
+    valor_config = models.CharField(max_length=200)
     tipo_dato_config = models.CharField(max_length=200)
     
 

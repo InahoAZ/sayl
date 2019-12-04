@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Asistencia, Edificio
+from app_justificacion.models import Justificacion
 from app_horarios.models import Horario, DetalleHorario
 from django.utils import timezone
 from datetime import datetime, timedelta, date, time
@@ -117,25 +118,57 @@ def corregir_marcaje(request, pk):
     context = {'form_corregir_marcaje': form}
     return render(request, 'asistencias/corregir_marcaje.html', context)
 
-def inasistencia_automatica(request):
+def inasistencia_automatica(request): #FALTA CONTROLAR QUE NO PONGA LA FALTA SI YA SE HIZO
     #asist_dehoy = Asistencia.objects.filter(fecha_marcaje=timezone.now(), condicion="Marcaje Válido") 
+    
+    #Obtengo los agentes que marcaron el dia de hoy
     agentes_marcaron = CustomUser.objects.filter(asistencia__fecha_marcaje=timezone.now())
     print("Asis de hoy: ",agentes_marcaron)
-    agentes_sinmarcar = CustomUser.objects.exclude(pk__in=agentes_marcaron)
+    
+    #Se obtiene todos los marcajes del dia de hoy para verificar que ya no se aplico la inasistencia:
+    inasist_ya_marcados = Asistencia.objects.filter(fecha_marcaje=timezone.now(), condicion__startswith="Inasistencia")
+
+    #Obtengo todos los agentes que no marcaron el dia de hoy
+    agentes_sinmarcar = CustomUser.objects.exclude(pk__in=agentes_marcaron, asistencia__in=inasist_ya_marcados)
+    print(agentes_sinmarcar)
+    #De los que no marcaron obtengo los que tienen justificaciones activas.
+    justs_en_curs = Justificacion.objects.prefetch_related('legajo').filter(legajo__in=agentes_sinmarcar, estado="Aprobado")
+    print("Just: ", justs_en_curs)
+    
+
+
+    #De todos los agentes sin marcar dejo solo los que no tienen justificaciones activas.
+    agentes_sinmarcar = CustomUser.objects.exclude(justificacion__in=justs_en_curs)
+    print("nueva lista: ", agentes_sinmarcar)
 
     for agente_sinmarcar in agentes_sinmarcar:
-        #por cada ajente sin marcar le registro una inasistencia.
-        newinasist = Asistencia()
-        newinasist.fecha_marcaje = timezone.now()
-        newinasist.legajo = agente_sinmarcar
-        newinasist.hora_entrada = '00:00'
-        newinasist.hora_salida = '00:01'
-        newinasist.condicion = 'Inasistencia Injustificada'
-        #Edificio harcodeado
-        newinasist.edificio = Edificio.objects.get(pk=1)
-        newinasist.save()
-        
+        #por cada agente sin marcar que no tiene una justificacion le registro una inasistencia.
+        if not(Asistencia.objects.filter(legajo=agente_sinmarcar, fecha_marcaje=timezone.now()).exists()):
+            newinasist = Asistencia() #Si ya se, se deberia llamar marcajes no asistencia xd
+            newinasist.fecha_marcaje = timezone.now()
+            newinasist.legajo = agente_sinmarcar
+            newinasist.hora_entrada = '00:00'
+            newinasist.hora_salida = '00:00'
+            newinasist.condicion = 'Inasistencia Injustificada'
+            #Edificio harcodeado
+            newinasist.edificio = Edificio.objects.get(pk=1)
+            newinasist.save()
+    
+    
+    for j_en_curs in justs_en_curs:       
 
+        if timezone.now().date() >= j_en_curs.fecha_inicio and timezone.now().date() <= j_en_curs.fecha_fin:
+            print("Esta en la fecha")
+            if not(Asistencia.objects.filter(legajo=j_en_curs.legajo, fecha_marcaje=timezone.now()).exists()):
+                newinasistjust = Asistencia()
+                newinasistjust.fecha_marcaje = timezone.now()
+                newinasistjust.legajo = j_en_curs.legajo
+                newinasistjust.hora_entrada = '00:00'
+                newinasistjust.hora_salida = '00:00'
+                newinasistjust.condicion = 'Inasistencia Justificada'
+                #Edificio harcodeado
+                newinasistjust.edificio = Edificio.objects.get(pk=1)
+                newinasistjust.save()
 
     return redirect('/asistencias/')
     

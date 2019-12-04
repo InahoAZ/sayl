@@ -21,3 +21,6 @@ def dia_de_semana(num_day):
 
 def time2timedelta(time):
     return datetime.combine(date.min, time) - datetime.min
+
+def date2timedelta(time):
+    return datetime.combine(date.min, datetime) - datetime.min
