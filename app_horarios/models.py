@@ -15,7 +15,7 @@ class Horario(models.Model):
     periodo_lectivo = models.ForeignKey('PeriodoLectivo', on_delete = models.PROTECT, blank=True)
     legajo = models.CharField(max_length=12)    
     cant_modificaciones = models.IntegerField()
-    #activo = models.BooleanField(default=False) #Añadir.
+    activo = models.BooleanField(default=False) #Añadir.
     
 
 
@@ -28,7 +28,7 @@ class DetalleHorario(models.Model):
         ('Miercoles', 'Miercoles'),
         ('Jueves', 'Jueves'),
         ('Viernes', 'Viernes'),
-        ('Sabado', 'Sabado'),
+        ('Sábado', 'Sabado'),
         ('Domingo','Domingo')
     ]
     desde = models.TimeField()

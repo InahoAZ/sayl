@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'asistencias.apps.AsistenciasConfig',
     'edificios.apps.EdificiosConfig',
     'mensajeria.apps.MensajeriaConfig',
+    'config.apps.ConfigConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

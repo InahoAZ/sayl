@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from app_tipojustificacion.views import TipoJustificacion
 from app_justificacion.views import Justificacion
-from asistencias.views import Asistencia
+from asistencias.models import Asistencia
 
 
 def audit_tjust(request):
