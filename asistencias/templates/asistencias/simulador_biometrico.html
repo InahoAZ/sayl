@@ -1,27 +1,23 @@
-{% extends 'sayl/index.html' %}
-{% load staticfiles %}
-{% block content %}
+{% extends 'sayl/index.html' %} {% load staticfiles %} {% block content %}
 <div class="right_col" role="main">
     <div class="">
         <div class="col-md-12">
-          <div class="x_panel">
-            <div class="x_title">
-                <h2>Simulador<small></small></h2>              
-                <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
-                <div class="text-center">
-                  <a href="simular_marcajeeste" class="btn btn-info">Marcar Entrada/Salida</a>
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Simulador<small></small></h2>
+                    <div class="clearfix"></div>
                 </div>
-                <div class="text-center">
-                  <a href="inasistencia_automatica" class="btn btn-info">Colocar Inasistencias</a>
+                <div class="x_content">
+                    <div class="text-center">
+                        <a href="simular_marcajee" class="btn btn-info">Marcar Entrada/Salida</a>
+                    </div>
+                    <div class="text-center">
+                        <a href="inasistencia_automatica" class="btn btn-info">Colocar Inasistencias</a>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
-
-        </div>
-      </div>
     </div>
-  </div>
+</div>
+
 {% endblock content %}

@@ -1,6 +1,4 @@
-{% extends 'sayl/index.html'%}
-
-{% block content %}
+{% extends 'sayl/index.html'%} {% block content %}
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
@@ -8,14 +6,11 @@
                 <h3>Corregir Marcaje<small></small></h3>
             </div>
         </div>
-
         <div class="clearfix"></div>
-
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <form action="" method="post">
-                    {% csrf_token %}
-                    {{ form_corregir_marcaje.as_p}}
+                    {% csrf_token %} {{ form_corregir_marcaje.as_p}}
                     <button type="submit">Guardar</button>
                 </form>
             </div>

@@ -40,12 +40,12 @@ $(document).ready(function() { //Falta Ordenar por fecha
             [5, 10, 25, 50, "Todos"]
         ],
         //"dom": '<"row"<"col-md-6"l><"col-md-6"f>><"row"rt><"row"<"col-md-6"i><"col-md-6"p>>',
-        "dom": 'Blrtip',
+        "dom": '<"text-right"B>lrtip',
         "iDisplayLength": 5,
         "buttons": [{
             extend: 'pdfHtml5',
             className: '',
-            text: '<i class="fa fa-file-pdf-o"></i>PDF',
+            text: '<i class="fa fa-file-pdf-o text-left"></i>PDF',
             //Aca le digo que solo los <th> que NO tengan la class="noExport" aparezcan en el reporte
             exportOptions: {
                 columns: ':not(.noExport)'
@@ -301,12 +301,19 @@ $(document).ready(function() { //Falta Ordenar por fecha
     //I got mine working base on https://www.datatables.net/examples/plug-ins/range_filtering.html. Here is my jsfiddle https://jsfiddle.net/bindrid/2bkbx2y3/6/
 
     $(document).ready(function() {
+        moment.lang('es', {
+            months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+            monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
+            weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
+            weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
+            weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
+        });
         var interval = setInterval(function() {
             var momentNow = moment();
-            $('#date-part').html(momentNow.format('DD MM YYYY') + ' ' +
-                momentNow.format('dddd')
-                .substring(0, 3).toUpperCase());
-            $('#time-part').html(momentNow.format('A hh:mm:ss'));
+            $('#date-part').html(momentNow.format('dddd').substring(0, 3).toUpperCase() + ' ' + momentNow.format('DD MM YYYY')
+
+            );
+            $('#time-part').html(momentNow.format('HH:mm:ss'));
         }, 100);
 
     });

@@ -16,8 +16,13 @@ from dateutil.parser import parse
 # Create your views here.
 
 def index(request):
-    asistencias = Asistencia.objects.all()
-    context = {'asistencias':asistencias} 
+    config = Configuraciones.objects.last()
+    print(config)
+    if request.user.is_superuser:
+        asistencias = Asistencia.objects.all()
+    else:
+        asistencias = Asistencia.objects.filter(legajo=request.user)
+    context = {'asistencias':asistencias, 'config':config} 
     print(asistencias)
     return render(request,'asistencias/marcajes.html', context)
 
@@ -26,6 +31,7 @@ def simulador_biometrico(request):
 
 def simular_marcaje(request):
     
+    print("SIMULA3")
     
     #Verifica si el usuario ya registro un marcaje en el dia de hoy:
     ya_marco = Asistencia.objects.filter(fecha_marcaje=timezone.now(), legajo = request.user)
@@ -36,7 +42,6 @@ def simular_marcaje(request):
     dia_de_hoy = dia_de_semana(dia_de_hoy)    
     
     #print("mis_horarios: ", mis_horarios)
-    
     #Verifico si en el dia de hoy existe algun horario declarado que cumplir:
     if Horario.objects.prefetch_related('detallehorario').filter(legajo=request.user.legajo, activo=True, detallehorario__dia=dia_de_hoy).exists():   
         print("Existe")
@@ -52,7 +57,7 @@ def simular_marcaje(request):
         desde = time2timedelta(d_horario.desde)
         hasta = time2timedelta(d_horario.hasta)
         tiempo_tolerancia = Configuraciones.objects.get(nombre_config="tiempo_tolerancia")
-        tiempo_tolerancia = timedelta(minutes=tiempo_tolerancia.valor_config)   
+        tiempo_tolerancia = timedelta(minutes=int(tiempo_tolerancia.valor_config))   
         tol_desde = desde - tiempo_tolerancia
         tol_hasta = hasta + tiempo_tolerancia
         #print(tol_desde, " - ", tol_hasta)
@@ -70,7 +75,7 @@ def simular_marcaje(request):
         marcaje_desde = time2timedelta(asistencia.hora_entrada)
         
         
-        
+        print("Tol DESDE      ->", tol_desde)
         if tol_desde != None and marcaje_desde>=tol_desde:   
             asistencia.condicion = "Entrada Válida"
         else:

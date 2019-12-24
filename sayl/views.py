@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .services import *
 import json
+from config.models import Configuraciones
 
 
 # Create your views here.
@@ -8,9 +9,10 @@ import json
 def home(request):
     if request.user.is_authenticated:
         agente = get_agente(request.user.legajo)
-        context = {'agente':agente}    
-        return render(request, 'sayl/pruebaapi.html', {'agente':agente})
-    return render(request, 'sayl/pruebaapi.html')
+        config = Configuraciones.objects.last()
+        context = {'agente':agente, 'config':config}    
+        return render(request, 'sayl/index.html', context)
+    return render(request, 'sayl/index.html')
 
 def profile(request):
     agente = get_agente(request.user.legajo)

@@ -1,22 +1,25 @@
+{% load staticfiles %} 
 <div class="nav_menu">
   <nav>
     <div class="nav toggle">
       <a id="menu_toggle"><i class="fa fa-bars"></i></a>      
     </div>
     <ul class="nav navbar-nav navbar-left">
-    <li class="">
-      <div id="date-part"></div>
-    </li>
-    <li class="">
-      <h4><div id="time-part"></div></h4>
-    </li>
+      <div class="fechas">
+        <li class="">
+          <div id="date-part"></div>
+        </li>
+        <li class="">
+          <div id="time-part"></div>
+        </li>
+      </div>
     </ul>
     
 
     <ul class="nav navbar-nav navbar-right">
       <li class="">
         <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-          <img src="/static/images/img.jpg" alt="">{{user.first_name}} {{user.last_name}} 
+          <img src=" {% static 'images/blank-profile.png' %} " alt="">{{user.first_name}} {{user.last_name}} 
           <span class=" fa fa-angle-down"></span>
         </a>
         <ul class="dropdown-menu dropdown-usermenu pull-right">

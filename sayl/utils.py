@@ -16,7 +16,7 @@ def render_to_pdf(template_src, context_dict={}):
     return None
 
 def dia_de_semana(num_day):
-    DAYS = ['Domingo', 'Lunes', 'Martes','Miércoles', 'Jueves', 'Viernes', 'Sábado']
+    DAYS = ['Domingo', 'Lunes', 'Martes','Miercoles', 'Jueves', 'Viernes', 'Sábado']
     return DAYS[num_day]
 
 def time2timedelta(time):

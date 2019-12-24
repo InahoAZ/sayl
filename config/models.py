@@ -3,9 +3,21 @@ from django.db import models
 # Create your models here.
 
 class Configuraciones(models.Model):
-    nombre_config = models.CharField(max_length=200)
-    valor_config = models.CharField(max_length=200)
-    tipo_dato_config = models.CharField(max_length=200)
+    #Configuracion General
+
+    #Configuracion de Horarios
+    nombre_universidad = models.CharField(max_length=200)
+    nombre_facultad = models.CharField(max_length=200)
+    direccion_facultad = models.CharField(max_length=200)
+    
+
+    #Configuracion de Asistencias
+    tiempo_tolerancia = models.FloatField()
+
+    #Configuracion de Horarios
+    porcentaje_frente_aula = models.FloatField()
+
+    #Configuracion de Usuario
     
 
 

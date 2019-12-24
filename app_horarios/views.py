@@ -39,7 +39,7 @@ def index(request):
                 print(type(hasta))
                 #hasta = hasta - timedelta(minutes=1)
                 #desde = desde + timedelta(minutes=1)
-                if DetalleHorario.objects.filter(desde__lte=hasta, hasta__gte=desde, dia=dia).exists():
+                if DetalleHorario.objects.filter(desde__lte=hasta, hasta__gte=desde, dia=dia, horario__legajo=request.user.legajo).exists():
                     messages.error(request, 'Ya existe este horario establecido.')
                 else:                    
                     detalle_horario = form_detalle_horario.save(commit=False)
