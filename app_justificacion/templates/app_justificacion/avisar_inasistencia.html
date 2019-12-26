@@ -172,6 +172,7 @@
                                                             <th>Desde</th>
                                                             <th>Hasta</th>
                                                             <th>Estado</th>
+                                                            <th>Observaciones de Supervisor</th>
                                                             <th>Acciones</th>
 
                                                         </tr>
@@ -193,6 +194,7 @@
                                                                 <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="right" title="Queda pendiente a aprobacion por el Supervisor de AyL">{{justificacion.estado}}</button></p>
                                                                 {% endif %}
                                                             </td>
+                                                            <td>{{justificacion.observaciones_supervisor}}</td>
                                                             <td>
                                                                 {% if justificacion.estado == "Pendiente" %}
                                                                 <a href="cancelar_aviso/{{justificacion.pk}}" class="btn btn-danger btn-sm"><span class="fa fa-remove"></span></a></p>

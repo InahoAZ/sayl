@@ -125,13 +125,28 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="text-center" ><a id="btn-aprobar" href="#" class="btn btn-success">Aprobar</a></div>
+                            <div class="col-md-4">
+                                <h4 for="Coso">Observación:</h4>
                             </div>
-                            <div class="col-md-6">
-                                <div class="text-center" ><a id="btn-rechazar" href="#" class="btn btn-danger">Rechazar</a></div>
+                            <div class="col-md-8">
+                                <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id_just" id="id_just" value="">
+                                <textarea type="text" name="observacion" id="observacion"> 
+                                </textarea>
+                            
                             </div>
                         </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="text-center" ><button type="submit" name="btn-aprobar" id="btn-aprobar" class="btn btn-success">Aprobar</button></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-center" ><button id="btn-rechazar" type="submit" name="btn-rechazar" class="btn btn-danger">Rechazar</button></div>
+                            </div>
+                        </div>
+                        </form>
                     <hr />
                     </div>                
                 </div>

@@ -29,7 +29,7 @@ def index(request):
 def simulador_biometrico(request):
     return render(request, 'asistencias/simulador_biometrico.html')
 
-def simular_marcaje(request):
+def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometrico no se van a loguear para marcar. (Cambiar request.user... a el usuario que le mande el biometrico)
     
     print("SIMULA3")
     
@@ -51,13 +51,14 @@ def simular_marcaje(request):
         d_horario = DetalleHorario.objects.get(horario=mis_horarios, dia=dia_de_hoy)  
 
         #Se trae el tiempo de tolerancia configurado
-        tiempo_tolerancia = Configuraciones.objects.get(nombre_config="tiempo_tolerancia")
+        tiempo_tolerancia = Configuraciones.objects.filter().order_by('-id')[0]
+        tiempo_tolerancia = tiempo_tolerancia.tiempo_tolerancia
 
         #Se agrega la tolerancia:
         desde = time2timedelta(d_horario.desde)
         hasta = time2timedelta(d_horario.hasta)
-        tiempo_tolerancia = Configuraciones.objects.get(nombre_config="tiempo_tolerancia")
-        tiempo_tolerancia = timedelta(minutes=int(tiempo_tolerancia.valor_config))   
+        #tiempo_tolerancia = Configuraciones.objects.get(nombre_config="tiempo_tolerancia")
+        tiempo_tolerancia = timedelta(minutes=int(tiempo_tolerancia))   
         tol_desde = desde - tiempo_tolerancia
         tol_hasta = hasta + tiempo_tolerancia
         #print(tol_desde, " - ", tol_hasta)

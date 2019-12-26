@@ -463,6 +463,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 $('#fhasta-txt').html(formato(data[0]['fecha_fin']));
                 $('#btn-aprobar').attr("href", "/app_justificacion/aprobar_just/" + data[0]['pk']);
                 $('#btn-rechazar').attr("href", "/app_justificacion/rechazar_just/" + data[0]['pk']);
+                $('#id_just').attr("value", data[0]['pk'])
 
             }
         });

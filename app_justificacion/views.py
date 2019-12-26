@@ -30,6 +30,15 @@ class JSONResponse(HttpResponse):
 def index(request):
     justificaciones = Justificacion.objects.exclude(estado='Aprobado').exclude(estado='Rechazado')
     
+    if request.method == 'POST':
+        pk = request.POST.get('id_just')
+        observacion = request.POST.get('observacion')
+        justificacion = Justificacion.objects.filter(pk=pk).update(observaciones_supervisor=observacion)
+        if "btn-aprobar" in request.POST:            
+            justificacion = Justificacion.objects.filter(pk=pk).update(estado='Aprobado')   
+        if "btn-rechazar" in request.POST:
+            justificacion = Justificacion.objects.filter(pk=pk).update(estado='Rechazado') 
+
     return render(request, 'app_justificacion/index_admin.html', {'justificaciones':justificaciones})
 
 def avisar_inasistencia(request):
@@ -112,6 +121,7 @@ def cancelar_aviso(request, pk):
 
 def aprobar_just(request, pk):
     justificacion = Justificacion.objects.filter(pk=pk).update(estado='Aprobado')
+    
     return redirect('/app_justificacion')
 
 def rechazar_just(request, pk):

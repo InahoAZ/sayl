@@ -19,6 +19,7 @@ class Justificacion(models.Model):
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
     descripcion = models.CharField(max_length=255)
+    observaciones_supervisor = models.CharField(max_length=255)
     history = HistoricalRecords(table_name='justificacion_historial')
     
 
