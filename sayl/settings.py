@@ -168,7 +168,7 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 '''
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/accounts/login'
+LOGOUT_REDIRECT_URL = '/login'
 
 # # Para simular mandar correos. Los "correos" se guardan en la carpeta sent_emails
 # EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"

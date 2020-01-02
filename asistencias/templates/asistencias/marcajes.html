@@ -46,7 +46,10 @@
                                 <th>Hora de Salida</th>
                                 <th>Horas Trabajadas</th>
                                 <th>Condicion</th>
-                                <th class="noExport">Acciones</th>
+                                {% if request.user.is_superuser %}
+                                    <th class="noExport">Acciones</th>
+                                {% endif %}
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -60,7 +63,10 @@
                                 <td>{{asistencia.hora_salida}}</td>
                                 <td>{{asistencia.horas_trabajadas}}</td>
                                 <td>{{asistencia.condicion}}</td>
-                                <td><a href="corregir_marcaje/{{asistencia.pk}}" class="btn btn-success"><span class="fa fa-edit"></span></a></td>
+                                {% if request.user.is_superuser %}
+                                    <td><a href="corregir_marcaje/{{asistencia.pk}}" class="btn btn-success"><span class="fa fa-edit"></span></a></td>
+                                {% endif %}
+                                
                             </tr>
                             {% endfor %}
                         </tbody>

@@ -12,12 +12,14 @@ class CustomUser(AbstractUser):
     telefono = models.ForeignKey(Telefono, on_delete=models.PROTECT)    
     suscripto_telefono =  models.BooleanField(default=True)
     suscripto_mail = models.BooleanField(default=True)
+    
     history = HistoricalRecords(table_name='usercontact_historial')
     
     
     def get_cargos(self):
         cargos = get_cargos_api(self.legajo)
         return cargos
+
     
     # def __str__(self):
     #     return self.get_cargos()
