@@ -19,7 +19,7 @@
     <div class="login_wrapper">
       <div class="animate form login_form">
         <section class="login_content">
-          <form method="POST" id="form_login">
+          <form method="POST" id="form_login" action='/login/signin'>
           <h1>Iniciar Sesión</h1>
             {% csrf_token %}
             {{ form.as_p }}

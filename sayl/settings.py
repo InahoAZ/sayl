@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'asistencias.apps.AsistenciasConfig',
     'edificios.apps.EdificiosConfig',
     'mensajeria.apps.MensajeriaConfig',
+    'cargos.apps.CargosConfig',
     'config.apps.ConfigConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -161,12 +162,13 @@ INTERNAL_IPS = [
     # ...
 ]
 
-'''
+
+#Para d esactivar la debug toolbar
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda r: False,  # disables it
     # '...
 }
-'''
+
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
 

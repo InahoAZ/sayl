@@ -12,13 +12,12 @@ def index(request):
         print(form.errors)
         if form.is_valid():
             config = form.save(commit=False)
-            config.changeReason = 'Modificacion de Configuracion'
+            config.changeReason = 'Nueva Configuracion'
             config.save()
             return redirect('/config')
     return render(request, 'config/index.html', {'all_config':all_config, 'config_form':config_form})
 
 def editar_config(request,pk):
-
     config = Configuraciones.objects.get(pk=pk)
     if request.method == 'GET':
         form = ConfiguracionesForm(instance = config)

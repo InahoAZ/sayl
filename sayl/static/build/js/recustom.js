@@ -704,6 +704,41 @@ $(document).ready(function() { //Falta Ordenar por fecha
     });
 
 
+    (function($) {
+        $('.dropdown-menu a.dropdown-toggle').on('click', function(e) {
+            if (!$(this).next().hasClass('show')) {
+                $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+            }
+            var $subMenu = $(this).next(".dropdown-menu");
+            $subMenu.toggleClass('show');
+
+            $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+                $('.dropdown-submenu .show').removeClass("show");
+            });
+
+            return false;
+        });
+    })(jQuery)
+
+
+    // //Rellenar Mis Cargos
+    // $('#perfil').click(function() {
+    //     console.log('hghghhghgh');
+    //     $.ajax({
+    //         url: '/cargos/mis_cargos_list',
+    //         success: function(data) {
+    //             var html = "";
+    //             for (var i = 0; i < data.length; i++) {
+
+    //                 html += "<li> <a href='cargos/switch_cargo/" + data[i].cargo + "'>" + data[i].desc_categ + "</li>";
+    //             }
+    //             $('#mis_cargos').html(html);
+    //         }
+    //     })
+    // });
+
+
+
 
 
 

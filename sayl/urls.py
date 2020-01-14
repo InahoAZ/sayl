@@ -34,6 +34,7 @@ urlpatterns = [
     path('edificios/', include('edificios.urls')),
     path('mensajeria/', include('mensajeria.urls')),
     path('config/', include('config.urls')),
+    path('cargos/', include('cargos.urls')),
 ]
 
 if settings.DEBUG:

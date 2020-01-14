@@ -10,7 +10,8 @@ def home(request):
     if request.user.is_authenticated:
         agente = get_agente(request.user.legajo)
         config = Configuraciones.objects.last()
-        context = {'agente':agente, 'config':config}    
+        mis_cargos = get_cargos_api(request.user.legajo)
+        context = {'agente':agente, 'config':config, 'mis_cargos':mis_cargos}    
         return render(request, 'sayl/index.html', context)
     return render(request, 'sayl/index.html')
 

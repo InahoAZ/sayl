@@ -99,6 +99,27 @@
     <script src="{% static '/build/js/amcharts4/core.js' %}"></script>
     <script src="{% static '/build/js/amcharts4/charts.js' %}"></script>
     <script src="{% static '/build/js/amcharts4/maps.js' %}"></script>
+    <script>    
+        function traer_cargos() {
+            console.log('hghghhghgh');
+            $.ajax({
+            url: '/cargos/mis_cargos_list',
+            success: function(data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+
+                    //html += "<li> <a href='cargos/switch_cargo/" + data[i].cargo + "'>" + data[i].desc_categ + "</li>";
+                    $('#cargos').append("<li> <a href='/cargos/switch_cargo/" + data[i].cargo + "'>" + data[i].desc_categ + "</li>");
+                }
+                console.log(html);
+                
+                
+
+            }
+        })
+        };
+
+    </script>
     {% endblock %}
 
     <!--DataTable-->

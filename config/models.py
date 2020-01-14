@@ -16,6 +16,7 @@ class Configuraciones(models.Model):
 
     #Configuracion de Horarios
     porcentaje_frente_aula = models.FloatField()
+    horario_entrada_nodoc = models.TimeField()
 
     #Configuracion de Usuario
     
