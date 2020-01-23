@@ -6,6 +6,7 @@ from .models import CustomUser
 from sayl.services import get_cargos_api
 from cargos.models import CargosCache
 from mensajeria.forms import TelefonoForm
+from django.contrib import messages
 # from mensajeria.forms import UserContactForm
 # from mensajeria.models import UserContact
 
@@ -18,27 +19,33 @@ def signin(request):
         login(request, user)
         #Traigo los cargos de ese usuario del siu
         cargos_siu = get_cargos_api(user.legajo)
-        #Selecciono el primero (porque si.)
-        cargos_siu = cargos_siu[0]
-        #Verifico si no esta en cache
-        if not(CargosCache.objects.filter(customuser=user, cargo_cod=cargos_siu['cargo']).exists()):
-            #si no esta agrego a cache y selecciono.
-            cc = CargosCache(cargo_cod=cargos_siu['cargo'],
-                            categoria=cargos_siu['categoria'],
-                            desc_regional=cargos_siu['desc_regional'],
-                            desc_categ=cargos_siu['desc_categ'],
-                            desc_dedic=cargos_siu['desc_dedic'],
-                            horas_dedicacion=cargos_siu['cargo'],
-                            escalafon=cargos_siu['escalafon'],
-                            seleccionado=True)
-            cc.save()
-            u=CustomUser.objects.get(pk=user.pk)
-            u.cargos_cache = cc
-            u.save()
+        print(cargos_siu)
+        #Selecciono el primero (porque si.) si es que tiene un cargo activo
+        if cargos_siu != None:
+            cargos_siu = cargos_siu[0]
+            #Verifico si no esta en cache
+            if not(CargosCache.objects.filter(customuser=user, cargo_cod=cargos_siu['cargo']).exists()):
+                #si no esta agrego a cache y selecciono.
+                cc = CargosCache(cargo_cod=cargos_siu['cargo'],
+                                categoria=cargos_siu['categoria'],
+                                desc_regional=cargos_siu['desc_regional'],
+                                desc_categ=cargos_siu['desc_categ'],
+                                desc_dedic=cargos_siu['desc_dedic'],
+                                horas_dedicacion=cargos_siu['cargo'],
+                                escalafon=cargos_siu['escalafon'],
+                                seleccionado=True)
+                cc.save()
+                u=CustomUser.objects.get(pk=user.pk)
+                u.cargos_cache = cc
+                u.save()
+                return redirect('/')
+        else:
+            messages.error(request, 'Verifique si tiene un cargo activo o su conexion a internet')
+            return redirect('/accounts/login')
         
-        return redirect('/')
     else:
-        return redirect('accounts/login')
+        messages.error(request, 'Usuario y/o contraseña incorrecta')
+        return redirect('/accounts/login')
     
         
 
@@ -59,7 +66,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username = username, password = raw_password)
             login(request, user)
-            return redirect('sayl/index')
+            return redirect('/')
     else:
         form = CustomUserCreationForm()
         telefono_form = TelefonoForm(request.POST)

@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
     telefono = models.ForeignKey(Telefono, on_delete=models.PROTECT)    
     suscripto_telefono =  models.BooleanField(default=True)
     suscripto_mail = models.BooleanField(default=True)
-    cargos_cache = models.ForeignKey(CargosCache, on_delete=models.PROTECT)
+    cargos_cache = models.ForeignKey(CargosCache, on_delete=models.PROTECT, blank=True, null=True)
 
     history = HistoricalRecords(table_name='usercontact_historial')
     
@@ -27,5 +27,5 @@ class CustomUser(AbstractUser):
         c_select = CargosCache.objects.get(seleccionado=True, customuser=self)
         return c_select
 
-    # def __str__(self):
-    #     return self.get_cargos()
+    def __str__(self):
+        return self.last_name + " " + self.first_name + " (" + self.legajo + ")"
