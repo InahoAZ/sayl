@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
     telefono = models.ForeignKey(Telefono, on_delete=models.PROTECT)    
     suscripto_telefono =  models.BooleanField(default=True)
     suscripto_mail = models.BooleanField(default=True)
-    cargos_cache = models.ForeignKey(CargosCache, on_delete=models.PROTECT, blank=True, null=True)
+    cargos_cache = models.ManyToManyField(CargosCache)
 
     history = HistoricalRecords(table_name='usercontact_historial')
     

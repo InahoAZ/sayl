@@ -741,8 +741,34 @@ $(document).ready(function() { //Falta Ordenar por fecha
     // });
 
 
+    $(document).ready(function() {
+        // console.log("COSO");
+        // console.log($("progress-bar, progress-bar-success").attr("data-transitiongoal"));
+        // console.log($(this).find('div[data-transitiongoal]').attr('data-transitiongoal'));
+
+        // var progresbar_value = $(this).find('div[data-transitiongoal]').attr('data-transitiongoal')
+        $('[data-toggle="tooltip"]').tooltip();
+
+    });
+
 
 
 
 
 });
+
+function msj_finalizar_hs_mayor() {
+    Swal.fire({
+        type: 'error',
+        title: 'Oops...',
+        text: 'Usted ha excedido las horas a cumplir que le corresponde según su cargo',
+    })
+}
+
+function msj_finalizar_hs_menor() {
+    Swal.fire({
+        type: 'error',
+        title: 'Oops...',
+        text: 'Aun no declaro todas las horas para su cargo',
+    })
+}

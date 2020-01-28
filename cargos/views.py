@@ -27,24 +27,29 @@ def switch_cargo(request, cod_cargo):
     if CargosCache.objects.filter(seleccionado=True).exists():
         cs = CargosCache.objects.filter(seleccionado=True)
         cs.update(seleccionado=False)
-
-    if not(CargosCache.objects.filter(customuser=request.user, cargo_cod=cod_cargo).exists()):       
-        
+    print(request.user)
+    if not(CargosCache.objects.filter(customuser__legajo=request.user.legajo, cargo_cod=cod_cargo).exists()):       
+        print("ACA ESTA EL PROBLEMA: ", CargosCache.objects.filter(customuser=request.user, cargo_cod=cod_cargo))
         #Traigo los cargos de ese usuario del siu
         cargo_siu = get_cargos_api(request.user.legajo, cod_cargo)
         #si no esta agrego a cache y selecciono.
+        hs_dedic = cargo_siu['horas_dedicacion']
+        hs_dedic = hs_dedic.replace(',', '.')
+        hs_dedic = float(hs_dedic)
+
         cc = CargosCache(cargo_cod=cargo_siu['cargo'],
                         categoria=cargo_siu['categoria'],
                         desc_regional=cargo_siu['desc_regional'],
                         desc_categ=cargo_siu['desc_categ'],
                         desc_dedic=cargo_siu['desc_dedic'],
-                        horas_dedicacion=cargo_siu['cargo'],
+                        horas_dedicacion=hs_dedic,
                         escalafon=cargo_siu['escalafon'],
                         seleccionado=True)
-        cc.save()
+        cc.save()        
         u=CustomUser.objects.get(pk=request.user.pk)
-        u.cargos_cache = cc
-        u.save()
+        u.cargos_cache.add(cc)
+        # u.cargos_cache.set(cc)
+        #u.save()
     else:
         cc = CargosCache.objects.get(customuser=request.user, cargo_cod=cod_cargo)
         if cc.seleccionado == False:

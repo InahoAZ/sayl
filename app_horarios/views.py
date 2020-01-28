@@ -11,22 +11,29 @@ import time
 from sayl.utils import dia_de_semana
 from login.models import CustomUser
 from config.models import Configuraciones
+from cargos.models import CargosCache
+from sayl.utils import time2timedelta
 
 # Create your views here.
 
 def index(request):
-    d_horarios = DetalleHorario.objects.filter(horario__legajo=request.user.legajo)
+    cargo_actual = CargosCache.objects.get(customuser=request.user, seleccionado=True)
+
+    d_horarios = DetalleHorario.objects.filter(horario__legajo=request.user.legajo, horario__cargo=cargo_actual)
     form_detalle_horario = DetalleHorarioForm()
-    h = Horario.objects.filter(legajo=request.user.legajo)
+    print(cargo_actual)
+    h = Horario.objects.filter(legajo=request.user.legajo, cargo=cargo_actual)
     
     #horas_semanales = get_cargos_api(request.user.legajo)
     
     #horas_semanales = horas_semanales[0]['horas_dedicacion']
     #agregar porcentaje frente al aula.
-    horas_semanales = "12,00"
-    horas_semanales = horas_semanales.replace(',', '.')
-    horas_semanales = float(horas_semanales)
-    print(horas_semanales)    
+    
+    #Obtenemos las horas semanales que tiene que cumplir el cargo actual
+    
+    print(cargo_actual.horas_dedicacion)
+
+
     if request.method == 'POST': 
         form_detalle_horario = DetalleHorarioForm(request.POST)   
         print("Error: ", form_detalle_horario.errors)    
@@ -36,14 +43,15 @@ def index(request):
                 desde = form_detalle_horario.cleaned_data['desde'] 
                 hasta = form_detalle_horario.cleaned_data['hasta']            
                 dia = form_detalle_horario.cleaned_data['dia']            
-                horario = Horario.objects.get(legajo=request.user.legajo)
+                horario = Horario.objects.get(legajo=request.user.legajo,cargo=cargo_actual)
                 
                 print(type(hasta))
                 #hasta = hasta - timedelta(minutes=1)
                 #desde = desde + timedelta(minutes=1)
                 if DetalleHorario.objects.filter(desde__lte=hasta, hasta__gte=desde, dia=dia, horario__legajo=request.user.legajo).exists():
-                    messages.error(request, 'Ya existe este horario establecido.')
-                else:                    
+                    messages.error(request, 'Ya existe este horario establecido. Revise los horarios de sus otros cargos')
+                else:
+                                        
                     detalle_horario = form_detalle_horario.save(commit=False)
                     detalle_horario.horario = horario
                     detalle_horario.save()
@@ -51,18 +59,34 @@ def index(request):
                 print("No existe")
                 edificio = Edificio.objects.get(pk=1)
                 periodo_lectivo = PeriodoLectivo.objects.get(pk=1)
-                horario = Horario(edificio=edificio,periodo_lectivo=periodo_lectivo,legajo=request.user.legajo, cant_modificaciones=2) #SETTINGS -> Parametrizar cant_modif
+                horario = Horario(edificio=edificio,periodo_lectivo=periodo_lectivo,legajo=request.user.legajo, cant_modificaciones=2, cargo=cargo_actual) #SETTINGS -> Parametrizar cant_modif
                 horario.save()
                 print(horario)
                 detalle_horario = form_detalle_horario.save(commit=False)
                 detalle_horario.horario = horario
                 detalle_horario.save()          
     else:
-        horario = Horario.objects.get(legajo=request.user.legajo) if h.count() > 0 else None
+        horario = Horario.objects.get(legajo=request.user.legajo, cargo=cargo_actual) if h.count() > 0 else None
 
     horas_declaradas = DetalleHorario.objects.select_related('horario').filter(horario=horario)
+    total_declarado = timedelta()
+    for hora_declarada in horas_declaradas:
+        dsd = time2timedelta(hora_declarada.desde)
+        hst = time2timedelta(hora_declarada.hasta)
+        total_declarado += hst - dsd
+    
+    total_declarado = '%02d.%02d' % (total_declarado.days*24 + total_declarado.seconds // 3600, ((total_declarado.seconds % 3600) // 60) + (total_declarado.seconds % 60) + total_declarado.microseconds)
+    total_declarado = float(total_declarado)
+    #total_declarado = float(total_declarado.replace(":",".",2))
+    print("Total declarado: ", total_declarado)
+    #Pasamos el timedelta a float
+    # secs=total_declarado.seconds #timedelta has everything below the day level stored in seconds
+    # minutes = ((secs/60)%60)/60.0
+    # hours = secs/3600
+    # total_declarado = hours + minutes
+    print("Total declarado: ", total_declarado)
     porcentaje_horas = None
-    return render(request, 'app_horarios/index.html', {'horario':horario, 'd_horarios':d_horarios, 'form_detalle_horario':form_detalle_horario, 'porcentaje_horas':porcentaje_horas})
+    return render(request, 'app_horarios/index.html', {'horario':horario, 'd_horarios':d_horarios, 'form_detalle_horario':form_detalle_horario, 'porcentaje_horas':porcentaje_horas, 'horas_dedicacion':cargo_actual.horas_dedicacion, 'declarado_actual':total_declarado})
     
 
 
@@ -136,7 +160,7 @@ def horarios_fijos(request):
             if not(HorariosFijos.objects.filter(hora_entrada=h_entrada, horas_a_cumplir = hs_a_cumplir).exists()):
                 if HorariosFijos.objects.filter(hora_entrada__lte=h_salida, hora_salida__gte=h_entrada, agente__in=lista_agentes).exists():
                     messages.error(request, 'Ya existe este horario establecido.')
-                else: 
+                else:
                     horario_fijo = form_horario_fijo.save(commit=False)
                     horario_fijo.hora_salida = h_salida
                     horario_fijo.save()

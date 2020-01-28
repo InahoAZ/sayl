@@ -3,6 +3,7 @@ from edificios.models import Edificio
 from login.models import CustomUser
 from datetime import datetime, timedelta, date, time
 from sayl.utils import time2timedelta
+from cargos.models import CargosCache
 
 # Create your models here.
 class PeriodoLectivo(models.Model):
@@ -19,6 +20,7 @@ class Horario(models.Model):
     legajo = models.CharField(max_length=12)    
     cant_modificaciones = models.IntegerField()
     activo = models.BooleanField(default=False) #Añadir.
+    cargo = models.OneToOneField(CargosCache, on_delete=models.PROTECT)
     
 
 
@@ -41,6 +43,7 @@ class DetalleHorario(models.Model):
         choices = DIAS
     )
     descripcion = models.CharField(max_length=200)
+    
     
     
 class HorariosFijos(models.Model):
