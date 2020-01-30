@@ -18,7 +18,7 @@ from sayl.utils import time2timedelta
 
 def index(request):
     cargo_actual = CargosCache.objects.get(customuser=request.user, seleccionado=True)
-
+    config = Configuraciones.objects.filter().order_by('-id')[0]
     d_horarios = DetalleHorario.objects.filter(horario__legajo=request.user.legajo, horario__cargo=cargo_actual)
     form_detalle_horario = DetalleHorarioForm()
     print(cargo_actual)
@@ -77,8 +77,11 @@ def index(request):
     
     total_declarado = '%02d.%02d' % (total_declarado.days*24 + total_declarado.seconds // 3600, ((total_declarado.seconds % 3600) // 60) + (total_declarado.seconds % 60) + total_declarado.microseconds)
     total_declarado = float(total_declarado)
+    
     #total_declarado = float(total_declarado.replace(":",".",2))
     print("Total declarado: ", total_declarado)
+    porcentaje_frente_aula = (config.porcentaje_frente_aula / 100)
+    print("porcentaje", config.porcentaje_frente_aula)
     #Pasamos el timedelta a float
     # secs=total_declarado.seconds #timedelta has everything below the day level stored in seconds
     # minutes = ((secs/60)%60)/60.0
@@ -86,7 +89,8 @@ def index(request):
     # total_declarado = hours + minutes
     print("Total declarado: ", total_declarado)
     porcentaje_horas = None
-    return render(request, 'app_horarios/index.html', {'horario':horario, 'd_horarios':d_horarios, 'form_detalle_horario':form_detalle_horario, 'porcentaje_horas':porcentaje_horas, 'horas_dedicacion':cargo_actual.horas_dedicacion, 'declarado_actual':total_declarado})
+    horas_dedicacion =  cargo_actual.horas_dedicacion * porcentaje_frente_aula
+    return render(request, 'app_horarios/index.html', {'horario':horario, 'd_horarios':d_horarios, 'form_detalle_horario':form_detalle_horario, 'porcentaje_horas':porcentaje_horas, 'horas_dedicacion':horas_dedicacion, 'declarado_actual':total_declarado, 'config':config})
     
 
 
@@ -116,7 +120,8 @@ def eliminar_detalle_horario(request, pk):
     return redirect('/app_horarios')
 
 def finalizar_declaracion_horarios(request, pk):
-    horario = Horario.objects.get(pk=pk)
+    cargo_actual = CargosCache.objects.get(customuser=request.user, seleccionado=True)
+    horario = Horario.objects.get(pk=pk, cargo=cargo_actual)
     horario.activo = True
     horario.save()
     return redirect('/app_horarios')

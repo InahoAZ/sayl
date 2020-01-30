@@ -36,7 +36,7 @@ def signin(request):
                                 seleccionado=True)
                 cc.save()
                 u=CustomUser.objects.get(pk=user.pk)
-                u.cargos_cache = cc
+                u.cargos_cache.add(cc)
                 u.save()
                 return redirect('/')
         else:

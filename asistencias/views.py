@@ -8,9 +8,10 @@ from datetime import datetime, timedelta, date, time
 from django.utils import timezone
 from .forms import AsistenciaForm
 from login.models import CustomUser
-from sayl.utils import dia_de_semana, time2timedelta
+from sayl.utils import dia_de_semana, time2timedelta, dia_de_mes
 from config.models import Configuraciones
 from dateutil.parser import parse
+from calendario.models import Feriado
 
 
 # Create your views here.
@@ -150,12 +151,22 @@ def inasistencia_automatica(request): #FALTA CONTROLAR QUE NO PONGA LA FALTA SI 
     for agente_sinmarcar in agentes_sinmarcar:
         #por cada agente sin marcar que no tiene una justificacion le registro una inasistencia.
         if not(Asistencia.objects.filter(legajo=agente_sinmarcar, fecha_marcaje=timezone.now()).exists()):
+            dt = datetime.now()
+            dt = dt.replace(hour=0, minute=0, second=0, microsecond=0) # Returns a copy
+            mes = dia_de_mes(dt.month)
+            print("fechona: ",dt)
+            print("fechona: ",mes)
             newinasist = Asistencia() #Si ya se, se deberia llamar marcajes no asistencia xd
             newinasist.fecha_marcaje = timezone.now()
             newinasist.legajo = agente_sinmarcar
             newinasist.hora_entrada = '00:00'
             newinasist.hora_salida = '00:00'
-            newinasist.condicion = 'Inasistencia Injustificada'
+            if Feriado.objects.filter(nro_dia = dt.day, mes=mes).exists():
+                newinasist.condicion = 'Dia no Laborable'
+            else:
+                
+                newinasist.condicion = 'Inasistencia Injustificada'
+            
             #Edificio harcodeado
             newinasist.edificio = Edificio.objects.get(pk=1)
             newinasist.save()
@@ -171,6 +182,7 @@ def inasistencia_automatica(request): #FALTA CONTROLAR QUE NO PONGA LA FALTA SI 
                 newinasistjust.legajo = j_en_curs.legajo
                 newinasistjust.hora_entrada = '00:00'
                 newinasistjust.hora_salida = '00:00'
+                
                 newinasistjust.condicion = 'Inasistencia Justificada'
                 #Edificio harcodeado
                 newinasistjust.edificio = Edificio.objects.get(pk=1)

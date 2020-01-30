@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'app_horarios.apps.AppHorariosConfig',
     'app_justificacion.apps.AppJustificacionConfig',
     'auditoria.apps.AuditoriaConfig',
+    'calendario.apps.CalendarioConfig',
     'asistencias.apps.AsistenciasConfig',
     'edificios.apps.EdificiosConfig',
     'mensajeria.apps.MensajeriaConfig',
@@ -170,7 +171,7 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/login'
+LOGOUT_REDIRECT_URL = '/accounts/login'
 
 # # Para simular mandar correos. Los "correos" se guardan en la carpeta sent_emails
 # EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"

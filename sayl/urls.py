@@ -35,6 +35,7 @@ urlpatterns = [
     path('mensajeria/', include('mensajeria.urls')),
     path('config/', include('config.urls')),
     path('cargos/', include('cargos.urls')),
+    path('calendario/', include('calendario.urls')),
 ]
 
 if settings.DEBUG:
