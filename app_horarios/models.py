@@ -4,6 +4,8 @@ from login.models import CustomUser
 from datetime import datetime, timedelta, date, time
 from sayl.utils import time2timedelta
 from cargos.models import CargosCache
+from simple_history.models import HistoricalRecords
+
 
 # Create your models here.
 class PeriodoLectivo(models.Model):
@@ -11,6 +13,8 @@ class PeriodoLectivo(models.Model):
     fecha_fin = models.DateTimeField()
     actual = models.BooleanField()
     descripcion = models.CharField(max_length=200)
+    history = HistoricalRecords()
+
 
 
 class Horario(models.Model):    
@@ -21,6 +25,7 @@ class Horario(models.Model):
     cant_modificaciones = models.IntegerField()
     activo = models.BooleanField(default=False) #Añadir.
     cargo = models.OneToOneField(CargosCache, on_delete=models.PROTECT)
+    history = HistoricalRecords()
     
 
 
@@ -43,6 +48,7 @@ class DetalleHorario(models.Model):
         choices = DIAS
     )
     descripcion = models.CharField(max_length=200)
+    history = HistoricalRecords()
     
     
     
@@ -51,6 +57,7 @@ class HorariosFijos(models.Model):
     hora_entrada = models.TimeField()
     horas_a_cumplir = models.TimeField()
     hora_salida = models.TimeField()
+    history = HistoricalRecords()
 
     # @property
     # def hora_salida(self):

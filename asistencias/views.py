@@ -77,6 +77,7 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
         marcaje_desde = time2timedelta(asistencia.hora_entrada)
         
         
+
         print("Tol DESDE      ->", tol_desde)
         if tol_desde != None and marcaje_desde>=tol_desde:   
             asistencia.condicion = "Entrada Válida"
@@ -85,7 +86,15 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
         asistencia.legajo = request.user
         ed = Edificio.objects.get(pk=1) #Harcodeada
         asistencia.edificio = ed
+
+        if Justificacion.objects.filter(fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), legajo=request.user).exists():
+            just = Justificacion.objects.get(fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), legajo=request.user)
+            
+            just.estado = "Anulado por Marcaje"
+            just.save()
+
         asistencia.save()
+
         print("redirect 1")
         return redirect('/asistencias/')
     else:

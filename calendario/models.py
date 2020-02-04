@@ -1,4 +1,5 @@
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 # Create your models here.
 
@@ -22,3 +23,4 @@ class Feriado(models.Model):
     descripcion = models.CharField(max_length=200)
     nro_dia = models.IntegerField()
     mes = models.CharField(max_length=200, choices=MESES)
+    history = HistoricalRecords()

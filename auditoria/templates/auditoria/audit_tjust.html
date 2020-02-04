@@ -1,9 +1,4 @@
-{% extends "sayl/base_site.html" %} 
-{% load staticfiles %} 
-{% block title %} Gestionar Tipos de Justificacion {% endblock title %} 
-{% block stylesheets %} 
-{{ block.super }}
-{% endblock stylesheets %} {% block content %}
+{% extends "sayl/base_site.html" %} {% load staticfiles %} {% block title %} Gestionar Tipos de Justificacion {% endblock title %} {% block stylesheets %} {{ block.super }} {% endblock stylesheets %} {% block content %}
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
@@ -18,7 +13,12 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
+                        {% if not detail %}
                         <h2>Tipos de Justificacion<small></small></h2>
+                        {% else %}
+                        <h2>Historial de Acciones de {{audit_regsolo.motivo}} <small></small></h2>
+                        {% endif %}
+
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -38,7 +38,7 @@
                     </div>
                     <div class="x_content">
                         <p class="text-muted font-13 m-b-30">
-                            Se detallan los movimientos realizados sobre los Tipos de Justificacion.    
+                            Se detallan los movimientos realizados sobre el Tipo de Justificacion <strong>{{audit_regsolo.motivo}}</strong> .
                         </p>
                         {% if messages %}
                         <div class="row">
@@ -48,13 +48,13 @@
                                 <div class="alert alert-danger alert-dismissible fade in" role="alert">
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
                                     </button>
-                                    <strong>Error</strong> {{ message }} {{tipojust.motivo}}
+                                    <strong>Error</strong> {{ message }} {{audit_reg.motivo}}
                                 </div>
                                 {% endfor %}
                             </div>
                         </div>
-                        {% endif %}                       
-                            
+                        {% endif %}
+
                         <div class="row">
                             {% include 'sayl/filtros.html' %}
                         </div>
@@ -65,20 +65,24 @@
                                     <th>Tipo de Justificacion</th>
                                     <th>Movimiento</th>
                                     <th>Fecha</th>
-                                    <th>Usuario</th>                                    
+                                    <th>Usuario</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for audit_tjust in audit_tjusts %}
+                                {% for audit_reg in audit_regs %}
                                 <tr>
-                                    <td>{{audit_tjust.history_id}}</td>
-                                    <td>{{audit_tjust.motivo}}</td>
-                                    <td>{{audit_tjust.history_change_reason}}</td>
-                                    <td>{{audit_tjust.history_date}}</td>
-                                    <td>{{audit_tjust.history_user}}</td>
-                                    
+                                    <td>{{audit_reg.history_id}}</td>
+                                    {% if not detail %}
+                                    <td><a href="/auditoria/audit_tjust_detail/{{audit_reg.id}}">{{audit_reg.motivo}}</a></td>
+                                    {% else %}
+                                    <td><a href="#" class="modal_detail" id="{{audit_reg.pk}}" onclick="modal_detail_tjust({{audit_reg.id}},{{audit_reg.pk}})">{{audit_reg.motivo}}</a></td>
+                                    {% endif %}
+                                    <td>{{audit_reg.history_change_reason}}</td>
+                                    <td>{{audit_reg.history_date}}</td>
+                                    <td>{{audit_reg.history_user}}</td>
+
                                 </tr>
-                                
+
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -91,8 +95,60 @@
             </div>
         </div>
     </div>
-</div>
+    <div class="modal fade modalDetail" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="modalDetail">Cambios de Tipo de Justificacion</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_content">
+                                    <div id="detail_modal"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
 
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function modal_detail_tjust(pk, id_history) {
+        console.log(pk);
+        $('.modalDetail').modal('toggle');
+        $.ajax({
+            url: '/auditoria/audit_tjust_detail_json/'+pk+"/"+id_history,
+            data: {
+                
+            },
+            dataType: 'json',
+            success: function(data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    console.log(data[i]);
+                    if(data[i].change){
+                        html += "<p> Se cambió el campo <strong>" + data[i].change + "</strong> de <strong>" + data[i].old + "</strong> a <strong>"+ data[i].new + "</strong></p>";
+                    }else{
+                        html += "<h5> Aun no existen cambios en este tipo de justificacion</h5>"
+                    }
+                }
+            $('#detail_modal').html(html);
+            }
+        })
+
+    }
+</script>
 {% endblock content %} {% block javascripts %} {{ block.super }}
 <!-- Datatables -->
 

@@ -11,10 +11,11 @@ class Justificacion(models.Model):
         ('En Auditoria','En proceso de auditoria'),
         ('Aprobado','Aprobado'),
         ('Rechazado','Rechazado'),
+        ('Anulado por Marcaje','Anulado por Marcaje'),
         ]
     legajo = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
     tipo_justificacion = models.ForeignKey(TipoJustificacion, on_delete=models.PROTECT) 
-    estado = models.CharField(max_length=16, default=ESTADOS[0][0], choices=ESTADOS)
+    estado = models.CharField(max_length=25, default=ESTADOS[0][0], choices=ESTADOS)
     fecha_solicitud = models.DateField(auto_now=True)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()

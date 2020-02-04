@@ -91,7 +91,7 @@ def tipos_justificacion_list(request):
         else:
             tipos_justificacion = TipoJustificacion.objects.all()
         serializer = TipoJustificacionSerializer(tipos_justificacion, many=True)
-
+        
         result = dict()
         result = serializer.data
         return JSONResponse(result)
