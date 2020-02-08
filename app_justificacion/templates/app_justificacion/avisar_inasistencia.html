@@ -7,7 +7,7 @@
     <div class="">
         <div class="clearfix"></div>
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>Notificar Inasistencia </h2>
@@ -109,9 +109,7 @@
                                 <h3>Mis Solicitudes</h3>
                                 <input type=hidden id="titulo_reporte" value="Justificaciones Solicitadas"></input>
                                 <input type="hidden" id="usuario_reporte" value="{{user.last_name}} {{user.first_name}}">
-                                <div class="row">
-                                    {% include 'sayl/filtros.html' %}
-                                </div>
+
                                 <div class="row">
                                     <div class="col-md-12">
                                         {% for message in messages %}
@@ -130,11 +128,11 @@
                                             <thead>
                                                 <tr>
                                                     <th class="noExport">Id</th>
-                                                    <th>Descripcion</th>
-                                                    <th>Tipo</th>
-                                                    <th>Desde</th>
+                                                    <th class="dt_filtrable">Descripcion</th>
+                                                    <th class="dt_filtrable">Tipo</th>
+                                                    <th class="dt_rango_fecha">Desde</th>
                                                     <th>Hasta</th>
-                                                    <th>Estado</th>
+                                                    <th class="dt_filtrable" style="width:10%">Estado</th>
                                                     <th>Observaciones de Supervisor</th>
                                                     <th>Acciones</th>
 
@@ -157,7 +155,7 @@
                                                         <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="right" title="Queda pendiente a aprobacion por el Supervisor de AyL">{{justificacion.estado}}</button></p>
                                                         {% elif justificacion.estado == "Anulado por Marcaje" %}
                                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="right" title="La justificación se anulo por un marcaje en el edificio">{{justificacion.estado}}</button></p>
-                                                        
+
                                                         {% endif %}
                                                     </td>
                                                     <td>{{justificacion.observaciones_supervisor}}</td>
@@ -166,9 +164,19 @@
                                                         <a href="cancelar_aviso/{{justificacion.pk}}" class="btn btn-danger btn-sm"><span class="fa fa-remove"></span></a></p>
                                                         {% endif %}
                                                     </td>
-
                                                 </tr>
-                                                {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tfoot>
+                                            {% endfor %}
                                         </table>
                                     </div>
                                 </div>
@@ -180,7 +188,7 @@
             <!--FIN AVISAR INASISTENCIA-->
 
             <!--CALENDARIO-->
-
+{% comment %} 
             <div class="col-md-4">
                 <div class="">
                     <div class="clearfix"></div>
@@ -276,7 +284,7 @@
                         </div>
                     </div>
                 </div>
-                <!--FIN ULTIMAS INASISTENCIAS-->
+                <!--FIN ULTIMAS INASISTENCIAS--> {% endcomment %}
             </div>
         </div>
     </div>

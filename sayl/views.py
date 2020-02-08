@@ -11,7 +11,7 @@ def home(request):
         agente = get_agente(request.user.legajo)
         config = Configuraciones.objects.last()
         mis_cargos = get_cargos_api(request.user.legajo)
-        context = {'agente':agente, 'config':config, 'mis_cargos':mis_cargos}    
+        context = {'agente':agente, 'config':config, 'mis_cargos':mis_cargos}  
         return render(request, 'sayl/index.html', context)
     return render(request, 'sayl/index.html')
 

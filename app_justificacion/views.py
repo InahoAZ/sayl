@@ -30,7 +30,7 @@ class JSONResponse(HttpResponse):
 
 
 def index(request):
-    justificaciones = Justificacion.objects.exclude(estado='Aprobado').exclude(estado='Rechazado')
+    justificaciones = Justificacion.objects.exclude(estado='Aprobado').exclude(estado='Rechazado').exclude(estado='Anulado por Marcaje')
     
     if request.method == 'POST':
         pk = request.POST.get('id_just')

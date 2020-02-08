@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Asistencia, Edificio
 from app_justificacion.models import Justificacion
-from app_horarios.models import Horario, DetalleHorario
+from app_horarios.models import Horario, DetalleHorario, HorariosFijos
 from django.utils import timezone
 from datetime import datetime, timedelta, date, time
 from django.utils import timezone
@@ -44,10 +44,11 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
     
     #print("mis_horarios: ", mis_horarios)
     #Verifico si en el dia de hoy existe algun horario declarado que cumplir:
-    if Horario.objects.prefetch_related('detallehorario').filter(legajo=request.user.legajo, activo=True, detallehorario__dia=dia_de_hoy).exists():   
+    if Horario.objects.prefetch_related('detallehorario').filter(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy, detallehorario__desde__gte=timezone.now(), detallehorario__hasta__lte=timezone.now()).exists():   
         print("Existe")
+        
         #Como existe, obtengo el horario del agente que realizo el marcaje en el dia de hoy:
-        mis_horarios = Horario.objects.get(legajo=request.user.legajo, activo=True, detallehorario__dia=dia_de_hoy)
+        mis_horarios = Horario.objects.get(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy)
         #El detalle del horario de hoy:    
         d_horario = DetalleHorario.objects.get(horario=mis_horarios, dia=dia_de_hoy)  
 
@@ -63,9 +64,25 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
         tol_desde = desde - tiempo_tolerancia
         tol_hasta = hasta + tiempo_tolerancia
         #print(tol_desde, " - ", tol_hasta)
-    else:        
-        tol_desde = None
-        tol_hasta = None
+    else:
+        
+        if HorariosFijos.objects.filter(agente=request.user, hora_entrada__gte=timezone.now(), hora_salida__lte=timezone.now()).exists():
+            print("Es horario fijo")
+            horario_fijo = HorariosFijos.objects.get(agente=request.user)   
+            tiempo_tolerancia = Configuraciones.objects.filter().order_by('-id')[0]
+            tiempo_tolerancia = tiempo_tolerancia.tiempo_tolerancia
+            #Se agrega la tolerancia:
+            desde = time2timedelta(horario_fijo.hora_entrada)
+            hasta = time2timedelta(horario_fijo.hora_salida)
+
+            tiempo_tolerancia = timedelta(minutes=int(tiempo_tolerancia))   
+            tol_desde = desde - tiempo_tolerancia
+            tol_hasta = hasta + tiempo_tolerancia
+            print("hf: ", tol_desde)
+            print("hf: ", tol_hasta)
+        else:
+            tol_desde = None
+            tol_hasta = None
     #print(ya_marco.last().hora_salida)
     #Verifico si ya marco el agente el dia de hoy.
     if not(ya_marco) or (ya_marco.last().hora_salida != None and ya_marco.last().condicion != "Entrada Válida"):
@@ -75,14 +92,19 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
         asistencia.fecha_marcaje = timezone.now().date()
         asistencia.hora_entrada = timezone.now().time()
         marcaje_desde = time2timedelta(asistencia.hora_entrada)
-        
+        dt = datetime.now()
+        dt = dt.replace(hour=0, minute=0, second=0, microsecond=0) # Returns a copy
+        mes = dia_de_mes(dt.month)
         
 
-        print("Tol DESDE      ->", tol_desde)
-        if tol_desde != None and marcaje_desde>=tol_desde:   
-            asistencia.condicion = "Entrada Válida"
+        if Feriado.objects.filter(nro_dia = dt.day, mes=mes).exists():
+            newinasist.condicion = 'Dia no Laborable'
         else:
-            asistencia.condicion = "Entrada Fuera de Horario"
+            print("Tol DESDE      ->", tol_desde)
+            if tol_desde != None and marcaje_desde>=tol_desde:   
+                asistencia.condicion = "Entrada Válida"
+            else:
+                asistencia.condicion = "Entrada Fuera de Horario"
         asistencia.legajo = request.user
         ed = Edificio.objects.get(pk=1) #Harcodeada
         asistencia.edificio = ed
@@ -128,13 +150,13 @@ def corregir_marcaje(request, pk):
         print(form.errors)
         if form.is_valid():
             asist = form.save(commit=False)
-            asist.changeReason = 'Correccion de Asistencia'
+            asist.changeReason = 'Correccion de Marcaje'
             asist.save()
         return redirect('index')
     context = {'form_corregir_marcaje': form}
     return render(request, 'asistencias/corregir_marcaje.html', context)
 
-def inasistencia_automatica(request): #FALTA CONTROLAR QUE NO PONGA LA FALTA SI YA SE HIZO
+def inasistencia_automatica(request):
     #asist_dehoy = Asistencia.objects.filter(fecha_marcaje=timezone.now(), condicion="Marcaje Válido") 
     
     #Obtengo los agentes que marcaron el dia de hoy
@@ -157,9 +179,22 @@ def inasistencia_automatica(request): #FALTA CONTROLAR QUE NO PONGA LA FALTA SI 
     agentes_sinmarcar = CustomUser.objects.exclude(justificacion__in=justs_en_curs)
     print("nueva lista: ", agentes_sinmarcar)
 
+    #Obtengo los agentes que tienen horarios en el dia que se coloca la inasistencia.
+    diaa = timezone.now()    
+    diaa = diaa.strftime("%w")
+    diaa = dia_de_semana(int(diaa))
+    print(diaa)
+    horarios_hoy = DetalleHorario.objects.filter(dia=diaa)
+    print(horarios_hoy)
+    agentes_sinmarcar = agentes_sinmarcar.filter(horario__detallehorario__in=horarios_hoy, horariosfijos__isnull=False)
+    print("xd; ", agentes_sinmarcar)
+    
+
+
     for agente_sinmarcar in agentes_sinmarcar:
         #por cada agente sin marcar que no tiene una justificacion le registro una inasistencia.
         if not(Asistencia.objects.filter(legajo=agente_sinmarcar, fecha_marcaje=timezone.now()).exists()):
+            
             dt = datetime.now()
             dt = dt.replace(hour=0, minute=0, second=0, microsecond=0) # Returns a copy
             mes = dia_de_mes(dt.month)
@@ -172,8 +207,7 @@ def inasistencia_automatica(request): #FALTA CONTROLAR QUE NO PONGA LA FALTA SI 
             newinasist.hora_salida = '00:00'
             if Feriado.objects.filter(nro_dia = dt.day, mes=mes).exists():
                 newinasist.condicion = 'Dia no Laborable'
-            else:
-                
+            else:               
                 newinasist.condicion = 'Inasistencia Injustificada'
             
             #Edificio harcodeado

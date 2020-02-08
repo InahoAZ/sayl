@@ -25,10 +25,8 @@
     <div class="menu_section">
       <h3>General</h3>
       <ul class="nav side-menu">
-        <li><a><i class="fa fa-home"></i> Principal <span class="fa fa-chevron-down"></span></a>
-          <ul class="nav child_menu">
-            <li><a href="/">...</a></li>            
-          </ul>
+        <li><a href="/"><i class="fa fa-home"></i> Principal </a>
+          
         </li>
         <li><a><i class="fa fa-check"></i> Asistencias <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
@@ -52,33 +50,44 @@
           </ul>
         </li>
         <li><a><i class="fa fa-clock-o"></i> Horarios <span class="fa fa-chevron-down"></span></a>
-          <ul class="nav child_menu">
-            <li><a href="/app_horarios">Declaracion de Horarios</a></li>
-            <li><a href="/app_horarios/horarios_fijos">Gestion de Horarios Fijos</a></li>
+          <ul class="nav child_menu">            
+            {% if user.cargo_seleccionado.escalafon == 'DOCE' %}
+              <li><a href="/app_horarios">Declaracion de Horarios</a></li>
+            {% else %}
+              <li><a href="/app_horarios/mis_horarios">Mis Horarios</a></li>
+            {% endif %}
+            {% if user.is_superuser %}
+              <li><a href="/app_horarios/horarios_fijos">Gestión de Horarios Fijos</a></li>
+            {% endif %}
+            
             
           </ul>
         </li>
         <li><a><i class="fa fa-bar-chart"></i> Reportes <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="form.html">Horas Trabajadas</a></li>
-            <li><a href="form_advanced.html">Licencias Mensuales Solicitadas</a></li>
-            <li><a href="form_validation.html">...</a></li>            
+            <li><a href="form_advanced.html">Licencias Mensuales Solicitadas</a></li>          
           </ul>
         </li>
+        {% if request.user.is_superuser %}
         <li><a><i class="fa fa-book"></i> Auditoria <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="/auditoria/audit_tjust">Tipos de Justificacion</a></li>
             <li><a href="/auditoria/audit_just">Solicitudes de Justificaciones</a></li>
             <li><a href="/auditoria/audit_asist">Marcajes</a></li>
             <li><a href="/auditoria/audit_horarios">Horarios</a></li>
-            <li><a href="/auditoria/audit_horarios_fijos">Horarios Fijos</a></li>
-            <li><a href="/auditoria/audit_feriados">Feriados y Dias no Laborables</a></li>           
+            {% comment %} <li><a href="/auditoria/audit_horarios_fijos">Horarios Fijos</a></li>
+            <li><a href="/auditoria/audit_feriados">Feriados y Dias no Laborables</a></li>            {% endcomment %}
           </ul>
         </li>
+        {% endif %}
+        
         <li><a><i class="fa fa-calendar-o"></i> Calendario <span class="fa fa-chevron-down"></span></a>
+          {% if request.user.is_superuser %}
           <ul class="nav child_menu">
             <li><a href="/calendario/">Feriados y Dias No Laborables</a></li>
           </ul>
+          {% endif %}
         </li>
         
       </ul>
@@ -88,9 +97,11 @@
 
   <!-- /menu footer buttons -->
   <div class="sidebar-footer hidden-small">
+    {% if request.user.is_superuser %}
     <a href="/config/" data-toggle="tooltip" data-placement="top" title="Configuración">
       <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
     </a>
+    {% endif %}
     <a data-toggle="tooltip" data-placement="top" title="FullScreen">
       <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
     </a>

@@ -24,16 +24,9 @@ def audit_tjust(request):
     return render(request, 'auditoria/audit_tjust.html', context)
 
 def audit_tjust_detail(request, pk):
-    tjs_historial = TipoJustificacion.history.filter(id=pk)
-    audit_regsolo = tjs_historial[0]
-    delta = audit_regsolo.diff_against(tjs_historial[1])
-    data = []
-    for change in delta.changes:
-        print("{} ha cambiado de {} a {}".format(change.field, change.old, change.new))
-        dic = {'change': change.field, 'old':change.old, 'new':change.new}
-        data.append(dic)
-
-    context = {'audit_regs':tjs_historial, 'detail':True, 'audit_regsolo':audit_regsolo}
+    tjs_historial = TipoJustificacion.history.filter(id=pk)   
+    
+    context = {'audit_regs':tjs_historial, 'detail':True}
     # return render(request, 'auditoria/audit_tjust.html', context)
     return render(request, 'auditoria/audit_tjust.html', context)
 
@@ -69,16 +62,9 @@ def audit_just(request):
     return render(request, 'auditoria/audit_just.html', context)
 
 def audit_just_detail(request, pk):
-    js_historial = Justificacion.history.filter(id=pk)
-    audit_regsolo = js_historial[0]
-    delta = audit_regsolo.diff_against(js_historial[1])
-    data = []
-    for change in delta.changes:
-        print("{} ha cambiado de {} a {}".format(change.field, change.old, change.new))
-        dic = {'change': change.field, 'old':change.old, 'new':change.new}
-        data.append(dic)
+    js_historial = Justificacion.history.filter(id=pk)    
 
-    context = {'audit_justs':js_historial, 'detail':True, 'audit_regsolo':audit_regsolo}
+    context = {'audit_justs':js_historial, 'detail':True}
     # return render(request, 'auditoria/audit_tjust.html', context)
     return render(request, 'auditoria/audit_just.html', context)
 
@@ -90,11 +76,11 @@ def audit_just_detail_json(request, pk, id_history):
     if len(js_historial) > 1:
         for i in range(len(historial)):
             print(id_history, " - ", historial[i].pk)
-            if historial[i].pk == id_history:            
-                audit_regsolo = historial[i]    
+            if historial[i].pk == id_history:   
+                audit_regsolo = historial[i]   
                 delta = audit_regsolo.diff_against(js_historial[i+1])
                 print(delta)
-                data = []            
+                data = []
                 for change in delta.changes:
                     dic = {'change': change.field, 'old':change.old, 'new':change.new}
                     data.append(dic)
@@ -182,6 +168,45 @@ def audit_horario_detail_json(request, pk, id_history):
     else:
         data=[{'change':False}]
     print("DATA: ", data)
-    return JSONResponse(data)    
+    return JSONResponse(data)  
+    
+def audit_horario_fijo(request):
+    audit_horario_fijos = HorariosFijos.history.all()
+    context = {'audit_horario_fijos': audit_horario_fijos}
+    return render(request, 'auditoria/audit_horario_fijo.html', context)
+
+def audit_horario_fijo_detail(request, pk):
+    js_historial = HorariosFijos.history.filter(id=pk)    
+    print(js_historial)
+    context = {'audit_horario_fijos':js_historial, 'detail':True}
+    # return render(request, 'auditoria/audit_tjust.html', context)
+    return render(request, 'auditoria/audit_horario_fijo.html', context)
+
+def audit_horario_fijo_detail_json(request, pk, id_history):
+    print(pk, id_history)
+    js_historial = HorariosFijos.history.filter(id=pk)
+    historial = HorariosFijos.history.filter(id=pk)
+    print(historial)
+    if len(js_historial) > 1:
+        for i in range(len(historial)):
+            print(id_history, " - ", historial[i].pk)
+            if historial[i].pk == id_history:            
+                audit_regsolo = historial[i]    
+                delta = audit_regsolo.diff_against(js_historial[i+1])
+                print(delta)
+                data = []            
+                for change in delta.changes:
+                    dic = {'change': change.field, 'old':change.old, 'new':change.new}
+                    data.append(dic)
+                    print("Entro en el for")
+                    print(data)
+                break
+            else:
+                data = []
+    else:
+        data=[{'change':False}]
+    print("DATA: ", data)
+    return JSONResponse(data) 
+
 
 

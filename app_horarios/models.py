@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, date, time
 from sayl.utils import time2timedelta
 from cargos.models import CargosCache
 from simple_history.models import HistoricalRecords
+from login.models import CustomUser
 
 
 # Create your models here.
@@ -21,7 +22,7 @@ class Horario(models.Model):
     #EDIFICIO DEBERIA IR EN CADA DETALLE DE HORARIO, MODIFICAR.
     edificio = models.ForeignKey(Edificio, on_delete = models.PROTECT, blank=True)    
     periodo_lectivo = models.ForeignKey('PeriodoLectivo', on_delete = models.PROTECT, blank=True)
-    legajo = models.CharField(max_length=12)    
+    legajo = models.ForeignKey(CustomUser, on_delete = models.PROTECT)   
     cant_modificaciones = models.IntegerField()
     activo = models.BooleanField(default=False) #Añadir.
     cargo = models.OneToOneField(CargosCache, on_delete=models.PROTECT)

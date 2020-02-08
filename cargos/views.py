@@ -24,10 +24,13 @@ class JSONResponse(HttpResponse):
 def switch_cargo(request, cod_cargo):
     
     #TENGO QUE VER SI HAY ALGUNO SELECCIONADO
-    if CargosCache.objects.filter(seleccionado=True).exists():
+    if CargosCache.objects.filter(seleccionado=True, customuser=request.user).exists():
         cs = CargosCache.objects.filter(seleccionado=True)
-        cs.update(seleccionado=False)
+        print("--1--", cs)
+        cs = cs.update(seleccionado=False)
+        print("--2--", cs)
     print(request.user)
+
     if not(CargosCache.objects.filter(customuser__legajo=request.user.legajo, cargo_cod=cod_cargo).exists()):       
         print("ACA ESTA EL PROBLEMA: ", CargosCache.objects.filter(customuser=request.user, cargo_cod=cod_cargo))
         #Traigo los cargos de ese usuario del siu

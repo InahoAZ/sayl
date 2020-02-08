@@ -39,6 +39,8 @@ def signin(request):
                 u.cargos_cache.add(cc)
                 u.save()
                 return redirect('/')
+            else:
+                return redirect('/')
         else:
             messages.error(request, 'Verifique si tiene un cargo activo o su conexion a internet')
             return redirect('/accounts/login')
