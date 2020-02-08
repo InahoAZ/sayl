@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .services import *
 import json
 from config.models import Configuraciones
+from login.models import CustomUser
 
 
 # Create your views here.
@@ -11,7 +12,8 @@ def home(request):
         agente = get_agente(request.user.legajo)
         config = Configuraciones.objects.last()
         mis_cargos = get_cargos_api(request.user.legajo)
-        context = {'agente':agente, 'config':config, 'mis_cargos':mis_cargos}  
+        usuarios = CustomUser.objects.all()
+        context = {'agente':agente, 'config':config, 'mis_cargos':mis_cargos, 'usuarios':usuarios}  
         return render(request, 'sayl/index.html', context)
     return render(request, 'sayl/index.html')
 

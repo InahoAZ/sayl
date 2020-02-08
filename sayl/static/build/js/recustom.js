@@ -435,6 +435,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
     $(document).ready(function() {
         $('#min').val('');
         $('#max').val('');
+        $('#daterangepicker').val('').change();
         $('#midtbusqueda').val('');
         midatatable.search('').draw();
         midatatable.draw();
@@ -529,21 +530,39 @@ $(document).ready(function() { //Falta Ordenar por fecha
             table.draw();
         });
 
-        $('#hasdaw').daterangepicker({
+        $('#daterangepicker').daterangepicker({
 
-            timePicker: true,
-            timePicker24Hour: true,
-            timePickerIncrement: 1,
-            timePickerSeconds: true,
-            drops: 'up',
+            changeMonth: true,
+            changeYear: true,
+            singleDatePicker: false,
             locale: {
-                format: 'HH:mm:ss',
+                format: 'DD/MM/YYYY',
                 applyLabel: 'Aceptar',
                 cancelLabel: 'Limpiar',
-            }
+                fromLabel: 'Desde',
+                toLabel: 'Hasta',
+                customRangeLabel: 'Personalizado',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                firstDay: 1
+            },
+            drops: 'down',
+            opens: 'left',
+            ranges: {
+                'Hoy': [moment(), moment()],
+                'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Ultimos 7 Días': [moment().subtract(6, 'days'), moment()],
+                'Ultimos 30 Días': [moment().subtract(29, 'days'), moment()],
+                'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                'Mes Anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            alwaysShowCalendars: true,
 
-        }).on('show.daterangepicker', function(ev, picker) {
-            picker.container.find(".calendar-table").hide();
+        });
+        $('#daterangepicker').on('cancel.daterangepicker', function(ev, picker) {
+            //do something, like clearing an input
+            $('#daterangepicker').val('').change();
+
         });
 
         var table = $('#midatatable').DataTable();
@@ -693,6 +712,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
         console.log("la wea");
         $('#min').val('');
         $('#max').val('');
+        $('#daterangepicker').val('');
 
     });
 
@@ -735,6 +755,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
     $(document).ready(function() {
         $('#min').val('');
         $('#max').val('');
+        $('#daterangepicker').val('').change();
         $('#midtbusqueda').val('');
         midatatable.search('').draw();
         table.draw();
@@ -768,22 +789,3 @@ function msj_finalizar_hs_menor() {
         text: 'Aun no declaro todas las horas para su cargo',
     })
 }
-
-new Chart(document.getElementById("bar-chart"), {
-    type: 'bar',
-    data: {
-        labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
-        datasets: [{
-            label: "Population (millions)",
-            backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-            data: [2478, 5267, 734, 784, 433]
-        }]
-    },
-    options: {
-        legend: { display: false },
-        title: {
-            display: true,
-            text: 'Predicted world population (millions) in 2050'
-        }
-    }
-});

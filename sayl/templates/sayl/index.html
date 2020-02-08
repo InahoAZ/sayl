@@ -28,18 +28,135 @@
     <div class="row">
     
     <div class="col col-md-6">ASDASDAS</div>
-    <div class="col col-md-6"><canvas id="bar-chart" width="800" height="450"></canvas></div>
+    <div class="col col-md-6">
+        <label for="filter_user">Agentes: </label>
+        <select class="select2" id="filter_user">
+            <option value="all">Todos</option>
+            {% for usuario in usuarios  %}
+                <option value="{{usuario.pk}}">{{usuario.last_name}} {{usuario.first_name}}</option>
+            {% endfor %}
+        </select>
+        <label for="filter_user">Fecha: </label>
+        <input type="text" id="daterangepicker">
+        <canvas id="bar-chart" data-url="{% url 'estadistica_estados_marcajes' %}" width="800" height="450"></canvas>
+
+    </div>
     
     </div>
     
 </div>
 
-<script>
 
-</script>
 {% endblock content %} {% block javascripts %} {{ block.super}}
 <!-- Chart.js -->
 <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
+<script>
+$(function(){
+    miChart = new Chart(document.getElementById("bar-chart"), {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: "Cantidad de Ocurrencias",
+                backgroundColor: [],
+                data: []
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: 'Condiciones de Marcajes (cantidad)'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        suggestedMin: 0,
+                        suggestedMax: 10,
+                        stepSize: 1
+                    }
+                }]
+            }
+        }
+    });
+    var condiciones_chart = $('#bar-chart');
+    
+    $.ajax({
+        url: condiciones_chart.data('url'),
+        success: function(data){
+            colores_random = []
+            for (let index = 0; index < data.labels.length; index++) {
+                colores_random.push(getRandomColor());
+                
+            }
+            console.log(colores_random);
+            miChart.data.labels = data.labels;
+            miChart.data.datasets[0].data = data['data'];
+            miChart.data.datasets[0].backgroundColor = colores_random;
+            console.log(miChart.data.datasets[0].data);
+            console.log(miChart.data.labels);
+            miChart.update();
+        }
+
+    })
+    $('#daterangepicker').val('')
+    $('#filter_user, #daterangepicker').change(function(){
+        console.log("cambio usuario");
+        user_pk = $('#filter_user').val()
+        fecha_rango = $('#daterangepicker').val()
+        console.log(user_pk)
+        console.log(fecha_rango)
+        var url = condiciones_chart.data('url');
+        
+        $.ajax({
+        url: url,
+        data:{
+            'fechona': fecha_rango,
+            'user_pk': user_pk
+        },
+        success: function(data){
+            colores_random = []
+            for (let index = 0; index < data.labels.length; index++) {
+                colores_random.push(getRandomColor());
+                
+            }
+            console.log(colores_random);
+            miChart.data.labels = data.labels;
+            miChart.data.datasets[0].data = data['data'];
+            miChart.data.datasets[0].backgroundColor = colores_random;
+            console.log(miChart.data.datasets[0].data);
+            console.log(miChart.data.labels);
+            miChart.update();
+        }
+
+    })
+
+    /*$('#daterangepicker').change(function(){
+        console.log("cambio usuario");
+        var fecha = $(this).val();
+        var rango = fecha.split(' - ');
+        if(fecha==''){
+            url = 
+        }else{
+            url = 
+        }
+        
+
+    });*/
+
+    });
+    
+});
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+</script>
 <!-- gauge.js -->
 <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
 <!-- Skycons -->
@@ -60,9 +177,7 @@
 <script src="/static/vendors/jqvmap/dist/jquery.vmap.js"></script>
 <script src="/static/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
 <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
-<!--amchart4-->
-<script src="{% static 'build/js/amcharts4/plugins/timeline.js' %}"></script>
-<script src="{% static 'build/js/amcharts4/plugins/bullets.js' %}"></script>
-<script src="{% static 'build/js/amcharts4/themes/animated.js' %}"></script>
+
 
 {% endblock javascripts %}
+

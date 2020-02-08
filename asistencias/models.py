@@ -13,7 +13,8 @@ class Asistencia(models.Model):
         ('Inasistencia Injustificada','Inasistencia Injustificada'),
         ('Inasistencia Justificada','Inasistencia Justificada'),
         ('Inconsistencia Marcaje','Inconsistencia Marcaje'),
-        ('Correccion Inconsistencia', 'Correccion Inconsistencia')
+        ('Correccion Inconsistencia', 'Correccion Inconsistencia'),
+        ('Anulacion por Marcaje', 'Anulacion por Marcaje'),
         ]
     legajo = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
     fecha_marcaje = models.DateField()

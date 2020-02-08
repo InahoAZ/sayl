@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'edificios.apps.EdificiosConfig',
     'mensajeria.apps.MensajeriaConfig',
     'cargos.apps.CargosConfig',
+    'estadisticas.apps.EstadisticasConfig',
     'config.apps.ConfigConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,7 +54,7 @@ INSTALLED_APPS = [
     'reversion',
     'simple_history',
     'background_task',
-    'django_crontab'
+    'django_crontab',
     
 ]
 
