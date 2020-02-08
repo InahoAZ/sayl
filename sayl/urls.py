@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home' ),
     path('perfil/', views.profile, name='perfil' ),
+    path('edit_contact/<int:pk>', views.edit_contact, name='edit_contact'),
     path('app_tipojustificacion/', include('app_tipojustificacion.urls')),
     path('app_horarios/', include('app_horarios.urls')),
     path('app_justificacion/', include('app_justificacion.urls')),
@@ -30,6 +31,12 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('auditoria/', include('auditoria.urls')),
     path('asistencias/', include('asistencias.urls')),
+    path('edificios/', include('edificios.urls')),
+    path('mensajeria/', include('mensajeria.urls')),
+    path('config/', include('config.urls')),
+    path('cargos/', include('cargos.urls')),
+    path('calendario/', include('calendario.urls')),
+    path('estadisticas/', include('estadisticas.urls')),
 ]
 
 if settings.DEBUG:

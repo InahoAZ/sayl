@@ -15,11 +15,24 @@
   <div>
     <a class="hiddenanchor" id="signup"></a>
     <a class="hiddenanchor" id="signin"></a>
-
-    <div class="login_wrapper">
+    {% if messages %}
+      <div class="row">
+          <div class="col-md-12">
+              {% for message in messages %}
+              <!--<div class="text-center"><p{% if message.tags %} {% endif %}>{{ message }} {{tipojust.motivo}} </p></div>-->
+              <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  <strong>Error</strong> {{ message }}
+              </div>
+              {% endfor %}
+          </div>
+      </div>
+    {% endif %}
+    <div class="login_wrapper">    
       <div class="animate form login_form">
         <section class="login_content">
-          <form method="POST" id="form_login">
+          <form method="POST" id="form_login" action='/login/signin'>
           <h1>Iniciar Sesión</h1>
             {% csrf_token %}
             {{ form.as_p }}

@@ -72,7 +72,11 @@
                                 {% for audit_just in audit_justs %}
                                 <tr>
                                     <td>{{audit_just.history_id}}</td>
-                                    <td>{{audit_just.descripcion}}</td>
+                                    {% if not detail %}
+                                        <td><a href="/auditoria/audit_just_detail/{{audit_just.id}}">{{audit_just.descripcion}}</a></td>
+                                    {% else %}
+                                        <td><a href="#" id="{{audit_reg.pk}}" onclick="modal_detail_just({{audit_just.id}},{{audit_just.pk}})">{{audit_just.descripcion}}</a></td>
+                                    {% endif %}                                    
                                     <td>{{audit_just.history_change_reason}}</td>
                                     <td>{{audit_just.history_date}}</td>
                                     <td>{{audit_just.history_user}}</td>
@@ -83,16 +87,68 @@
                             </tbody>
                         </table>
                         <div class="row">
-                            <div class="col-md-2 col-md-offset-10"><a href="/" class="btn btn-dark"><span class="fa fa-mail-reply"></span> VOLVER</a></div>
                         </div>
+                        <div class="modal fade modalDetail" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                        </button>
+                                        <h4 class="modal-title" id="modalDetail">Cambios de Solicitudes de Justificacion</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="clearfix"></div>
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div class="x_panel">
+                                                    <div class="x_content">
+                                                        <div id="detail_modal"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
 
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function modal_detail_just(pk, id_history) {
+        console.log(pk);
+        $('.modalDetail').modal('toggle');
+        $.ajax({
+            url: '/auditoria/audit_just_detail_json/'+pk+"/"+id_history,
+            data: {
+                
+            },
+            dataType: 'json',
+            success: function(data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    console.log(data[i]);
+                    if(data[i].change){
+                        html += "<p> Se cambió el campo <strong>" + data[i].change + "</strong> de <strong>" + data[i].old + "</strong> a <strong>"+ data[i].new + "</strong></p>";
+                    }else{
+                        html += "<h5> Aun no existen cambios en esta justificacion</h5>"
+                    }
+                }
+            $('#detail_modal').html(html);
+            }
+        })
 
+    }
+
+    
+</script>
 {% endblock content %} {% block javascripts %} {{ block.super }}
 <!-- Datatables -->
 

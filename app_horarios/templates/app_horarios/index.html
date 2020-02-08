@@ -1,20 +1,13 @@
-{% extends 'sayl/base_site.html' %}
-{% load staticfiles %} 
-{% block title %} Declaracion de Horarios {% endblock title %} 
-{% block stylesheets %} 
-{{ block.super }}
+{% extends 'sayl/base_site.html' %} {% load staticfiles %} {% block title %} Declaracion de Horarios {% endblock title %} {% block stylesheets %} {{ block.super }}
 <link href=" {% static '/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %} " rel="stylesheet">
 <link href=" {% static '/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %} " rel="stylesheet">
 <link href=" {% static '/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %} " rel="stylesheet">
 <link href=" {% static '/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %} " rel="stylesheet">
-<link href=" {% static '/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %} " rel="stylesheet"> {% endblock stylesheets %} 
-{% block content %}
+<link href=" {% static '/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %} " rel="stylesheet"> {% endblock stylesheets %} {% block content %}
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
-            <div class="title_left">
-                <h3>Declaracion de Horarios <small></small></h3>
-            </div>
+
         </div>
 
         <div class="clearfix"></div>
@@ -23,7 +16,21 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Mis Horarios<small></small></h2>
+                        <h2>Declaracion de Horarios<small></small></h2>                        
+                        {% if declarado_actual > horas_dedicacion%}
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-danger" aria-valuemin="0" aria-valuemax="{{horas_dedicacion}}" data-transitiongoal="{{horas_dedicacion}}">
+                                    <strong>{{declarado_actual}}hs declaradas de {{horas_dedicacion}}hs</strong>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="progress">
+                            <div class="progress-bar progress-bar-success" aria-valuemin="0" aria-valuemax="{{horas_dedicacion}}" data-transitiongoal="{{declarado_actual}}">
+                                <strong>{{declarado_actual}}hs declaradas de {{horas_dedicacion}}hs</strong>
+                            </div>
+                            </div>
+                        {% endif %}
+                        
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -44,111 +51,139 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <p class="text-muted font-13 m-b-30">
-                            Estos horarios seran los que se deberan cumplir
-                        </p>
+                        {% if messages %}
                         <div class="row">
-                            <div class="col-md-2"><a class="btn btn-success" data-toggle="modal" data-target=".modal_agregar"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>
+                            <div class="col-md-10">
+                                {% for message in messages %}
+                                <!--<div class="text-center"><p{% if message.tags %} {% endif %}>{{ message }} {{tipojust.motivo}} </p></div>-->
+                                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                    </button>
+                                    <strong>Error</strong> {{ message }} {{tipojust.motivo}}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="row">
+
                             <!--<div class="col-md-2"><a class="btn btn-success" href="agregar_tjust"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>-->
+
+                            <!--Comienzo MODAL-->
                             <div class="modal fade modal_agregar" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                                             </button>
-                                            <h4 class="modal-title" id="myModalLabel{{tipojust.pk}}">Modal title</h4>
+                                            <h4 class="modal-title" id="myModalLabel{{tipojust.pk}}">Declaracion de Horarios</h4>
                                         </div>
-                                        <div class="modal-body">                                          
-                                          <form action="" method="POST">
-                                          <input type="hidden" name="accion" value="add">
-                                            {% csrf_token %}
-                                            {{form_horarios.as_p}}
-                                            
-                                          
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
-                                            <button type="submit" class="btn btn-default">
+                                        <div class="modal-body">
+                                            <form action="" method="POST">
+                                                <input type="hidden" name="accion" value="add"> {% csrf_token %} {{form_detalle_horario.as_p}}
+
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                                                    <button type="submit" class="btn btn-default">
                                                 <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
                                             </button>
                                             </form>
-                                        </div>
+                                            </div>
 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <table id="datatable" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Motivo</th>
-                                    <th>Art.CCT</th>
-                                    <th>Dia Trabajado</th>
-                                    <th>Cant. Mes</th>
-                                    <th>Cant. Año</th>
-                                    <th>Claustro</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for tipojust in tiposjust %}
-                                <tr>
-                                    <td>{{tipojust.motivo}}</td>
-                                    <td>{{tipojust.artcct}}</td>
-                                    <td>{{tipojust.dia_trabajado}}</td>
-                                    <td>{{tipojust.cant_mes}}</td>
-                                    <td>{{tipojust.cant_año}}</td>
-                                    <td>{{tipojust.claustro}}</td>
-                                    <td class=" last">
-                                        <div class="btn-group">
-                                            <a type="button" class="btn btn-warning" href="modificar_tjust/{{tipojust.pk}}"><i class="fa fa-edit"></i></button>
-                                                                                       
-                                            <a class="btn btn-danger" type="button" href="eliminar_tjust/{{tipojust.pk}}"><i class="fa fa-trash"></i></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        <div class="row">
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-success" data-transitiongoal="95"></div>
-                            </div>
-                        </div>
-                        <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="form-group">
-                                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-4">
-                                        <button type="button" class="btn btn-primary">Cancel</button>
-                                        <button class="btn btn-primary" type="reset">Reset</button>
-                                        <button type="submit" class="btn btn-success">Submit</button>
-                                    </div>
-                                    </div>
-                            </div>
-                        </div>
+                            <!--Fin MODAL-->
+                            <div class="col-md-10">
+                                <table id="midatatable" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Pk</th>
+                                            <th>Descripcion</th>
+                                            <th>Día</th>
+                                            <th>Desde</th>
+                                            <th>Hasta</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for d_horario in d_horarios %}
+                                        <tr>
+                                            <td>{{d_horario.pk}}</td>
+                                            <td>{{d_horario.descripcion}}</td>
+                                            <td>{{d_horario.dia}}</td>
+                                            <td>{{d_horario.desde}}</td>
+                                            <td>{{d_horario.hasta}}</td>
 
+                                            <td class=" last">
+                                                <div class="btn-group">
+                                                    {% comment %} <a type="button" class="btn btn-warning" href="modificar_detalle_horario/{{d_horario.pk}}"><i class="fa fa-edit"></i></button> {% endcomment %}
+                                            {% if not horario.activo %}
+                                            <a class="btn btn-danger" type="button" href="eliminar_detalle_horario/{{d_horario.pk}}"><i class="fa fa-trash"></i></a> {% endif %}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-2 align-middle"><a class="btn btn-success" data-toggle="modal" data-target=".modal_agregar"><span class="glyphicon glyphicon-plus"></span></a></div>
+
+
+
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="form-group">
+                                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                            {% if horario.activo %}
+                                                <a href="/app_horarios/editar_declaracion_horarios/{{horario.pk}}" class="btn btn-primary">Editar Declaracion de Horarios</a>
+                                                <a class="btn btn-success disabled" disabled>Finalizar Declaracion de Horarios</a> 
+                                            {% else %}
+                                                {% if declarado_actual == horas_dedicacion %}
+                                                    <a href="/app_horarios/editar_declaracion_horarios/{{horario.pk}}" class="btn btn-primary disabled" disabled>Editar Declaracion de Horarios</a>
+                                                    <a href="/app_horarios/finalizar_declaracion_horarios/{{horario.pk}}" class="btn btn-success">Finalizar Declaracion de Horarios</a> 
+                                                {% else %}
+                                                    {% if declarado_actual < horas_dedicacion %}
+                                                        <button class="btn btn-primary disabled" disabled >Editar Declaracion de Horariosa</a>
+                                                        <button class="btn btn-success" onclick="msj_finalizar_hs_menor()">Finalizar Declaracion de Horarios</a>
+                                                    {% else %}
+                                                        <button class="btn btn-primary disabled" disabled>Editar Declaracion de Horariosb</a>
+                                                        <button class="btn btn-success" onclick="msj_finalizar_hs_mayor()">Finalizar Declaracion de Horarios</a>
+                                                    {% endif %}
+                                                
+                                                {% endif %}
+                                                    
+                                            {% endif %}
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-{% endblock content %} {% block javascripts %} {{ block.super }}
-<!-- Datatables -->
-<script src="{% static '/vendors/datatables.net/js/jquery.dataTables.min.js'%}"></script>
-<script src="{% static '/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'%}"></script>
-<script src="{% static '/vendors/datatables.net-buttons/js/dataTables.buttons.min.js'%}"></script>
-<script src="{% static '/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js'%}"></script>
-<script src="{% static '/vendors/datatables.net-buttons/js/buttons.flash.min.js'%}"></script>
-<script src="{% static '/vendors/datatables.net-buttons/js/buttons.html5.min.js'%}"></script>
-<script src="{% static '/vendors/datatables.net-buttons/js/buttons.print.min.js'%}"></script>
-<script src="{% static '/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js'%}"></script>
-<script src="{% static '/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js'%}"></script>
-<script src="{% static '/vendors/datatables.net-responsive/js/dataTables.responsive.min.js'%}"></script>
-<script src="{% static '/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js'%}"></script>
-<script src="{% static '/vendors/datatables.net-scroller/js/dataTables.scroller.min.js'%}"></script>
-<script src="{% static '/vendors/jszip/dist/jszip.min.js'%}"></script>
-<script src="{% static '/vendors/pdfmake/build/pdfmake.min.js'%}"></script>
-<script src="{% static '/vendors/pdfmake/build/vfs_fonts.js'%}"></script>
-{% endblock javascripts %}
-
+    {% endblock content %} {% block javascripts %} {{ block.super }}
+    <!-- Datatables -->
+    <script src="{% static '/vendors/datatables.net/js/jquery.dataTables.min.js'%}"></script>
+    <script src="{% static '/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'%}"></script>
+    <script src="{% static '/vendors/datatables.net-buttons/js/dataTables.buttons.min.js'%}"></script>
+    <script src="{% static '/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js'%}"></script>
+    <script src="{% static '/vendors/datatables.net-buttons/js/buttons.flash.min.js'%}"></script>
+    <script src="{% static '/vendors/datatables.net-buttons/js/buttons.html5.min.js'%}"></script>
+    <script src="{% static '/vendors/datatables.net-buttons/js/buttons.print.min.js'%}"></script>
+    <script src="{% static '/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js'%}"></script>
+    <script src="{% static '/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js'%}"></script>
+    <script src="{% static '/vendors/datatables.net-responsive/js/dataTables.responsive.min.js'%}"></script>
+    <script src="{% static '/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js'%}"></script>
+    <script src="{% static '/vendors/datatables.net-scroller/js/dataTables.scroller.min.js'%}"></script>
+    <script src="{% static '/vendors/jszip/dist/jszip.min.js'%}"></script>
+    <script src="{% static '/vendors/pdfmake/build/pdfmake.min.js'%}"></script>
+    <script src="{% static '/vendors/pdfmake/build/vfs_fonts.js'%}"></script>
+    {% endblock javascripts %}

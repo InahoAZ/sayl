@@ -10,10 +10,95 @@
     text-align: center;
 }
 
+.fechas {
+    margin: 5%;
+    width: 100%
+}
+
 #date-part {
-    font-size: 1.2em;
+    font-size: 18px;
+    padding: 0%;
+    font-weight: bold;
 }
 
 #time-part {
-    font-size: 1em;
+    font-size: 16px;
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: left;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    /*safari and chrome*/
+    select {
+        height: 30px;
+        line-height: 30px;
+        background: #f4f4f4;
+    }
+}
+
+select::-moz-focus-inner {
+    /*Remove button padding in FF*/
+    border: 0;
+    padding: 0;
+}
+
+@-moz-document url-prefix() {
+    /* targets Firefox only */
+    select {
+        padding: 15px 0!important;
+    }
+}
+
+@media screen\0 {
+    /* IE Hacks: targets IE 8, 9 and 10 */
+    select {
+        height: 30px;
+        line-height: 30px;
+    }
 }

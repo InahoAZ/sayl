@@ -54,9 +54,9 @@
                             </div>
                         </div>
                         {% endif %}
-                        <div class="row">
+                        {% comment %} <div class="row">
                             <div class="col-md-12">{% include 'sayl/filtros.html' %}</div>
-                        </div>
+                        </div> {% endcomment %}
                         <div class="row">
                             <div class="col-md-2"><a class="btn btn-success" data-toggle="modal" data-target=".modal_agregar"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>
                             <!--<div class="col-md-2"><a class="btn btn-success" href="agregar_tjust"><span class="glyphicon glyphicon-plus"></span>Agregar</a></div>-->
@@ -135,13 +135,13 @@
                             <thead>
                                 <tr>
                                     <th class="noExport">Pk</th>
-                                    <th>Motivo</th>
-                                    <th>Cargo</th>
-                                    <th>Art.CCT</th>
-                                    <th>Dia Trabajado</th>
-                                    <th>Cant. Mes</th>
-                                    <th>Cant. Año</th>
-                                    <th>Claustro</th>
+                                    <th class="dt_filtrable">Motivo</th>
+                                    <th class="dt_filtrable">Cargo</th>
+                                    <th class="dt_filtrable">Art.CCT</th>
+                                    <th class="dt_filtrable">Dia Trabajado</th>
+                                    <th class="dt_filtrable">Cant. Mes</th>
+                                    <th class="dt_filtrable">Cant. Año</th>
+                                    <th class="dt_filtrable">Claustro</th>
                                     <th class="noExport">Acciones</th>
                                 </tr>
                             </thead>
@@ -168,6 +168,17 @@
                                 
                                 {% endfor %}
                             </tbody>
+                            <tfoot>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tfoot>
                         </table>
                         <div class="row">
                             <div class="col-md-2 col-md-offset-10"><a href="/" class="btn btn-dark"><span class="fa fa-mail-reply"></span> VOLVER</a></div>

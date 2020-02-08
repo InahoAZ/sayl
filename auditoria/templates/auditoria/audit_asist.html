@@ -18,7 +18,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Tipos de Justificacion<small></small></h2>
+                        <h2>Marcajes de Asistencia<small></small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -38,7 +38,7 @@
                     </div>
                     <div class="x_content">
                         <p class="text-muted font-13 m-b-30">
-                            Se detallan los movimientos realizados sobre los Tipos de Justificacion.    
+                            Se detallan los movimientos realizados sobre los Marcajes.    
                         </p>
                         {% if messages %}
                         <div class="row">
@@ -73,7 +73,12 @@
                                 {% for audit_asist in audit_asists %}
                                 <tr>
                                     <td>{{audit_asist.history_id}}</td>
-                                    <td>{{audit_asist.legajo.first_name}}</td>
+                                    {% if not detail %}
+                                        <td><a href="/auditoria/audit_asist_detail/{{audit_asist.id}}">{{audit_asist.legajo.first_name}}</td>
+                                    {% else %}
+                                        <td><a href="#" id="{{audit_asist.pk}}" onclick="modal_detail_asis({{audit_asist.id}},{{audit_asist.pk}})">{{audit_asist.legajo.first_name}}</td>
+                                    {% endif %}
+                                    
                                     <td>{{audit_asist.fecha_marcaje}}</td>
                                     <td>{{audit_asist.history_change_reason}}</td>
                                     <td>{{audit_asist.history_date}}</td>
@@ -84,8 +89,32 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <div class="row">
-                            <div class="col-md-2 col-md-offset-10"><a href="/" class="btn btn-dark"><span class="fa fa-mail-reply"></span> VOLVER</a></div>
+                        <div class="modal fade modalDetail" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                        </button>
+                                        <h4 class="modal-title" id="modalDetail">Cambios Realizados en Marcaje</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="clearfix"></div>
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div class="x_panel">
+                                                    <div class="x_content">
+                                                        <div id="detail_modal"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -94,7 +123,35 @@
         </div>
     </div>
 </div>
+<script>
+    function modal_detail_asis(pk, id_history) {
+        console.log(pk);
+        $('.modalDetail').modal('toggle');
+        $.ajax({
+            url: '/auditoria/audit_asist_detail_json/'+pk+"/"+id_history,
+            data: {
+                
+            },
+            dataType: 'json',
+            success: function(data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    console.log(data[i]);
+                    if(data[i].change){
+                        html += "<p> Se cambió el campo <strong>" + data[i].change + "</strong> de <strong>" + data[i].old + "</strong> a <strong>"+ data[i].new + "</strong></p>";
+                    }else{
+                        html += "<h5> Aun no existen cambios en este marcaje</h5>"
+                    }
+                    
+                }
+            $('#detail_modal').html(html);
+            }
+        })
 
+    }
+
+    
+</script>
 {% endblock content %} {% block javascripts %} {{ block.super }}
 <!-- Datatables -->
 

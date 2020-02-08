@@ -1,55 +1,98 @@
-{% extends 'sayl/index.html' %}
-{% load staticfiles %}
-{% block content %}
+ {% extends 'sayl/index.html' %} {% load staticfiles %} {% block content %}
 
 <div class="right_col" role="main">
     <div class="">
         <div class="col-md-12">
-          <div class="x_panel">
-            <div class="x_title">
-                <h2>Marcajes de Entrada/Salida <small></small></h2>              
-                <div class="clearfix"></div>
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Marcajes de Entrada/Salida <small></small></h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                        <!-- start accordion -->
+                        <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+                            <div class="panel">
+                                <a class="panel-heading collapsed" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <h4 class="panel-title"><i class="fa fa-filter" aria-hidden="true"></i>Filtros</h4>
+                                </a>
+                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col col-md-4"><span id="date-label-to" class="date-label">Buscar: </span><input class="filter" type="text" id="midtbusqueda" name="Buscado por" /></div>
+                                            <div class="col col-md-4"><span id="date-label-from" class="date-label">Fecha Marcaje: </span>
+                                                <input class="date_range_filter date filter" name="Fecha de Marcaje" type="text" id="minnn" value="" />
+                                                <input class="date_range_filter date " name="-" type="hidden" id="max" value="">
+                                            </div>
+                                            
+                                            <div class="col col-md-4"><button type="button" class="btn btn-danger" id="cleanfilters">Limpiar</button></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="titulo_reporte" value="Listado de Marcajes"></input>
+                    <input type="hidden" id="usuario_reporte" value="{{user.last_name}} {{user.first_name}}">
+                    <input type="hidden" name="nombre_universidad" value={{config.nombre_universidad}}>
+                    <input type="hidden" name="nombre_facultad" value={{config}}>
+                    <input type="hidden" name="direccion_facultad" value={{config.direccion_facultad}}>
+                    <input type="hidden" name="telefono_facultad" value={{config.telefono_facultad}}> {% include 'sayl/info_config.html' %}
+                    <table id="midatatable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="noExport"></th>
+                                <th class="dt_filtrable">Legajo</th>
+                                <th class="dt_filtrable">Agente</th>
+                                <th class="dt_rango_fecha">Fecha de Marcaje</th>
+                                <th class="dt_time_range_2col">Hora de Entrada</th>
+                                <th class="dt_time_range_2col">Hora de Salida</th>
+                                <th class="dt_time_range_2col">Horas Trabajadas</th>
+                                <th class="dt_filtrable">Condicion</th>
+                                {% if request.user.is_superuser %}
+                                    <th class="noExport">Acciones</th>
+                                {% endif %}
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for asistencia in asistencias %}
+                            <tr>
+                                <td>{{asistencia.pk}} </td>
+                                <td>{{asistencia.legajo.legajo}}</td>
+                                <td>{{asistencia.legajo.first_name}} {{asistencia.legajo.last_name}}</td>
+                                <td>{{asistencia.fecha_marcaje|date:'d-m-Y'}}</td>
+                                <td>{{asistencia.hora_entrada}}</td>
+                                <td>{{asistencia.hora_salida}}</td>
+                                <td>{{asistencia.horas_trabajadas}}</td>
+                                <td>{{asistencia.condicion}}</td>
+                                {% if request.user.is_superuser %}
+                                    <td><a href="corregir_marcaje/{{asistencia.pk}}" class="btn btn-success"><span class="fa fa-edit"></span></a></td>
+                                {% endif %}                                
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th ></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                
+                                
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
-            <div class="x_content">
-                <div class="row">
-                    {% include 'sayl/filtros.html' %}
-                </div>            
-                <table id="midatatable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th class="noExport">Legajo</th>
-                            <th>Agente</th>
-                            <th>Fecha de Marcaje</th> 
-                            <th>Hora de Entrada</th>
-                            <th>Hora de Salida</th>
-                            <th>Horas Trabajadas</th>
-                            <th>Condicion</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for asistencia in asistencias %}                                
-                        <tr>
-                            <td>{{asistencia.pk}} </td>
-                            <td>{{asistencia.legajo}}</td>
-                            <td>{{asistencia.legajo}}</td>
-                            <td>{{asistencia.fecha_marcaje}}</td>
-                            <td>{{asistencia.hora_entrada}}</td> 
-                            <td>{{asistencia.hora_salida}}</td>
-                            <td>{{asistencia.horas_trabajadas}}</td>
-                            <td>{{asistencia.condicion}}</td>                            
-                            <td><a href="corregir_marcaje/{{asistencia.pk}}" class="btn btn-success"><span class="fa fa-edit"></span></a></td>                            
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
         </div>
-        </div>
-
-        </div>
-      </div>
     </div>
-  </div>
+</div>
+
 {% endblock content %}

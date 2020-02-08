@@ -1,67 +1,30 @@
-{% extends 'sayl/base_site.html' %}
-{% load staticfiles %}
-{% block content %}
+{% extends 'sayl/base_site.html' %} {% load staticfiles %} {% block content %}
 <div class="right_col" role="main">
-<!--MINI PERFIL DEL USUARIO-->
+    <!--MINI PERFIL DEL USUARIO-->
+
+    <!--AVISAR INASISTENCIA c/tabla-->
+
     <div class="">
         <div class="clearfix"></div>
         <div class="row">
             <div class="col-md-12">
-                <div class="x_panel">                
-                <div class="x_content">
-                    <div class="row">
-                    <div class="col-md-2 col-sm-3 col-xs-12 profile_left">
-                        <div class="profile_img">
-                            <div id="crop-avatar">
-                                <!-- Current avatar -->
-                                <img class="img-responsive avatar-view" src="/static/images/picture.jpg" alt="Avatar" title="Change the avatar">
-                            </div>
-                        </div>                        
-                    </div>
-                    <div class="col-md-6">
-                        <h3>{{user.first_name}} {{user.last_name}} </h3>
-                        <ul class="list-unstyled user_data">
-                        <li><i class="fa fa-map-marker user-profile-icon"></i> {{user.legajo}}</li>                        
-                        <li>
-                            <div class="selDiv">
-                            <label for="">Mis Cargos:</label>
-                            <select name="" id="select-cargo" class="form-control col-md-7 col-xs-12">
-                            <option value="-1" selected>---Seleccione un Cargo de la Lista---</option>                            
-                            {% for cargo_user in cargos_user%}
-                                <option value="{{cargo_user.categoria}}">{{cargo_user.desc_categ}}</option>
-                            {% endfor %}                            
-                            </select>
-                            </div>
-                        </li>                        
-                    </div>                    
-                </div>
-            </div>
-        </div>
-    </div>
-
-<!--AVISAR INASISTENCIA c/tabla-->
-
-    <div class="">
-        <div class="clearfix"></div>
-        <div class="row">
-            <div class="col-md-8">
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>Notificar Inasistencia </h2>
                         <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                        </li>
-                        <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Settings 1</a>
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
-                            <li><a href="#">Settings 2</a>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#">Settings 1</a>
+                                    </li>
+                                    <li><a href="#">Settings 2</a>
+                                    </li>
+                                </ul>
                             </li>
-                            </ul>
-                        </li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                        </li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
                         </ul>
                         <div class="clearfix"></div>
                     </div>
@@ -70,19 +33,19 @@
                             <!--FORMULARIO AVISO INASISTENCIA-->
                             <div class="col-md-12">
                                 <form action="" method="post" class="form-horizontal form-label-left">
-                                {% csrf_token %}
-                                                                                                            
+                                    {% csrf_token %}
+
                                     <div class="form-group">
                                         <label for="{{field.id_for_label}}" class="control-label col-md-3 col-sm-3 col-xs-12">{{form_justificacion.descripcion.label}}</label>
-                                        <div class="col-md-6 col-sm-6 col-xs-12">                                             
-                                            {{form_justificacion.descripcion}}                                     
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            {{form_justificacion.descripcion}}
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="{{field.id_for_label}}" class="control-label col-md-3 col-sm-3 col-xs-12">{{form_justificacion.tipo_justificacion.label}}</label>
-                                        <div class="col-md-6 col-sm-6 col-xs-12">                                             
-                                            {{form_justificacion.tipo_justificacion}}                                     
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            {{form_justificacion.tipo_justificacion}}
                                         </div>
                                     </div>
 
@@ -91,52 +54,51 @@
                                         <div class="col-md-6 col-sm-6 col-xs-12">
                                             <fieldset>
                                                 <div class="control-group">
-                                                <div class="controls">
-                                                    <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                                                    {{form_justificacion.fecha_inicio}}
-                                                    <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
-                                                    <span id="inputSuccess2Status5" class="sr-only">(success)</span>
+                                                    <div class="controls">
+                                                        <div class="col-md-11 xdisplay_inputx form-group has-feedback">
+                                                            {{form_justificacion.fecha_inicio}}
+                                                            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                                                            <span id="inputSuccess2Status5" class="sr-only">(success)</span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                </div>
-                                            </fieldset>                                                                              
+                                            </fieldset>
                                         </div>
-                                    </div>                                     
-                                    
+                                    </div>
+
                                     <div class="form-group">
                                         <label for="{{field.id_for_label}}" class="control-label col-md-3 col-sm-3 col-xs-12">{{form_justificacion.fecha_fin.label}}</label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
                                             <fieldset>
                                                 <div class="control-group">
-                                                <div class="controls">
-                                                    <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                                                    {{form_justificacion.fecha_fin}}
-                                                    <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
-                                                    <span id="inputSuccess2Status6" class="sr-only">(success)</span>
+                                                    <div class="controls">
+                                                        <div class="col-md-11 xdisplay_inputx form-group has-feedback">
+                                                            {{form_justificacion.fecha_fin}}
+                                                            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                                                            <span id="inputSuccess2Status6" class="sr-only">(success)</span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                </div>
-                                            </fieldset>                                                                              
+                                            </fieldset>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                     <div class="form-group">
                                         <label for="" class="control-label col-md-3 col-sm-3 col-xs-12">Avisar a: </label>
-                                        <div class="">                                             
+                                        <div class="">
                                             <select class="to col-md-6 col-sm-6 col-xs-12" name="usuarios[]" multiple="multiple">
                                                 {% for user in users %}
                                                     <option value="{{user.pk}}">{{user.last_name}} {{user.first_name}}</option>
                                                 {% endfor %}
                                                 
                                                 
-                                            </select>                                    
+                                            </select>
                                         </div>
                                     </div>
-                                <div class="text-center">
-                                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
-                                <button type="submit" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
-                                </button>
-                                </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-default">
+                                            <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Notificar
+                                        </button>
+                                    </div>
                                 </form>
                             </div>
                             <!--FIN FORMULARIO AVISO INASISTENCIA-->
@@ -147,9 +109,7 @@
                                 <h3>Mis Solicitudes</h3>
                                 <input type=hidden id="titulo_reporte" value="Justificaciones Solicitadas"></input>
                                 <input type="hidden" id="usuario_reporte" value="{{user.last_name}} {{user.first_name}}">
-                                <div class="row">
-                                    {% include 'sayl/filtros.html' %}
-                                </div>
+
                                 <div class="row">
                                     <div class="col-md-12">
                                         {% for message in messages %}
@@ -166,42 +126,57 @@
                                     <div class="col-md-12">
                                         <table id="midatatable" class="table table-striped table-bordered table-hover">
                                             <thead>
-                                            <tr>
-                                                <th class="noExport">Id</th>
-                                                <th>Descripcion</th>
-                                                <th>Tipo</th>
-                                                <th>Desde</th>
-                                                <th>Hasta</th>
-                                                <th>Estado</th>
-                                                <th>Acciones</th>
-                                                
-                                            </tr>
+                                                <tr>
+                                                    <th class="noExport">Id</th>
+                                                    <th class="dt_filtrable">Descripcion</th>
+                                                    <th class="dt_filtrable">Tipo</th>
+                                                    <th class="dt_rango_fecha">Desde</th>
+                                                    <th>Hasta</th>
+                                                    <th class="dt_filtrable" style="width:10%">Estado</th>
+                                                    <th>Observaciones de Supervisor</th>
+                                                    <th>Acciones</th>
+
+                                                </tr>
                                             </thead>
 
                                             <tbody>
-                                            {% for justificacion in justificaciones %}
-                                            <tr>
-                                                <td>{{justificacion.pk}}</td>
-                                                <td>{{justificacion.descripcion}}</td>
-                                                <td>{{justificacion.tipo_justificacion}}</td>
-                                                <td>{{justificacion.fecha_inicio|date:'d-m-Y'}}</td>
-                                                <td>{{justificacion.fecha_fin|date:'d-m-Y'}}</td>
-                                                <td>{% if justificacion.estado == "Rechazado" %}
-                                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="right" title="Su solicitud ha sido rechazada">{{justificacion.estado}}</button></p>
-                                                {% elif justificacion.estado == "Aprobado" %}
-                                                    <button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="right" title="Su solicitud ha sido aprobada">{{justificacion.estado}}</button></p>
-                                                {% elif justificacion.estado == "Pendiente" %}
-                                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="right" title="Queda pendiente a aprobacion por el Supervisor de AyL">{{justificacion.estado}}</button></p>
-                                                {% endif %}
-                                                </td>
-                                                <td>
-                                                {% if justificacion.estado == "Pendiente" %}
-                                                    <a href="cancelar_aviso/{{justificacion.pk}}" class="btn btn-danger btn-sm"><span class="fa fa-remove"></span></a></p>
-                                                {% endif %}
-                                                </td>
-                                                
-                                            </tr>
-                                            {% endfor %}                                        
+                                                {% for justificacion in justificaciones %}
+                                                <tr>
+                                                    <td>{{justificacion.pk}}</td>
+                                                    <td>{{justificacion.descripcion}}</td>
+                                                    <td>{{justificacion.tipo_justificacion}}</td>
+                                                    <td>{{justificacion.fecha_inicio|date:'d-m-Y'}}</td>
+                                                    <td>{{justificacion.fecha_fin|date:'d-m-Y'}}</td>
+                                                    <td>{% if justificacion.estado == "Rechazado" %}
+                                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="right" title="Su solicitud ha sido rechazada">{{justificacion.estado}}</button></p>
+                                                        {% elif justificacion.estado == "Aprobado" %}
+                                                        <button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="right" title="Su solicitud ha sido aprobada">{{justificacion.estado}}</button></p>
+                                                        {% elif justificacion.estado == "Pendiente" %}
+                                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="right" title="Queda pendiente a aprobacion por el Supervisor de AyL">{{justificacion.estado}}</button></p>
+                                                        {% elif justificacion.estado == "Anulado por Marcaje" %}
+                                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="right" title="La justificación se anulo por un marcaje en el edificio">{{justificacion.estado}}</button></p>
+
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{justificacion.observaciones_supervisor}}</td>
+                                                    <td>
+                                                        {% if justificacion.estado == "Pendiente" %}
+                                                        <a href="cancelar_aviso/{{justificacion.pk}}" class="btn btn-danger btn-sm"><span class="fa fa-remove"></span></a></p>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tfoot>
+                                            {% endfor %}
                                         </table>
                                     </div>
                                 </div>
@@ -209,11 +184,11 @@
                         </div>
                     </div>
                 </div>
-            </div>        
-<!--FIN AVISAR INASISTENCIA-->
+            </div>
+            <!--FIN AVISAR INASISTENCIA-->
 
-<!--CALENDARIO-->
-        
+            <!--CALENDARIO-->
+{% comment %} 
             <div class="col-md-4">
                 <div class="">
                     <div class="clearfix"></div>
@@ -221,21 +196,21 @@
                         <div class="col-md-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                <h2>Calendario </h2>
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                    <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">Settings 1</a>
+                                    <h2>Calendario </h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
-                                        <li><a href="#">Settings 2</a>
+                                        <li class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="#">Settings 1</a>
+                                                </li>
+                                                <li><a href="#">Settings 2</a>
+                                                </li>
+                                            </ul>
                                         </li>
-                                        </ul>
-                                    </li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                    </li>
+                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
                                     </ul>
                                     <div class="clearfix"></div>
                                 </div>
@@ -246,70 +221,70 @@
                         </div>
                     </div>
                 </div>
-<!--FIN CALENDARIO-->
-<!--ULTIMAS INASISTENCIAS-->         
+                <!--FIN CALENDARIO-->
+                <!--ULTIMAS INASISTENCIAS-->
                 <div class="">
                     <div class="clearfix"></div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                <h2>Ultimas Inasistencias </h2>
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                    <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">Settings 1</a>
+                                    <h2>Ultimas Inasistencias </h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
-                                        <li><a href="#">Settings 2</a>
+                                        <li class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="#">Settings 1</a>
+                                                </li>
+                                                <li><a href="#">Settings 2</a>
+                                                </li>
+                                            </ul>
                                         </li>
-                                        </ul>
-                                    </li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                    </li>
+                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
                                     </ul>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
                                     <table id="" class="table table-striped table-bordered">
                                         <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            
-                                        </tr>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Position</th>
+                                                <th>Office</th>
+
+                                            </tr>
                                         </thead>
 
 
                                         <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            
-                                        </tr>
-                                        <tr>
-                                            <td>Garrett Winters</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            
-                                        </tr>
-                                        <tr>
-                                            <td>Ashton Cox</td>
-                                            <td>Junior Technical Author</td>
-                                            <td>San Francisco</td>
-                                            
-                                        </tr>
+                                            <tr>
+                                                <td>Tiger Nixon</td>
+                                                <td>System Architect</td>
+                                                <td>Edinburgh</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td>Garrett Winters</td>
+                                                <td>Accountant</td>
+                                                <td>Tokyo</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td>Ashton Cox</td>
+                                                <td>Junior Technical Author</td>
+                                                <td>San Francisco</td>
+
+                                            </tr>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-<!--FIN ULTIMAS INASISTENCIAS-->
+                <!--FIN ULTIMAS INASISTENCIAS--> {% endcomment %}
             </div>
         </div>
     </div>

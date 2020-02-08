@@ -40,12 +40,148 @@ $(document).ready(function() { //Falta Ordenar por fecha
             [5, 10, 25, 50, "Todos"]
         ],
         //"dom": '<"row"<"col-md-6"l><"col-md-6"f>><"row"rt><"row"<"col-md-6"i><"col-md-6"p>>',
-        "dom": 'Blrtip',
+        "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
         "iDisplayLength": 5,
+        initComplete: function() {
+            console.log("Carga2");
+            $('#min').val('');
+            $('#max').val('');
+            var columnas_permitidas = $('.dt_filtrable');
+            this.api().columns(columnas_permitidas).every(function() {
+                var column = this;
+                var select = $('<select class="select2"><option value=""></option></select>')
+                    .appendTo($(column.footer()).empty())
+                    .on('change', function() {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column
+                            .search(val ? '^' + val + '$' : '', true, false)
+                            .draw();
+                        console.log(column.index())
+                    });
+                console.log()
+                column.data().unique().sort().each(function(d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            var columnas_rangos = $('.dt_rango_fecha');
+            this.api().columns(columnas_rangos).every(function() {
+                var column = this;
+                var select = $('<input class="" id="min">')
+                    .appendTo($(column.footer()).empty())
+                    .on('change', function() {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+                        $.fn.dataTableExt.afnFiltering.push(
+                            function(oSettings, aData, iDataIndex) {
+                                var iFini = document.getElementById('min').value;
+                                var rango = iFini.split(' - ');
+                                if (rango.length > 1) {
+                                    var iFini = rango[0]
+                                    var iFfin = rango[1];
+                                } else {
+                                    var iFfin = '';
+                                }
+                                console.log(iFini, "***", iFfin);
+                                //var iFfin = document.getElementById('max').value;
+                                var iStartDateCol = column.index();
+                                var iEndDateCol = column.index();
+                                console.log("dato: ", aData[column.index()]);
+                                iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2);
+                                iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2);
+
+                                var datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2);
+                                var datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2);
+
+                                if (iFini === "" && iFfin === "") {
+                                    return true;
+                                } else if (iFini <= datofini && iFfin === "") {
+                                    return true;
+                                } else if (iFfin >= datoffin && iFini === "") {
+                                    return true;
+                                } else if (iFini <= datofini && iFfin >= datoffin) {
+                                    return true;
+                                }
+                                return false;
+                            }
+                        );
+                        column
+                        //.search(val ? '^' + val + '$' : '', true, false)
+                            .draw();
+                        console.log(column.index())
+                    });
+                console.log()
+
+                // column.data().unique().sort().each(function(d, j) {
+                //     select.append('<option value="' + d + '">' + d + '</option>')
+                // });
+            });
+            var columnas_time = $('.dt_time_range_2col');
+            console.log("LEN: ", columnas_time.length)
+            this.api().columns(columnas_time).every(function() {
+                var column = this;
+                var select = $('<input class="col col-md-5" id="hs_min' + column.index() + '"><div class="col col-md-2 text-center"><p><br>-</p></div><input  class="col col-md-5"  id="hs_max' + column.index() + '">')
+                    .appendTo($(column.footer()).empty())
+                    .on('change', function() {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+                        $.fn.dataTableExt.afnFiltering.push(
+                            function(oSettings, aData, iDataIndex) {
+                                var iFini = document.getElementById('hs_min' + column.index() + '').value;
+                                var iFfin = document.getElementById('hs_max' + column.index() + '').value;
+
+                                //var iFfin = document.getElementById('max').value;
+                                var iStartDateCol = column.index();
+                                var iEndDateCol = column.index();
+                                //console.log("dato2: ", aData[column.index() + 1]);
+
+                                console.log(iFini);
+                                iFini = iFini.substring(0, 2) + iFini.substring(3, 5) + iFini.substring(6, 8);
+                                console.log(iFini);
+                                iFfin = iFfin.substring(0, 2) + iFfin.substring(3, 5) + iFfin.substring(6, 8);
+
+                                var datofini = aData[iStartDateCol].substring(0, 2) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(6, 8);
+                                var datoffin = aData[iEndDateCol].substring(0, 2) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(6, 8);
+                                console.log(iFini, "|", datofini, "|", datoffin, "|", iFfin)
+                                if (iFini === "" && iFfin === "") {
+                                    return true;
+                                } else if (iFini <= datofini && iFfin === "") {
+                                    return true;
+                                } else if (iFfin >= datoffin && iFini === "") {
+                                    return true;
+                                } else if (iFini <= datofini && iFfin >= datoffin) {
+                                    return true;
+                                }
+                                return false;
+                            }
+                        );
+                        column
+                        //.search(val ? '^' + val + '$' : '', true, false)
+                            .draw();
+                        console.log(column.index())
+                    });
+                console.log()
+
+                // column.data().unique().sort().each(function(d, j) {
+                //     select.append('<option value="' + d + '">' + d + '</option>')
+                // });
+            });
+
+
+
+
+
+        },
         "buttons": [{
             extend: 'pdfHtml5',
             className: '',
-            text: '<i class="fa fa-file-pdf-o"></i>PDF',
+            text: '<i class="fa fa-file-pdf-o text-left"></i>PDF',
             //Aca le digo que solo los <th> que NO tengan la class="noExport" aparezcan en el reporte
             exportOptions: {
                 columns: ':not(.noExport)'
@@ -107,7 +243,10 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 // Creamos un encabezado con 3 columnas
                 // A la izquierda: Logo
                 // En el medio: Titulo
-                // A la derecha: algo xd               
+                // A la derecha: algo xd
+                var univ = $('#universidad').val()
+                var facultad = $('#facultad').val()
+                var direccion = $('#direccion').val()
                 doc['header'] = (function() {
                     return {
                         columns: [{
@@ -218,7 +357,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
             },
         }],
         "pageLength": 100,
-        "processing": false,
+        "processing": true,
         'columnDefs': [
             { 'sortable': true, 'searchable': false, 'visible': false, 'type': 'num', 'targets': [0] }
         ],
@@ -229,7 +368,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
             "sProcessing": "Procesando...",
             "sLengthMenu": "Mostrar _MENU_ registros",
             "sZeroRecords": "No se encontraron resultados",
-            "sEmptyTable": "Ningún dato disponible en esta tabla =(",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
             "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
             "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
@@ -251,27 +390,8 @@ $(document).ready(function() { //Falta Ordenar por fecha
             "buttons": {
                 "copy": "Copiar",
                 "colvis": "Visibilidad"
-            },
-            "initComplete": function() {
-                this.api().columns().every(function() {
-                    var column = this;
-                    var select = $('<select><option value=""></option></select>')
-                        .appendTo($(column.footer()).empty())
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-
-                            column
-                                .search(val ? '^' + val + '$' : '', true, false)
-                                .draw();
-                        });
-
-                    column.data().unique().sort().each(function(d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
-                    });
-                });
             }
+
         }
     });
     midatatable.rows({ selected: true }).data();
@@ -295,15 +415,18 @@ $(document).ready(function() { //Falta Ordenar por fecha
         ]
     });
 
+
+
     //I got mine working base on https://www.datatables.net/examples/plug-ins/range_filtering.html. Here is my jsfiddle https://jsfiddle.net/bindrid/2bkbx2y3/6/
 
     $(document).ready(function() {
+
         var interval = setInterval(function() {
             var momentNow = moment();
-            $('#date-part').html(momentNow.format('DD MM YYYY') + ' ' +
-                momentNow.format('dddd')
-                .substring(0, 3).toUpperCase());
-            $('#time-part').html(momentNow.format('A hh:mm:ss'));
+            $('#date-part').html(momentNow.format('dddd').substring(0, 3).toUpperCase() + ' ' + momentNow.format('DD MM YYYY')
+
+            );
+            $('#time-part').html(momentNow.format('HH:mm:ss'));
         }, 100);
 
     });
@@ -312,6 +435,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
     $(document).ready(function() {
         $('#min').val('');
         $('#max').val('');
+        $('#daterangepicker').val('').change();
         $('#midtbusqueda').val('');
         midatatable.search('').draw();
         midatatable.draw();
@@ -332,69 +456,112 @@ $(document).ready(function() { //Falta Ordenar por fecha
             }
         );
         */
-        $.fn.dataTableExt.afnFiltering.push(
-            function(oSettings, aData, iDataIndex) {
-                var iFini = document.getElementById('min').value;
-                var iFfin = document.getElementById('max').value;
-                var iStartDateCol = 3;
-                var iEndDateCol = 3;
-                console.log(aData[3]);
-                iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2);
-                iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2);
+        // $.fn.dataTableExt.afnFiltering.push(
+        //     function(oSettings, aData, iDataIndex) {
+        //         var iFini = document.getElementById('min').value;
+        //         var rango = iFini.split(' - ');
+        //         if (rango.length > 1) {
+        //             var iFini = rango[0]
+        //             var iFfin = rango[1];
+        //         } else {
+        //             var iFfin = document.getElementById('max').value;
+        //         }
+        //         //var iFfin = document.getElementById('max').value;
+        //         var iStartDateCol = 3;
+        //         var iEndDateCol = 3;
+        //         console.log("dato: ", aData[3]);
+        //         iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2);
+        //         iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2);
 
-                var datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2);
-                var datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2);
+        //         var datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2);
+        //         var datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2);
 
-                if (iFini === "" && iFfin === "") {
-                    return true;
-                } else if (iFini <= datofini && iFfin === "") {
-                    return true;
-                } else if (iFfin >= datoffin && iFini === "") {
-                    return true;
-                } else if (iFini <= datofini && iFfin >= datoffin) {
-                    return true;
-                }
-                return false;
-            }
-        );
+        //         if (iFini === "" && iFfin === "") {
+        //             return true;
+        //         } else if (iFini <= datofini && iFfin === "") {
+        //             return true;
+        //         } else if (iFfin >= datoffin && iFini === "") {
+        //             return true;
+        //         } else if (iFini <= datofini && iFfin >= datoffin) {
+        //             return true;
+        //         }
+        //         return false;
+        //     }
+        // );
 
         $('#min').daterangepicker({
                 changeMonth: true,
                 changeYear: true,
-                singleDatePicker: true,
+                singleDatePicker: false,
                 locale: {
                     format: 'DD/MM/YYYY',
-                    applyLabel: 'Submit',
-                    cancelLabel: 'Clear',
-                    fromLabel: 'From',
-                    toLabel: 'To',
-                    customRangeLabel: 'Custom',
+                    applyLabel: 'Aceptar',
+                    cancelLabel: 'Limpiar',
+                    fromLabel: 'Desde',
+                    toLabel: 'Hasta',
+                    customRangeLabel: 'Personalizado',
                     daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
                     monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                     firstDay: 1
-                }
+                },
+                drops: 'up',
+                ranges: {
+                    'Hoy': [moment(), moment()],
+                    'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Ultimos 7 Días': [moment().subtract(6, 'days'), moment()],
+                    'Ultimos 30 Días': [moment().subtract(29, 'days'), moment()],
+                    'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                    'Mes Anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                alwaysShowCalendars: true,
             },
-            function(start, end, label) {
-                $('#min').val(start.format('DD-MM-YYYY'));
-                console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-            });
+            // function(start, end, label) {
+            //     $('#min').val(start.format('DD-MM-YYYY'));
+            //     console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
 
-        $('#max').daterangepicker({
+
+            // }
+        );
+
+        $('#min').on('cancel.daterangepicker', function(ev, picker) {
+            //do something, like clearing an input
+            $('#min').val('');
+            midatatable.search('').draw();
+            table.draw();
+        });
+
+        $('#daterangepicker').daterangepicker({
 
             changeMonth: true,
             changeYear: true,
-            singleDatePicker: true,
+            singleDatePicker: false,
             locale: {
                 format: 'DD/MM/YYYY',
-                applyLabel: 'Submit',
-                cancelLabel: 'Clear',
-                fromLabel: 'From',
-                toLabel: 'To',
-                customRangeLabel: 'Custom',
+                applyLabel: 'Aceptar',
+                cancelLabel: 'Limpiar',
+                fromLabel: 'Desde',
+                toLabel: 'Hasta',
+                customRangeLabel: 'Personalizado',
                 daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
                 monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                 firstDay: 1
-            }
+            },
+            drops: 'down',
+            opens: 'left',
+            ranges: {
+                'Hoy': [moment(), moment()],
+                'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Ultimos 7 Días': [moment().subtract(6, 'days'), moment()],
+                'Ultimos 30 Días': [moment().subtract(29, 'days'), moment()],
+                'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                'Mes Anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            alwaysShowCalendars: true,
+
+        });
+        $('#daterangepicker').on('cancel.daterangepicker', function(ev, picker) {
+            //do something, like clearing an input
+            $('#daterangepicker').val('').change();
 
         });
 
@@ -453,6 +620,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 $('#fhasta-txt').html(formato(data[0]['fecha_fin']));
                 $('#btn-aprobar').attr("href", "/app_justificacion/aprobar_just/" + data[0]['pk']);
                 $('#btn-rechazar').attr("href", "/app_justificacion/rechazar_just/" + data[0]['pk']);
+                $('#id_just').attr("value", data[0]['pk'])
 
             }
         });
@@ -491,6 +659,8 @@ $(document).ready(function() { //Falta Ordenar por fecha
         })
     });
 
+
+
     //Para filtrar cada columna de un datatable.
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
@@ -510,6 +680,9 @@ $(document).ready(function() { //Falta Ordenar por fecha
         });
 
 
+
+
+
     });
 
     $('#just-cargo').change(function() {
@@ -525,9 +698,74 @@ $(document).ready(function() { //Falta Ordenar por fecha
 
 
 
+
+
+
+
     //Select 2 multiple, para mandar mensajes a usuarios.
     $(document).ready(function() {
         $('.to').select2();
+        //console.log("oli");
+
+        $('.select2').select2();
+
+        console.log("la wea");
+        $('#min').val('');
+        $('#max').val('');
+        $('#daterangepicker').val('');
+
+    });
+
+
+
+    (function($) {
+        $('.dropdown-menu a.dropdown-toggle').on('click', function(e) {
+            if (!$(this).next().hasClass('show')) {
+                $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+            }
+            var $subMenu = $(this).next(".dropdown-menu");
+            $subMenu.toggleClass('show');
+
+            $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+                $('.dropdown-submenu .show').removeClass("show");
+            });
+
+            return false;
+        });
+    })(jQuery)
+
+
+    // //Rellenar Mis Cargos
+    // $('#perfil').click(function() {
+    //     console.log('hghghhghgh');
+    //     $.ajax({
+    //         url: '/cargos/mis_cargos_list',
+    //         success: function(data) {
+    //             var html = "";
+    //             for (var i = 0; i < data.length; i++) {
+
+    //                 html += "<li> <a href='cargos/switch_cargo/" + data[i].cargo + "'>" + data[i].desc_categ + "</li>";
+    //             }
+    //             $('#mis_cargos').html(html);
+    //         }
+    //     })
+    // });
+
+
+    $(document).ready(function() {
+        $('#min').val('');
+        $('#max').val('');
+        $('#daterangepicker').val('').change();
+        $('#midtbusqueda').val('');
+        midatatable.search('').draw();
+        table.draw();
+        // console.log("COSO");
+        // console.log($("progress-bar, progress-bar-success").attr("data-transitiongoal"));
+        // console.log($(this).find('div[data-transitiongoal]').attr('data-transitiongoal'));
+
+        // var progresbar_value = $(this).find('div[data-transitiongoal]').attr('data-transitiongoal')
+        $('[data-toggle="tooltip"]').tooltip();
+
     });
 
 
@@ -535,3 +773,19 @@ $(document).ready(function() { //Falta Ordenar por fecha
 
 
 });
+
+function msj_finalizar_hs_mayor() {
+    Swal.fire({
+        type: 'error',
+        title: 'Oops...',
+        text: 'Usted ha excedido las horas a cumplir que le corresponde según su cargo',
+    })
+}
+
+function msj_finalizar_hs_menor() {
+    Swal.fire({
+        type: 'error',
+        title: 'Oops...',
+        text: 'Aun no declaro todas las horas para su cargo',
+    })
+}

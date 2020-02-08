@@ -25,7 +25,7 @@ SECRET_KEY = 'c^hv-3u74aino8lad5@_36t=%96w6b7za9_df)$0y3=t!wn#$r'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -35,7 +35,13 @@ INSTALLED_APPS = [
     'app_horarios.apps.AppHorariosConfig',
     'app_justificacion.apps.AppJustificacionConfig',
     'auditoria.apps.AuditoriaConfig',
+    'calendario.apps.CalendarioConfig',
     'asistencias.apps.AsistenciasConfig',
+    'edificios.apps.EdificiosConfig',
+    'mensajeria.apps.MensajeriaConfig',
+    'cargos.apps.CargosConfig',
+    'estadisticas.apps.EstadisticasConfig',
+    'config.apps.ConfigConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,7 +53,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'reversion',
     'simple_history',
-    'background_task'
+    'background_task',
+    'django_crontab',
     
 ]
 
@@ -75,6 +82,8 @@ TEMPLATES = [
             os.path.join(BASE_DIR, "app_justificacion","templates"),
             os.path.join(BASE_DIR, "login","templates"),
             os.path.join(BASE_DIR, "asistencias","templates"),
+            os.path.join(BASE_DIR, "edificios","templates"),
+            os.path.join(BASE_DIR, "mensajeria","templates"),
             ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -155,21 +164,39 @@ INTERNAL_IPS = [
     # ...
 ]
 
-'''
+
+#Para d esactivar la debug toolbar
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda r: False,  # disables it
     # '...
 }
-'''
+
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login'
 
-# Para simular mandar correos. Los "correos" se guardan en la carpeta sent_emails
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+# # Para simular mandar correos. Los "correos" se guardan en la carpeta sent_emails
+# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+
+#Configuracion para correo gmail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'supervisoraylunam@gmail.com'
+EMAIL_HOST_PASSWORD = 'supervisor1234'
 
 #Lugar donde se guardan las imagenes
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') 
 MEDIA_URL = '/media/'
 
+#Aca se dicen cuando y que se va a ejecutar en el cron. (Tareas Automaticas)
+#Se usa el formato de crontab de unix para establecer el cuando 
+#(https://www.redeszone.net/2017/01/09/utilizar-cron-crontab-linux-programar-tareas/)
+#(https://gutsytechster.wordpress.com/2019/06/24/how-to-setup-a-cron-job-in-django/)
+
+CRONJOBS = [
+    ('* * * * *', 'asistencias.cron.asignar_inasistencia', '>> /home/bjar/Documents/scheduled_job.log')
+]
 

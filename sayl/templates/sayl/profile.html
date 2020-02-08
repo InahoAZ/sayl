@@ -57,7 +57,7 @@
                 <div class="profile_img">
                   <div id="crop-avatar">
                     <!-- Current avatar -->
-                    <img class="img-responsive avatar-view" src="{% static '/images/picture.jpg' %}" alt="Avatar" title="Change the avatar">
+                    <img class="img-responsive avatar-view" src="{% static '/images/blank-profile.png' %}" alt="Avatar" title="Change the avatar">
                   </div>
                 </div>
                 <h3>{{agente.nombre}} {{agente.apellido}}</h3>
@@ -76,7 +76,7 @@
                   </li>
                 </ul>
 
-                <a class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a>
+                <a class="btn btn-success" href="/edit_contact/{{user.pk}}"><i class="fa fa-edit m-right-xs"></i>Editar Datos de Contacto</a>
                 <br />
 
                 <!-- start skills -->

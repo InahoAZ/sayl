@@ -1,101 +1,119 @@
+{% load staticfiles %}
 <div class="nav_menu">
-  <nav>
-    <div class="nav toggle">
-      <a id="menu_toggle"><i class="fa fa-bars"></i></a>      
-    </div>
-    <ul class="nav navbar-nav navbar-left">
-    <li class="">
-      <div id="date-part"></div>
-    </li>
-    <li class="">
-      <h4><div id="time-part"></div></h4>
-    </li>
-    </ul>
-    
-
-    <ul class="nav navbar-nav navbar-right">
-      <li class="">
-        <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-          <img src="/static/images/img.jpg" alt="">{{user.first_name}} {{user.last_name}} 
-          <span class=" fa fa-angle-down"></span>
-        </a>
-        <ul class="dropdown-menu dropdown-usermenu pull-right">
-          <li><a href="{% url 'perfil' %}"> Mi Perfil</a></li>
-          <li>
-            <a href="javascript:;">
-              <span class="badge bg-red pull-right">50%</span>
-              <span>Configuración</span>
-            </a>
-          </li>
-          <li><a href="javascript:;">Ayuda</a></li>
-          <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out pull-right"></i>Cerrar Sesión</a></li>
-        </ul>
-      </li>
-
-      <li role="presentation" class="dropdown">
-        <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-          <i class="fa fa-envelope-o"></i>
-          <span class="badge bg-green">6</span>
-        </a>
-        <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-          <li>
-            <a>
-              <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
-              <span>
-                <span>John Doe</span>
-                <span class="time">3 mins ago</span>
-              </span>
-              <span class="message">
-                Film festivals used to be do-or-die moments for movie makers. They were where...
-              </span>
-            </a>
-          </li>
-          <li>
-            <a>
-              <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
-              <span>
-                <span>John Doe</span>
-                <span class="time">3 mins ago</span>
-              </span>
-              <span class="message">
-                Film festivals used to be do-or-die moments for movie makers. They were where...
-              </span>
-            </a>
-          </li>
-          <li>
-            <a>
-              <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
-              <span>
-                <span>John Doe</span>
-                <span class="time">3 mins ago</span>
-              </span>
-              <span class="message">
-                Film festivals used to be do-or-die moments for movie makers. They were where...
-              </span>
-            </a>
-          </li>
-          <li>
-            <a>
-              <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
-              <span>
-                <span>John Doe</span>
-                <span class="time">3 mins ago</span>
-              </span>
-              <span class="message">
-                Film festivals used to be do-or-die moments for movie makers. They were where...
-              </span>
-            </a>
-          </li>
-          <li>
-            <div class="text-center">
-              <a>
-                <strong>See All Alerts</strong>
-                <i class="fa fa-angle-right"></i>
-              </a>
+    <nav>
+        <div class="nav toggle">
+            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+        </div>
+        <ul class="nav navbar-nav navbar-left">
+            <div class="fechas">
+                <li class="">
+                    <div id="date-part"></div>
+                </li>
+                <li class="">
+                    <div id="time-part"></div>
+                </li>
             </div>
-          </li>
         </ul>
-      </li>
-    </ul>
-  </nav>
+
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown" id="perfil">
+            
+                <a href="" class="user-profile dropdown-toggle" onclick="traer_cargos();" id="perfil" data-toggle="dropdown" aria-expanded="false">
+                    <img src=" {% static 'images/blank-profile.png' %} " alt="">{{user.first_name}} {{user.last_name}}
+                    <span class=" fa fa-angle-down"></span>
+                    <br>
+                    <div class="text-centered"><span class="badge badge-light">{{user.cargo_seleccionado.desc_categ}}</span> <span class="badge badge-warning">{{user.cargo_seleccionado.escalafon}}</span></div>
+                </a>
+                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="{% url 'perfil' %}"> Mi Perfil</a></li>
+                    <li>
+                        <a href="javascript:;">
+                            <span class="badge bg-red pull-right">50%</span>
+                            <span>Configuración</span>
+                        </a>
+                    </li>
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#">Mis Cargos</a>
+                        <ul class="dropdown-menu" id="cargos">
+                            <input type="hidden" id="legajo" value="{{user.legajo}}">
+                            <div class="mis_cargos" id="mis_cargos">
+                                {% comment %} {% for cargo in mis_cargos  %}
+                                    <li><a href="cargos/switch_cargo/{{cargo.cargo}}">{{cargo.desc_categ}}</a></li>
+                                {% endfor %} {% endcomment %}
+                            </div>
+                        </ul>
+                    </li>
+                    <li><a href="javascript:;">Ayuda</a></li>
+                    <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out pull-right"></i>Cerrar Sesión</a></li>
+                </ul>
+            </li>
+
+            <li role="presentation" class="dropdown">
+                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope-o"></i>
+                    <span class="badge bg-green">6</span>
+                </a>
+                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                    <li>
+                        <a>
+                            <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
+                            <span>
+                <span>John Doe</span>
+                            <span class="time">3 mins ago</span>
+                            </span>
+                            <span class="message">
+                Film festivals used to be do-or-die moments for movie makers. They were where...
+              </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
+                            <span>
+                <span>John Doe</span>
+                            <span class="time">3 mins ago</span>
+                            </span>
+                            <span class="message">
+                Film festivals used to be do-or-die moments for movie makers. They were where...
+              </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
+                            <span>
+                <span>John Doe</span>
+                            <span class="time">3 mins ago</span>
+                            </span>
+                            <span class="message">
+                Film festivals used to be do-or-die moments for movie makers. They were where...
+              </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
+                            <span>
+                <span>John Doe</span>
+                            <span class="time">3 mins ago</span>
+                            </span>
+                            <span class="message">
+                Film festivals used to be do-or-die moments for movie makers. They were where...
+              </span>
+                        </a>
+                    </li>
+                    <li>
+                        <div class="text-center">
+                            <a>
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
 </div>
+
