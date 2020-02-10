@@ -1,7 +1,32 @@
 {% extends "sayl/base_site.html" %} {% load staticfiles %} {% block title %} Dashboard 1 {% endblock title %} {% block stylesheets %} {{ block.super }} {% endblock stylesheets %} {% block content %}
 <div class="right_col" role="main">
     <!-- top tiles -->
-    <div class="row tile_count">
+    {% if user.is_superuser %}
+        <div class="row tile_count">
+        <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-user"></i> Asistencias Hoy</span>
+            <div class="count green">46</div>
+            <span class="count_bottom"><i class="green">4% </i> From last Week</span>
+        </div>
+        <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-clock-o"></i> Justificaciones Hoy</span>
+            <div class="count">12</div>
+            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span>
+        </div>
+        <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-user"></i> Aun sin marcar</span>
+            <div class="count red">34</div>
+            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+        </div>
+        <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-user"></i> Marcajes fuera de horario</span>
+            <div class="count red">2,500</div>
+            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+        </div>
+        
+    </div>
+    {% else %}
+        <div class="row tile_count">
         <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> Horas Trabajadas Semanal</span>
             <div class="count green">2500</div>
@@ -24,11 +49,14 @@
         </div>
         
     </div>
+    {% endif %} 
+    
     <!-- /top tiles -->
     <div class="row">
     
     <div class="col col-md-6">ASDASDAS</div>
     <div class="col col-md-6">
+        {% if user.is_superuser %}
         <label for="filter_user">Agentes: </label>
         <select class="select2" id="filter_user">
             <option value="all">Todos</option>
@@ -36,6 +64,9 @@
                 <option value="{{usuario.pk}}">{{usuario.last_name}} {{usuario.first_name}}</option>
             {% endfor %}
         </select>
+        {% else %}
+        <input type="hidden" id="filter_user" value="{{user.pk}}">
+        {% endif %}
         <label for="filter_user">Fecha: </label>
         <input type="text" id="daterangepicker">
         <canvas id="bar-chart" data-url="{% url 'estadistica_estados_marcajes' %}" width="800" height="450"></canvas>
@@ -72,8 +103,6 @@ $(function(){
                 yAxes: [{
                     ticks: {
                         suggestedMin: 0,
-                        suggestedMax: 10,
-                        stepSize: 1
                     }
                 }]
             }

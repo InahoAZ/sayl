@@ -31,7 +31,7 @@ class JSONResponse(HttpResponse):
 
 def index(request):
     justificaciones = Justificacion.objects.exclude(estado='Aprobado').exclude(estado='Rechazado').exclude(estado='Anulado por Marcaje')
-    
+    print("QUE DICES TIO")
     if request.method == 'POST':
         pk = request.POST.get('id_just')
         observacion = request.POST.get('observacion')
@@ -144,19 +144,22 @@ def cancelar_aviso(request, pk):
         messages.error(request, 'No se puede eliminar el tipo de justificacion')
     return redirect('/app_justificacion/avisar_inasistencia')
 
-def aprobar_just(request, pk):
+def aprobar_justt(request, pk):
     print("QUE LE PASAAAA")
     justificacion = Justificacion.objects.filter(pk=pk)
     print(justificacion.fecha_inicio, " - ", justificacion.fecha_fin)
+    print(daterange(date2timedelta(justificacion.fecha_inicio), date2timedelta(justificacion.fecha_fin)))
     for single_date in daterange(justificacion.fecha_inicio, justificacion.fecha_fin):
-        print("---> ", single_date)
-    # if Asistencia.objects.filter(legajo=request.user, fecha_marcaje=):
+        print("---> ", single_date)        
+        if Asistencia.objects.filter(legajo=justificacion.legajo, fecha_marcaje=single_date).exists():
+            Asistencia.objects.filter(legajo=justificacion.legajo, fecha_marcaje=single_date).update(condicion="Inasistencia Justificada")
 
-    # justificacion = Justificacion.objects.filter(pk=pk).update(estado='Aprobado')
-    
-    return redirect('/app_justificacion')
+    #justificacion = Justificacion.objects.filter(pk=pk).update(estado='Aprobado')
+    print("KE PASA")
+    #return redirect('/app_justificacion')
 
 def rechazar_just(request, pk):
+    print("wea")
     justificacion = Justificacion.objects.filter(pk=pk).update(estado='Rechazado')
     return redirect('/app_justificacion')
 

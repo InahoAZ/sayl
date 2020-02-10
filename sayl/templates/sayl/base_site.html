@@ -45,13 +45,19 @@
             <div class="col-md-3 left_col {% block sidebar_class %} {% endblock sidebar_class %}">
                 {% include "../sayl/sidebar.html" %}
             </div>
-            {% endblock sidebar %} {% block top_navigation %}
+            {% endblock sidebar %} 
+            
+            {% block top_navigation %}
             <div class="top_nav">
                 {% include "../sayl/top_navigation.html" %}
             </div>
-            {% endblock top_navigation %} {% block content %}
+            {% endblock top_navigation %} 
+            
+            {% block content %}
             <!-- {{ content }} -->
-            {% endblock content %} {% block footer %}
+            {% endblock content %} 
+            
+            {% block footer %}
             <footer>
                 {% include "../sayl/footer.html" %}
             </footer>
@@ -60,7 +66,10 @@
     </div>
     {% else %}
     <p>You are not logged in</p>
-    <a href="{% url 'login' %}">login</a> {% endif %} {% block javascripts %}
+    <a href="{% url 'login' %}">login</a> 
+    {% endif %} 
+    
+    {% block javascripts %}
     <!-- jQuery -->
 
     <script src="{% static '/vendors/jquery/dist/jquery.min.js' %}"></script>
@@ -163,8 +172,6 @@
     <script src="{% static 'build/js/sweetalert2.all.min.js' %}"></script>
     <script src="{% static 'build/js/alertas.js' %}"></script>
     <script src="{% static 'build/js/recustom.js' %}"></script>
-
-
 
 
 

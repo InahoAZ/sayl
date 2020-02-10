@@ -618,7 +618,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 $('#fsol-txt').html(formato(data[0]['fecha_solicitud']));
                 $('#fdesde-txt').html(formato(data[0]['fecha_inicio']));
                 $('#fhasta-txt').html(formato(data[0]['fecha_fin']));
-                $('#btn-aprobar').attr("href", "/app_justificacion/aprobar_just/" + data[0]['pk']);
+                $('#btn-aprobar').attr("href", "/app_justificacion/aprobar_justt/" + data[0]['pk']);
                 $('#btn-rechazar').attr("href", "/app_justificacion/rechazar_just/" + data[0]['pk']);
                 $('#id_just').attr("value", data[0]['pk'])
 
@@ -712,7 +712,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
         console.log("la wea");
         $('#min').val('');
         $('#max').val('');
-        $('#daterangepicker').val('');
+        $('#daterangepicker').val('').change();
 
     });
 

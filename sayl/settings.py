@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'simple_history',
     'background_task',
     'django_crontab',
+    'django_extensions'
     
 ]
 
@@ -200,3 +201,8 @@ CRONJOBS = [
     ('* * * * *', 'asistencias.cron.asignar_inasistencia', '>> /home/bjar/Documents/scheduled_job.log')
 ]
 
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}

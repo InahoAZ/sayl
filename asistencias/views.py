@@ -17,6 +17,7 @@ from calendario.models import Feriado
 # Create your views here.
 
 def index(request):
+    print("A ber")
     config = Configuraciones.objects.last()
     print(config)
     if request.user.is_superuser:
@@ -44,26 +45,26 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
     
     #print("mis_horarios: ", mis_horarios)
     #Verifico si en el dia de hoy existe algun horario declarado que cumplir:
-    if Horario.objects.prefetch_related('detallehorario').filter(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy, detallehorario__desde__gte=timezone.now(), detallehorario__hasta__lte=timezone.now()).exists():   
+    if Horario.objects.prefetch_related('detallehorario').filter(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy, detallehorario__desde__lte=timezone.now(), detallehorario__hasta__gte=timezone.now()).exists():   
         print("Existe")
         
         #Como existe, obtengo el horario del agente que realizo el marcaje en el dia de hoy:
         mis_horarios = Horario.objects.get(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy)
         #El detalle del horario de hoy:    
         d_horario = DetalleHorario.objects.get(horario=mis_horarios, dia=dia_de_hoy)  
-
+        
         #Se trae el tiempo de tolerancia configurado
         tiempo_tolerancia = Configuraciones.objects.filter().order_by('-id')[0]
-        tiempo_tolerancia = tiempo_tolerancia.tiempo_tolerancia
-
+        minutos_tol = tiempo_tolerancia.tiempo_tolerancia
+        tiempo_tolerancia = None
         #Se agrega la tolerancia:
         desde = time2timedelta(d_horario.desde)
         hasta = time2timedelta(d_horario.hasta)
         #tiempo_tolerancia = Configuraciones.objects.get(nombre_config="tiempo_tolerancia")
-        tiempo_tolerancia = timedelta(minutes=int(tiempo_tolerancia))   
+        tiempo_tolerancia = timedelta(minutes=int(minutos_tol))   
         tol_desde = desde - tiempo_tolerancia
         tol_hasta = hasta + tiempo_tolerancia
-        #print(tol_desde, " - ", tol_hasta)
+        print(tol_desde, " - ", tol_hasta)
     else:
         
         if HorariosFijos.objects.filter(agente=request.user, hora_entrada__gte=timezone.now(), hora_salida__lte=timezone.now()).exists():

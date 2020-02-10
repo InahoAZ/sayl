@@ -18,6 +18,9 @@ def time2timedelta(time):
 def date2timedelta(time):
     return datetime.combine(date.min, datetime) - datetime.min
 
+def timedelta2time(time):
+    return (datetime.min + time).time()
+
 def daterange(start_date, end_date):
     for n in range(int ((end_date - start_date).days)):
         yield start_date + timedelta(n)

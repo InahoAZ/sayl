@@ -76,6 +76,7 @@ def index(request):
         dsd = time2timedelta(hora_declarada.desde)
         hst = time2timedelta(hora_declarada.hasta)
         total_declarado += hst - dsd
+        print(hst , "-", dsd, " = ", total_declarado )
     
     total_declarado = '%02d.%02d' % (total_declarado.days*24 + total_declarado.seconds // 3600, ((total_declarado.seconds % 3600) // 60) + (total_declarado.seconds % 60) + total_declarado.microseconds)
     total_declarado = float(total_declarado)
