@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'simple_history',
     'background_task',
     'django_crontab',
-    'django_extensions'
+    'django_extensions',
+    'notify'
     
 ]
 

@@ -47,7 +47,7 @@ def get_cargos_api(legajo, cod_cargo=None):
     
     #print(url)
     try:
-        resp = req.get(url, auth=(user,password),timeout=1)
+        resp = req.get(url, auth=(user,password),timeout=10)
         respuesta = resp.json()
         if not(cod_cargo == None):
             for r in respuesta:

@@ -36,14 +36,15 @@ def index(request):
         pk = request.POST.get('id_just')
         observacion = request.POST.get('observacion')
         justificacion = Justificacion.objects.filter(pk=pk).update(observaciones_supervisor=observacion)
-        if "btn-aprobar" in request.POST:
-            print("QUE LE PASAAAA")
+        if "btn-aprobar" in request.POST:            
             justificacion = Justificacion.objects.get(pk=pk)
             print(justificacion.fecha_inicio, " - ", justificacion.fecha_fin)
-            for single_date in daterange(justificacion.fecha_inicio, justificacion.fecha_fin):
-                if Asistencia.objects.filter(legajo=request.user, fecha_marcaje=single_date, condicion='Inasistencia Injustificada').exists():
+            fecha_fin = justificacion.fecha_fin + timedelta(days=1)            
+            for single_date in daterange(justificacion.fecha_inicio, fecha_fin):
+                print(single_date)
+                if Asistencia.objects.filter(legajo=justificacion.legajo, fecha_marcaje=single_date, condicion='Inasistencia Injustificada').exists():
                     print("Corregir")
-                    Asistencia.objects.filter(legajo=request.user, fecha_marcaje=single_date, condicion='Inasistencia Injustificada').update(condicion='Inasistencia Justificada')
+                    Asistencia.objects.filter(legajo=justificacion.legajo, fecha_marcaje=single_date, condicion='Inasistencia Injustificada').update(condicion='Inasistencia Justificada')
             justificacion = Justificacion.objects.filter(pk=pk).update(estado='Aprobado')   
         if "btn-rechazar" in request.POST:
             justificacion = Justificacion.objects.filter(pk=pk).update(estado='Rechazado')
@@ -146,17 +147,20 @@ def cancelar_aviso(request, pk):
 
 def aprobar_justt(request, pk):
     print("QUE LE PASAAAA")
-    justificacion = Justificacion.objects.filter(pk=pk)
+    if Justificacion.objects.filter(pk=pk).exists():
+        justificacion = Justificacion.objects.get(pk=pk)
+    
+    print(justificacion)
     print(justificacion.fecha_inicio, " - ", justificacion.fecha_fin)
-    print(daterange(date2timedelta(justificacion.fecha_inicio), date2timedelta(justificacion.fecha_fin)))
+    print(daterange(justificacion.fecha_inicio, justificacion.fecha_fin))
     for single_date in daterange(justificacion.fecha_inicio, justificacion.fecha_fin):
         print("---> ", single_date)        
         if Asistencia.objects.filter(legajo=justificacion.legajo, fecha_marcaje=single_date).exists():
             Asistencia.objects.filter(legajo=justificacion.legajo, fecha_marcaje=single_date).update(condicion="Inasistencia Justificada")
-
-    #justificacion = Justificacion.objects.filter(pk=pk).update(estado='Aprobado')
+        
+    justificacion = Justificacion.objects.filter(pk=pk).update(estado='Aprobado')
     print("KE PASA")
-    #return redirect('/app_justificacion')
+    return redirect('/app_justificacion')
 
 def rechazar_just(request, pk):
     print("wea")

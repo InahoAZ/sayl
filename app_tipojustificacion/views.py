@@ -13,6 +13,9 @@ from .serializers import TipoJustificacionSerializer
 
 from .forms import TipoJustificacionForm
 from sayl.services import *
+from login.models import CustomUser
+
+from notify.signals import notify
 
 # Create your views here.
 
@@ -30,7 +33,9 @@ def index(request):
     tiposjust = TipoJustificacion.objects.all()
     form_tj = TipoJustificacionForm()
     cargos = get_categorias()
-    if request.method == 'POST' and request.POST['accion'] == 'add':        
+    admins = list(CustomUser.objects.filter(is_superuser=True))
+    if request.method == 'POST' and request.POST['accion'] == 'add':
+        notify.send(request.user, recipient_list=admins, actor=request.user, verb='creó un tipo de justificación')        
         agregar_tjust(request)
     return render(request, 'app_tipojustificacion/index.html', {'tiposjust':tiposjust, 'form_tj':form_tj})
 

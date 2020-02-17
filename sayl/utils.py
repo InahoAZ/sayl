@@ -21,6 +21,9 @@ def date2timedelta(time):
 def timedelta2time(time):
     return (datetime.min + time).time()
 
+def timedelta2date(date):
+    return (datetime.min + date).date()
+
 def daterange(start_date, end_date):
     for n in range(int ((end_date - start_date).days)):
         yield start_date + timedelta(n)
@@ -50,4 +53,6 @@ def get_next_or_prev(models, item, direction):
         return models[0]
     return False
 
+    def days_hours_minutes(td):
+        return td.days, td.seconds//3600, (td.seconds//60)%60
     

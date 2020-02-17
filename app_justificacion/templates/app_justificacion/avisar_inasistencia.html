@@ -85,7 +85,7 @@
                                     <div class="form-group">
                                         <label for="" class="control-label col-md-3 col-sm-3 col-xs-12">Avisar a: </label>
                                         <div class="">
-                                            <select class="to col-md-6 col-sm-6 col-xs-12" name="usuarios[]" multiple="multiple">
+                                            <select class="select2 col-md-6 col-sm-6 col-xs-12" name="usuarios[]" multiple="multiple">
                                                 {% for user in users %}
                                                     <option value="{{user.pk}}">{{user.last_name}} {{user.first_name}}</option>
                                                 {% endfor %}

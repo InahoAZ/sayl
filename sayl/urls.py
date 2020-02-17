@@ -37,6 +37,7 @@ urlpatterns = [
     path('cargos/', include('cargos.urls')),
     path('calendario/', include('calendario.urls')),
     path('estadisticas/', include('estadisticas.urls')),
+    path('notifications/', include('notify.urls', 'notifications')),
 ]
 
 if settings.DEBUG:

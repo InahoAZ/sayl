@@ -1,4 +1,7 @@
 {% load staticfiles %}
+{% load notification_tags %}
+{% include_notify_js_variables %}
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -73,6 +76,7 @@
     <!-- jQuery -->
 
     <script src="{% static '/vendors/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static "notify/notifyX.js" %}"></script>
     <!-- Bootstrap -->
     <script src="{% static '/vendors/bootstrap/dist/js/bootstrap.min.js' %}"></script>
     <!-- FastClick -->
@@ -85,6 +89,7 @@
     <script src="{% static '/vendors/iCheck/icheck.min.js' %}"></script>
     <!-- bootstrap-daterangepicker -->
     <script src="{% static '/vendors/moment/min/moment.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/locale/es.js"></script>
     <script src="{% static '/vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
     <!-- bootstrap-wysiwyg -->
     <script src="{% static '/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js' %}"></script>
@@ -104,6 +109,7 @@
     <script src="{% static '/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js' %}"></script>
     <!-- starrr -->
     <script src="{% static '/vendors/starrr/dist/starrr.js' %}"></script>
+    
     
     <script>
         
@@ -172,9 +178,8 @@
     <script src="{% static 'build/js/sweetalert2.all.min.js' %}"></script>
     <script src="{% static 'build/js/alertas.js' %}"></script>
     <script src="{% static 'build/js/recustom.js' %}"></script>
-
-
-
+    
+    
     {% endblock body %}
 </body>
 

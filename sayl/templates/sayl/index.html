@@ -1,80 +1,90 @@
 {% extends "sayl/base_site.html" %} {% load staticfiles %} {% block title %} Dashboard 1 {% endblock title %} {% block stylesheets %} {{ block.super }} {% endblock stylesheets %} {% block content %}
 <div class="right_col" role="main">
     <!-- top tiles -->
-    {% if user.is_superuser %}
-        <div class="row tile_count">
-        <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+    {% comment %} {% if user.is_superuser %} {% endcomment %}
+    <div class="row tile_count">
+        <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> Asistencias Hoy</span>
-            <div class="count green">46</div>
-            <span class="count_bottom"><i class="green">4% </i> From last Week</span>
+            <div class="count green">{{cant_asistencias_hoy}}</div>
+            {% comment %} <span class="count_bottom"><i class="green">4% </i> From last Week</span> {% endcomment %}
         </div>
-        <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+        <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-clock-o"></i> Justificaciones Hoy</span>
-            <div class="count">12</div>
-            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span>
+            <div class="count">{{cant_justificacion_hoy}}</div>
+            {% comment %} <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> {% endcomment %}
         </div>
-        <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+        <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> Aun sin marcar</span>
-            <div class="count red">34</div>
-            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+            <div class="count red">{{cant_sin_marcar}}</div>
+            {% comment %} <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span> {% endcomment %}
         </div>
-        <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-user"></i> Marcajes fuera de horario</span>
-            <div class="count red">2,500</div>
-            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
-        </div>
-        
+        {% comment %} <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-user"></i> Personas en el establecimiento</span>
+            <div class="count">{{cant_agentes_establecimiento}}</div>
+            {% comment %} <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span> {% endcomment %}
+        {% comment %} </div> {% endcomment %}
+
     </div>
-    {% else %}
-        <div class="row tile_count">
+    {% comment %} {% else %} {% endcomment %}
+    {% comment %} <div class="row tile_count">
         <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> Horas Trabajadas Semanal</span>
             <div class="count green">2500</div>
-            <span class="count_bottom"><i class="green">4% </i> From last Week</span>
-        </div>
+            {% comment %} <span class="count_bottom"><i class="green">4% </i> From last Week</span> {% endcomment %}
+        {% comment %} </div>
         <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-clock-o"></i> Horas a Favor</span>
             <div class="count">123.50</div>
-            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span>
-        </div>
+            {% comment %} <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> {% endcomment %}
+        {% comment %} </div>
         <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> Inasistencias Injustificadas</span>
             <div class="count red">2,500</div>
-            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
-        </div>
+            {% comment %} <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span> {% endcomment %}
+        {% comment %} </div>
         <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> Inconsistencias de Marcaje</span>
             <div class="count red">2,500</div>
-            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
-        </div>
-        
-    </div>
-    {% endif %} 
-    
+            {% comment %} <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span> {% endcomment %}
+        {% comment %} </div> {% endcomment %} 
+
+    {% comment %} </div> {% endcomment %}
+    {% comment %} {% endif %}  {% endcomment %}
+
     <!-- /top tiles -->
     <div class="row">
-    
-    <div class="col col-md-6">ASDASDAS</div>
-    <div class="col col-md-6">
-        {% if user.is_superuser %}
-        <label for="filter_user">Agentes: </label>
-        <select class="select2" id="filter_user">
+
+        <div class="col col-md-6">
+            {% if user.is_superuser %}
+            <label for="filter_user">Agentes: </label>
+            <select class="select2" id="user_pk_horas">
+            <option value="-1">Todos</option>
+            {% for usuario in usuarios  %}
+                <option value="{{usuario.pk}}">{{usuario.last_name}} {{usuario.first_name}}</option>
+            {% endfor %}
+        </select> {% else %}
+            <input type="hidden" id="user_pk_horas" value="{{user.pk}}"> {% endif %}
+            <canvas id="hs_chart" width="800" height="450"></canvas>
+
+        </div>
+        <div class="col col-md-6">
+            {% if user.is_superuser %}
+            <label for="filter_user">Agentes: </label>
+            <select class="select2" id="filter_user">
             <option value="all">Todos</option>
             {% for usuario in usuarios  %}
                 <option value="{{usuario.pk}}">{{usuario.last_name}} {{usuario.first_name}}</option>
             {% endfor %}
-        </select>
-        {% else %}
-        <input type="hidden" id="filter_user" value="{{user.pk}}">
-        {% endif %}
-        <label for="filter_user">Fecha: </label>
-        <input type="text" id="daterangepicker">
-        <canvas id="bar-chart" data-url="{% url 'estadistica_estados_marcajes' %}" width="800" height="450"></canvas>
+        </select> {% else %}
+            <input type="hidden" id="filter_user" value="{{user.pk}}"> {% endif %}
+            <label for="filter_user">Fecha: </label>
+            <input type="text" id="daterangepicker">
+            <canvas id="bar-chart" data-url="{% url 'estadistica_estados_marcajes' %}" width="800" height="450"></canvas>
+
+        </div>
 
     </div>
-    
-    </div>
-    
+
 </div>
 
 
@@ -82,109 +92,217 @@
 <!-- Chart.js -->
 <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
 <script>
-$(function(){
-    miChart = new Chart(document.getElementById("bar-chart"), {
-        type: 'bar',
-        data: {
-            labels: [],
-            datasets: [{
-                label: "Cantidad de Ocurrencias",
-                backgroundColor: [],
-                data: []
-            }]
-        },
-        options: {
-            legend: { display: false },
-            title: {
-                display: true,
-                text: 'Condiciones de Marcajes (cantidad)'
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        suggestedMin: 0,
+    $(function() {
+        $(document).ready(function() {
+            miChart = new Chart(document.getElementById("bar-chart"), {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: "Cantidad de Ocurrencias",
+                        backgroundColor: [],
+                        data: []
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Condiciones de Marcajes (cantidad)'
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                suggestedMin: 0,
+                            }
+                        }]
+                    },
+                    responsive: true,
+                }
+            });
+
+            console.log("DECLA")
+            var condiciones_chart = $('#bar-chart');
+
+            $.ajax({
+                url: condiciones_chart.data('url'),
+                success: function(data) {
+                    console.log("AJAX DE CHART 2");
+                    colores_random = []
+                    for (let index = 0; index < data.labels.length; index++) {
+                        colores_random.push(getRandomColor());
+
                     }
-                }]
+                    console.log(colores_random);
+                    miChart.data.labels = data.labels;
+                    miChart.data.datasets[0].data = data['data'];
+                    miChart.data.datasets[0].backgroundColor = colores_random;
+                    console.log(miChart.data.datasets[0].data);
+                    console.log(miChart.data.labels);
+                    miChart.update();
+                }
+
+            })
+
+
+
+            $('#daterangepicker').val('')
+            $('#filter_user, #daterangepicker').change(function() {
+                //console.log("cambio usuario");
+                user_pk = $('#filter_user').val()
+                fecha_rango = $('#daterangepicker').val()
+                console.log(user_pk)
+                console.log(fecha_rango)
+                var url = condiciones_chart.data('url');
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        'fechona': fecha_rango,
+                        'user_pk': user_pk,
+                    },
+                    success: function(data) {
+                        console.log("AJAX DE CHART 2 con Change")
+                        colores_random = []
+                        for (let index = 0; index < data.labels.length; index++) {
+                            colores_random.push(getRandomColor());
+
+                        }
+                        //console.log(colores_random);
+                        miChart.data.labels = data.labels;
+                        miChart.data.datasets[0].data = data['data'];
+                        miChart.data.datasets[0].backgroundColor = colores_random;
+                        console.log(miChart.data.datasets[0].data);
+                        console.log(miChart.data.labels);
+                        miChart.update();
+                    }
+                })
+            })
+
+        })
+
+        $(document).ready(function() {
+            var ctx = $('#hs_chart')
+
+            var myLineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: "Horas",
+                        data: [],
+
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxis: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'probability'
+                            }
+
+                        }]
+                    },
+                    title: {
+                        display: true,
+                        text: 'Horas Trabajadas por Mes'
+                    },
+                },
+
+            })
+
+            user_pk_hs = $('#user_pk_horas').val()
+            $.ajax({
+                url: '/estadisticas/estadistica_horas_mes',
+                data: {
+                    'user_pk_hs': user_pk_hs,
+                },
+                success: function(data) {
+                    console.log("AJAX DE CHART 1")
+                        //console.log("xd");
+                    var horas = myLineChart.data.datasets[0].data
+                    var horas = data['data']
+                        //console.log(horas)
+                    hora_data = []
+                    for (hora in horas) {
+                        //console.log(horas[hora])
+                        hora = horas[hora]
+                            //console.log(hora)
+                            //hora = hora.substr(0,9)
+                            //console.log(hora)
+                            //hs = hora.split(":").join("")
+                            //console.log(hora)
+                        hora_data.push(hora)
+                    }
+                    myLineChart.data.labels = data.labels;
+                    myLineChart.data.datasets[0].data = hora_data;
+                    myLineChart.update()
+                        //console.log(myLineChart.data.labels);
+                }
+            })
+
+            $('#user_pk_horas').change(function() {
+                user_pk = $('#user_pk_horas').val()
+                console.log(user_pk)
+                $.ajax({
+                    url: '/estadisticas/estadistica_horas_mes',
+                    data: {
+                        'user_pk_hs': user_pk,
+                    },
+                    success: function(data) {
+                        console.log("AJAX DE CHART 1 change")
+                            //console.log("xd");
+                        var horas = myLineChart.data.datasets[0].data
+                        var horas = data['data']
+                            //console.log(horas)
+                        hora_data = []
+                        for (hora in horas) {
+                            //console.log(horas[hora])
+                            hora = horas[hora]
+                                //console.log(hora)
+                                //hora = hora.substr(0,9)
+                                //console.log(hora)
+                                //hs = hora.split(":").join("")
+                                //console.log(hora)
+                            hora_data.push(hora)
+                        }
+                        myLineChart.data.labels = data.labels;
+                        myLineChart.data.datasets[0].data = hora_data;
+                        myLineChart.update()
+                            //console.log(myLineChart.data.labels);
+                    }
+
+                })
+            })
+        })
+
+        /*$('#daterangepicker').change(function(){
+            console.log("cambio usuario");
+            var fecha = $(this).val();
+            var rango = fecha.split(' - ');
+            if(fecha==''){
+                url = 
+            }else{
+                url = 
             }
-        }
+            
+
+        });*/
+
     });
-    var condiciones_chart = $('#bar-chart');
-    
-    $.ajax({
-        url: condiciones_chart.data('url'),
-        success: function(data){
-            colores_random = []
-            for (let index = 0; index < data.labels.length; index++) {
-                colores_random.push(getRandomColor());
-                
-            }
-            console.log(colores_random);
-            miChart.data.labels = data.labels;
-            miChart.data.datasets[0].data = data['data'];
-            miChart.data.datasets[0].backgroundColor = colores_random;
-            console.log(miChart.data.datasets[0].data);
-            console.log(miChart.data.labels);
-            miChart.update();
+
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
         }
-
-    })
-    $('#daterangepicker').val('')
-    $('#filter_user, #daterangepicker').change(function(){
-        console.log("cambio usuario");
-        user_pk = $('#filter_user').val()
-        fecha_rango = $('#daterangepicker').val()
-        console.log(user_pk)
-        console.log(fecha_rango)
-        var url = condiciones_chart.data('url');
-        
-        $.ajax({
-        url: url,
-        data:{
-            'fechona': fecha_rango,
-            'user_pk': user_pk
-        },
-        success: function(data){
-            colores_random = []
-            for (let index = 0; index < data.labels.length; index++) {
-                colores_random.push(getRandomColor());
-                
-            }
-            console.log(colores_random);
-            miChart.data.labels = data.labels;
-            miChart.data.datasets[0].data = data['data'];
-            miChart.data.datasets[0].backgroundColor = colores_random;
-            console.log(miChart.data.datasets[0].data);
-            console.log(miChart.data.labels);
-            miChart.update();
-        }
-
-    })
-
-    /*$('#daterangepicker').change(function(){
-        console.log("cambio usuario");
-        var fecha = $(this).val();
-        var rango = fecha.split(' - ');
-        if(fecha==''){
-            url = 
-        }else{
-            url = 
-        }
-        
-
-    });*/
-
-    });
-    
-});
-
-function getRandomColor() {
-    var letters = '0123456789ABCDEF'.split('');
-    var color = '#';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
+        return color;
     }
-    return color;
-}
 </script>
 <!-- gauge.js -->
 <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
@@ -209,4 +327,3 @@ function getRandomColor() {
 
 
 {% endblock javascripts %}
-

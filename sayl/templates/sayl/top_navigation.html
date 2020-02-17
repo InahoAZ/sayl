@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load staticfiles %} {% load notification_tags %} {% include_notify_js_variables %}
 <div class="nav_menu">
     <nav>
         <div class="nav toggle">
@@ -18,7 +18,7 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown" id="perfil">
-            
+
                 <a href="" class="user-profile dropdown-toggle" onclick="traer_cargos();" id="perfil" data-toggle="dropdown" aria-expanded="false">
                     <img src=" {% static 'images/blank-profile.png' %} " alt="">{{user.first_name}} {{user.last_name}}
                     <span class=" fa fa-angle-down"></span>
@@ -38,8 +38,8 @@
                         <ul class="dropdown-menu" id="cargos">
                             <input type="hidden" id="legajo" value="{{user.legajo}}">
                             <div class="mis_cargos" id="mis_cargos">
-                                {% comment %} {% for cargo in mis_cargos  %}
-                                    <li><a href="cargos/switch_cargo/{{cargo.cargo}}">{{cargo.desc_categ}}</a></li>
+                                {% comment %} {% for cargo in mis_cargos %}
+                                <li><a href="cargos/switch_cargo/{{cargo.cargo}}">{{cargo.desc_categ}}</a></li>
                                 {% endfor %} {% endcomment %}
                             </div>
                         </ul>
@@ -50,70 +50,111 @@
             </li>
 
             <li role="presentation" class="dropdown">
-                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-envelope-o"></i>
-                    <span class="badge bg-green">6</span>
+                <a href="javascript:;" id="notify-btn" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-bell-o"></i>
+                    <span id="notify-count" class="badge bg-green"></span>
                 </a>
                 <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                    <li>
-                        <a>
-                            <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
-                            <span>
-                <span>John Doe</span>
-                            <span class="time">3 mins ago</span>
-                            </span>
-                            <span class="message">
-                Film festivals used to be do-or-die moments for movie makers. They were where...
-              </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
-                            <span>
-                <span>John Doe</span>
-                            <span class="time">3 mins ago</span>
-                            </span>
-                            <span class="message">
-                Film festivals used to be do-or-die moments for movie makers. They were where...
-              </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
-                            <span>
-                <span>John Doe</span>
-                            <span class="time">3 mins ago</span>
-                            </span>
-                            <span class="message">
-                Film festivals used to be do-or-die moments for movie makers. They were where...
-              </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
-                            <span>
-                <span>John Doe</span>
-                            <span class="time">3 mins ago</span>
-                            </span>
-                            <span class="message">
-                Film festivals used to be do-or-die moments for movie makers. They were where...
-              </span>
-                        </a>
-                    </li>
-                    <li>
-                        <div class="text-center">
-                            <a>
-                                <strong>See All Alerts</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </div>
-                    </li>
+
                 </ul>
-            </li>
+
+                {% comment %}
+                <li>
+                    <a>
+                        <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                <span>John Doe</span>
+                        <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                Film festivals used to be do-or-die moments for movie makers. They were where...
+                </span>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                <span>John Doe</span>
+                        <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                Film festivals used to be do-or-die moments for movie makers. They were where...
+            </span>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <span class="image"><img src="/static/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                <span>John Doe</span>
+                        <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                Film festivals used to be do-or-die moments for movie makers. They were where...
+            </span>
+                    </a>
+                </li>
+                <li>
+                    <div class="text-center">
+                        <a>
+                            <strong>See All Alerts</strong>
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    </div>
+                </li>
+        </ul>
+        </li> {% endcomment %}
+
         </ul>
     </nav>
 </div>
+<script src="{% static '/vendors/jquery/dist/jquery.min.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        var notificacion = $('#menu1');
+        var notify_count = $('#notify-count');
+        $.ajax({
+            type: "GET",
+            url: "/notifications/api/update",
+            data: {
+                'flag': '2'
+            },
+            success: function(response) {
+                response.notifications.forEach(element => {
+                    notificacion.append(element.html);
 
+                });
+                notify_count.text(response.unread_count)
+
+            }
+        });
+
+        $('#notify-btn').click(function(e) {
+            $.ajax({
+                type: "POST",
+                url: "/notifications/mark-all/",
+                data: {
+                    'action': 'read'
+                },
+                success: function(response) {
+                    notify_count.text(response.unread_count)
+                }
+            });
+            $.ajax({
+                type: "GET",
+                url: "/notifications/api/update",
+                data: {
+                    'flag': '1'
+                },
+                success: function(response) {
+                    notify_count.text(response.unread_count)
+
+                }
+            });
+
+        });
+
+
+    });
+</script>

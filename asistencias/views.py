@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.db.models import Q
 from .models import Asistencia, Edificio
 from app_justificacion.models import Justificacion
 from app_horarios.models import Horario, DetalleHorario, HorariosFijos
@@ -42,7 +43,7 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
     #Obtiene el dia de la semana del 1 al 7 y lo transforma en un string del tipo Lunes, Martes, etc.
     dia_de_hoy = int(timezone.now().strftime("%w"))
     dia_de_hoy = dia_de_semana(dia_de_hoy)    
-    
+    corresponde_horario = None
     #print("mis_horarios: ", mis_horarios)
     #Verifico si en el dia de hoy existe algun horario declarado que cumplir:
     if Horario.objects.prefetch_related('detallehorario').filter(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy, detallehorario__desde__lte=timezone.now(), detallehorario__hasta__gte=timezone.now()).exists():   
@@ -65,12 +66,18 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
         tol_desde = desde - tiempo_tolerancia
         tol_hasta = hasta + tiempo_tolerancia
         print(tol_desde, " - ", tol_hasta)
+        corresponde_horario = d_horario
     else:
-        
-        if HorariosFijos.objects.filter(agente=request.user, hora_entrada__gte=timezone.now(), hora_salida__lte=timezone.now()).exists():
+        #Si no hay horario declarado (doc), se verifica si no hay un horario fijo (nodoc)
+        tiempo_tolerancia = Configuraciones.objects.filter().order_by('-id')[0]
+        print(HorariosFijos.objects.filter(agente=request.user, hora_entrada__lte=timezone.now(), hora_salida__gte=timezone.now()))
+        marcaje_tol = timezone.now() + timedelta(minutes=int(tiempo_tolerancia.tiempo_tolerancia))
+        marcaje_tol_hasta = timezone.now() - timedelta(minutes=int(tiempo_tolerancia.tiempo_tolerancia))
+        print(marcaje_tol)
+        if HorariosFijos.objects.filter(agente=request.user, hora_entrada__lte=marcaje_tol, hora_salida__gte=marcaje_tol_hasta).exists():
             print("Es horario fijo")
             horario_fijo = HorariosFijos.objects.get(agente=request.user)   
-            tiempo_tolerancia = Configuraciones.objects.filter().order_by('-id')[0]
+            
             tiempo_tolerancia = tiempo_tolerancia.tiempo_tolerancia
             #Se agrega la tolerancia:
             desde = time2timedelta(horario_fijo.hora_entrada)
@@ -81,6 +88,8 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
             tol_hasta = hasta + tiempo_tolerancia
             print("hf: ", tol_desde)
             print("hf: ", tol_hasta)
+
+
         else:
             tol_desde = None
             tol_hasta = None
@@ -102,6 +111,7 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
             newinasist.condicion = 'Dia no Laborable'
         else:
             print("Tol DESDE      ->", tol_desde)
+            print("marco en: ", marcaje_desde)
             if tol_desde != None and marcaje_desde>=tol_desde:   
                 asistencia.condicion = "Entrada Válida"
             else:
@@ -124,14 +134,26 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
         print("Marco")
         marcaje = Asistencia.objects.filter(fecha_marcaje=timezone.now(), legajo = request.user).last()
         marcaje_hasta = time2timedelta(timezone.now().time())
+
         if marcaje.hora_salida == None and marcaje.condicion == "Entrada Válida":
             marcaje.hora_salida = timezone.now().time()
             
             #Verifica si la salida fue dentro del horario declarado como salida. (Con cierto tiempo de margen)
-            if marcaje_hasta<=tol_hasta:
+            if tol_hasta != None and marcaje_hasta<=tol_hasta:
                 marcaje.condicion = "Marcaje Válido"
             else:
-                marcaje.condicion = "Salida Fuera de Horario"
+                #Aca iria la logica de las horas a favor
+                if DetalleHorario.objects.filter(horario__legajo=request.user, dia=dia_de_hoy).exclude(desde__gte=timezone.now()).order_by('-hasta').exists():
+
+                    print("Arnold: ",DetalleHorario.objects.filter(horario__legajo=request.user, dia=dia_de_hoy).exclude(desde__gte=timezone.now()).order_by('-hasta')[0])
+                    horario_cercano = DetalleHorario.objects.filter(horario__legajo=request.user, dia=dia_de_hoy).exclude(desde__gte=timezone.now()).order_by('-hasta')[0]
+                    print(tol_desde, "---", tol_hasta)
+                    marcaje.hora_salida = horario_cercano.hasta
+                    marcaje.condicion = "Marcaje Válido"
+                    Asistencia.objects.create(fecha_marcaje=timezone.now(), hora_entrada = horario_cercano.hasta, hora_salida=timezone.now().time(), condicion="Horas a Favor", edificio_id=1, legajo=request.user)
+                else:
+                    marcaje.condicion = "Salida Fuera de Horario"
+
 
             marcaje.save()
         if marcaje.hora_salida == None and marcaje.condicion == "Entrada Fuera de Horario":
@@ -181,13 +203,15 @@ def inasistencia_automatica(request):
     print("nueva lista: ", agentes_sinmarcar)
 
     #Obtengo los agentes que tienen horarios en el dia que se coloca la inasistencia.
-    diaa = timezone.now()    
+    diaa = timezone.now()
     diaa = diaa.strftime("%w")
     diaa = dia_de_semana(int(diaa))
     print(diaa)
     horarios_hoy = DetalleHorario.objects.filter(dia=diaa)
     print(horarios_hoy)
-    agentes_sinmarcar = agentes_sinmarcar.filter(horario__detallehorario__in=horarios_hoy, horariosfijos__isnull=False)
+    print("-->", Horario.objects.filter(detallehorario__in=horarios_hoy))
+    h =  Horario.objects.filter(detallehorario__in=horarios_hoy)
+    agentes_sinmarcar = agentes_sinmarcar.filter(Q(horario__in=h) | Q(horariosfijos__isnull=False))
     print("xd; ", agentes_sinmarcar)
     
 
@@ -231,6 +255,13 @@ def inasistencia_automatica(request):
                 #Edificio harcodeado
                 newinasistjust.edificio = Edificio.objects.get(pk=1)
                 newinasistjust.save()
+
+    #Para los agentes que marcaron solo una vez, se le coloca una inconsistencia
+    inconsistentes = Asistencia.objects.filter(hora_salida=None)
+    for inconsistente in inconsistentes:
+        inconsistente.condicion="Inconsistencia de Marcaje"
+        inconsistente.save()
+    print("INCONSISTENTES: ", inconsistentes)
 
     return redirect('/asistencias/')
     

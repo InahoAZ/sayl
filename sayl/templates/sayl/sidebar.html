@@ -45,8 +45,9 @@
               <li><a href="/app_justificacion">Solicitudes de Justificaciones</a></li>
             {% endif %}
             <li><a href="/app_justificacion/justificaciones_encurso">Justificaciones en Curso</a></li>
+            {% if user.is_superuser %}
             <li><a href="/app_tipojustificacion">Gestionar Tipos de Justificaciones</a></li>            
-            
+            {% endif %}
           </ul>
         </li>
         <li><a><i class="fa fa-clock-o"></i> Horarios <span class="fa fa-chevron-down"></span></a>
@@ -63,12 +64,12 @@
             
           </ul>
         </li>
-        <li><a><i class="fa fa-bar-chart"></i> Reportes <span class="fa fa-chevron-down"></span></a>
+        {% comment %} <li><a><i class="fa fa-bar-chart"></i> Reportes <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="form.html">Horas Trabajadas</a></li>
             <li><a href="form_advanced.html">Licencias Mensuales Solicitadas</a></li>          
           </ul>
-        </li>
+        </li> {% endcomment %}
         {% if request.user.is_superuser %}
         <li><a><i class="fa fa-book"></i> Auditoria <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">

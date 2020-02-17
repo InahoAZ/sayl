@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from asistencias.models import Asistencia
+from asistencias.models import Asistencia, Month
 from django.db.models import Count
 from django.http import JsonResponse
-from sayl.utils import time2timedelta, timedelta2time
+from sayl.utils import time2timedelta, timedelta2time, dia_de_mes
 from datetime import datetime, time, timedelta
 from app_horarios.models import Horario, HorariosFijos
 from config.models import Configuraciones
+from django.db.models import F, Sum
 
 # Create your views here.
 
@@ -14,11 +15,14 @@ def estadistica_estados_marcajes(request):
     data = []
     fecha_rango = request.GET.get('fechona')
     user_pk = request.GET.get('user_pk')
+    
     if fecha_rango != '' and fecha_rango:
         print(fecha_rango)
         f_desde, f_hasta = fecha_rango.split(' - ')
     else:
         f_desde, f_hasta = ['','']
+    if fecha_rango == None:
+        fecha_rango = ''
     print("----------->>>>>>> ", user_pk, ">>", fecha_rango)
     if user_pk == 'all' and fecha_rango == '':
         queryset = Asistencia.objects.values('condicion').order_by('condicion').annotate(count=Count('condicion'))
@@ -32,7 +36,10 @@ def estadistica_estados_marcajes(request):
         print(queryset)
     elif user_pk != 'all' and fecha_rango == '':
         queryset = Asistencia.objects.filter(legajo__pk=user_pk).values('condicion').order_by('condicion').annotate(count=Count('condicion'))
-    else:
+        print("qs: ",queryset)
+    elif user_pk != 'all' and fecha_rango != '':                
+        f_desde = f_desde[-4:] + "-" + f_desde[3:5] + "-" + f_desde[0:2]
+        f_hasta = f_hasta[-4:] + "-" + f_hasta[3:5] + "-" + f_hasta[0:2]
         queryset = Asistencia.objects.filter(legajo__pk=user_pk, fecha_marcaje__range=(f_desde, f_hasta)).values('condicion').order_by('condicion').annotate(count=Count('condicion'))
     for entry in queryset:
         labels.append(entry['condicion'])
@@ -58,6 +65,8 @@ def estadistica_horas_trabajadas(request):
         f_desde, f_hasta = ['','']
     print("----------->>>>>>> ", user_pk, ">>", fecha_rango)
 
+    if fecha_rango == None:
+        fecha_rango = ''
 
     hs_trabajadas = Asistencia.objects.values('hora_entrada', 'hora_salida')
 
@@ -75,6 +84,53 @@ def estadistica_horas_trabajadas(request):
 
     config = Configuraciones.objects.filter().order_by('-id')[0]
     f_desde
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data
+    })
+
+
+def estadistica_horas_mes(request):
+    labels = []
+    data = []
+
+
+    fecha_rango = request.GET.get('fechona')
+    user_pk = request.GET.get('user_pk_hs')
+    #print("user_pk", user_pk)
+    if user_pk != '-1':
+        #print("uno")
+        horas = (Asistencia.objects 
+                .filter(legajo__pk=user_pk)          
+                .annotate(trabajado=F('hora_salida') - F('hora_entrada'))
+                .annotate(month=Month('fecha_marcaje'))
+                .values('month')
+                .annotate(total=Sum('trabajado'))
+                .order_by('month')
+                )
+    else:
+        #print("todos")
+        horas = (Asistencia.objects            
+                    .annotate(trabajado=F('hora_salida') - F('hora_entrada'))
+                    .annotate(month=Month('fecha_marcaje'))
+                    .values('month')
+                    .annotate(total=Sum('trabajado'))
+                    .order_by('month')
+                    )
+    #print(horas)
+    for hora in horas:
+        hora = list(hora.values())
+        #print("HHHH: ", hora)
+        labels.append(dia_de_mes(hora[0]))
+        dias = (hora[1]).days
+        horas = ((hora[1]).seconds//3600)
+        minutes = (((hora[1]).seconds//60)%60)
+        seconds = (hora[1]).seconds
+        hora_final = dias + horas + minutes + seconds
+        #time_formateado = str(dias) + ":" + str(horas) + ":" + str(minutes) + ":" + str(seconds)
+        data.append((hora[1].total_seconds()/3600))
+        
 
     return JsonResponse(data={
         'labels': labels,
