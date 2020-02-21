@@ -26,9 +26,9 @@
                                 <th class="dt_time_range_2col">Hora de Salida</th>
                                 <th class="dt_time_range_2col">Horas Trabajadas</th>
                                 <th class="dt_filtrable">Condicion</th>
-                                {% if request.user.is_superuser %}
+                                {% comment %} {% if request.user.is_superuser %} {% endcomment %}
                                 <th class="noExport">Acciones</th>
-                                {% endif %}
+                                {% comment %} {% endif %} {% endcomment %}
                             </tr>
                         </thead>
                         <tbody>
@@ -42,9 +42,9 @@
                                 <td>{{asistencia.hora_salida}}</td>
                                 <td>{{asistencia.horas_trabajadas}}</td>
                                 <td>{{asistencia.condicion}}</td>
-                                {% if request.user.is_superuser %}
+                                {% comment %} {% if user.is_superuser %} {% endcomment %}
                                 <td><a href="corregir_marcaje/{{asistencia.pk}}" class="btn btn-success"><span class="fa fa-edit"></span></a></td>
-                                {% endif %}
+                                {% comment %} {% endif %} {% endcomment %}
                             </tr>
                             {% endfor %}
                         </tbody>

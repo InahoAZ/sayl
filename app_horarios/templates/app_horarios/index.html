@@ -16,21 +16,21 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Declaracion de Horarios<small></small></h2>                        
+                        <h2>Declaracion de Horarios<small></small></h2>
                         {% if declarado_actual > horas_dedicacion%}
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-danger" aria-valuemin="0" aria-valuemax="{{horas_dedicacion}}" data-transitiongoal="{{horas_dedicacion}}">
-                                    <strong>{{declarado_actual}}hs declaradas de {{horas_dedicacion}}hs</strong>
-                                </div>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-danger" aria-valuemin="0" aria-valuemax="{{horas_dedicacion}}" data-transitiongoal="{{horas_dedicacion}}">
+                                <strong>{{declarado_actual}}hs declaradas de {{horas_dedicacion}}hs</strong>
                             </div>
+                        </div>
                         {% else %}
-                            <div class="progress">
+                        <div class="progress">
                             <div class="progress-bar progress-bar-success" aria-valuemin="0" aria-valuemax="{{horas_dedicacion}}" data-transitiongoal="{{declarado_actual}}">
                                 <strong>{{declarado_actual}}hs declaradas de {{horas_dedicacion}}hs</strong>
                             </div>
-                            </div>
+                        </div>
                         {% endif %}
-                        
+
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -76,7 +76,7 @@
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                                             </button>
-                                            <h4 class="modal-title" id="myModalLabel{{tipojust.pk}}">Declaracion de Horarios</h4>
+                                            <h4 class="modal-title" id="myModalLabel{{tipojust.pk}}">Declaración de Horarios</h4>
                                         </div>
                                         <div class="modal-body">
                                             <form action="" method="POST">
@@ -101,11 +101,13 @@
                                     <thead>
                                         <tr>
                                             <th>Pk</th>
-                                            <th>Descripcion</th>
+                                            <th>Descripción</th>
                                             <th>Día</th>
                                             <th>Desde</th>
                                             <th>Hasta</th>
+                                            {% if not horario.activo %}
                                             <th>Acciones</th>
+                                            {% endif %}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -116,14 +118,16 @@
                                             <td>{{d_horario.dia}}</td>
                                             <td>{{d_horario.desde}}</td>
                                             <td>{{d_horario.hasta}}</td>
-
+                                            {% if not horario.activo %}
                                             <td class=" last">
                                                 <div class="btn-group">
                                                     {% comment %} <a type="button" class="btn btn-warning" href="modificar_detalle_horario/{{d_horario.pk}}"><i class="fa fa-edit"></i></button> {% endcomment %}
-                                            {% if not horario.activo %}
-                                            <a class="btn btn-danger" type="button" href="eliminar_detalle_horario/{{d_horario.pk}}"><i class="fa fa-trash"></i></a> {% endif %}
+                                            
+                                            <a class="btn btn-danger" type="button" href="eliminar_detalle_horario/{{d_horario.pk}}"><i class="fa fa-trash"></i></a>
+
                                                 </div>
                                             </td>
+                                            {% endif %}
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -138,19 +142,15 @@
                                     <div class="form-group">
                                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                                             {% if horario.activo %}
-                                                <a href="/app_horarios/editar_declaracion_horarios/{{horario.pk}}" class="btn btn-primary">Editar Declaracion de Horarios</a>
-                                                <a class="btn btn-success disabled" disabled>Finalizar Declaracion de Horarios</a> 
-                                            {% else %}
-                                                {% if declarado_actual == horas_dedicacion %}
-                                                    <a href="/app_horarios/editar_declaracion_horarios/{{horario.pk}}" class="btn btn-primary disabled" disabled>Editar Declaracion de Horarios</a>
-                                                    <a href="/app_horarios/finalizar_declaracion_horarios/{{horario.pk}}" class="btn btn-success">Finalizar Declaracion de Horarios</a> 
-                                                {% else %}
-                                                    {% if declarado_actual < horas_dedicacion %}
-                                                        <button class="btn btn-primary disabled" disabled >Editar Declaracion de Horariosa</a>
-                                                        <button class="btn btn-success" onclick="msj_finalizar_hs_menor()">Finalizar Declaracion de Horarios</a>
+                                            <a href="/app_horarios/editar_declaracion_horarios/{{horario.pk}}" class="btn btn-primary">Editar Declaración de Horarios</a>
+                                            <a class="btn btn-success disabled" disabled>Finalizar Declaración de Horarios</a> {% else %} {% if declarado_actual == horas_dedicacion %}
+                                            <a href="/app_horarios/editar_declaracion_horarios/{{horario.pk}}" class="btn btn-primary disabled" disabled>Editar Declaración de Horarios</a>
+                                            <a href="/app_horarios/finalizar_declaracion_horarios/{{horario.pk}}" class="btn btn-success">Finalizar Declaración de Horarios</a> {% else %} {% if declarado_actual
+                                            < horas_dedicacion %} <button class="btn btn-primary disabled" disabled>Editar Declaración de Horarios</a>
+                                                <button class="btn btn-success" onclick="msj_finalizar_hs_menor()">Finalizar Declaración de Horarios</a>
                                                     {% else %}
-                                                        <button class="btn btn-primary disabled" disabled>Editar Declaracion de Horariosb</a>
-                                                        <button class="btn btn-success" onclick="msj_finalizar_hs_mayor()">Finalizar Declaracion de Horarios</a>
+                                                        <button class="btn btn-primary disabled" disabled>Editar Declaración de Horarios</a>
+                                                        <button class="btn btn-success" onclick="msj_finalizar_hs_mayor()">Finalizar Declaración de Horarios</a>
                                                     {% endif %}
                                                 
                                                 {% endif %}

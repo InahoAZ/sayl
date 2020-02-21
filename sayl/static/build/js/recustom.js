@@ -34,6 +34,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
     $('#max').val('');
     midatatable = $('#midatatable').DataTable({
         "orderCellsTop": true,
+        "displayStart": 5,
         "fixedHeader": true,
         "lengthMenu": [
             [5, 10, 25, 50, -1],
@@ -43,7 +44,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
         "dom": "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-        "iDisplayLength": 5,
+
         "bPaginate": true,
         "buttons": [{
             extend: 'pdfHtml5',

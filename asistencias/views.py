@@ -13,6 +13,7 @@ from sayl.utils import dia_de_semana, time2timedelta, dia_de_mes
 from config.models import Configuraciones
 from dateutil.parser import parse
 from calendario.models import Feriado
+from cargos.models import CargosCache
 
 
 # Create your views here.
@@ -50,7 +51,10 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
         print("Existe")
         
         #Como existe, obtengo el horario del agente que realizo el marcaje en el dia de hoy:
-        mis_horarios = Horario.objects.get(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy)
+        cargo_actual = CargosCache.objects.get(customuser=request.user, seleccionado=True)
+        print(cargo_actual)
+        mis_horarios = Horario.objects.get(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy, cargo=cargo_actual).distinct()
+        print(mis_horarios)
         #El detalle del horario de hoy:    
         d_horario = DetalleHorario.objects.get(horario=mis_horarios, dia=dia_de_hoy)  
         
