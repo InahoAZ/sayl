@@ -8,6 +8,7 @@ from django.core import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from sayl.utils import get_next_or_prev
+from config.models import Configuraciones
 
 class JSONResponse(HttpResponse):
     """
@@ -19,14 +20,15 @@ class JSONResponse(HttpResponse):
         super(JSONResponse, self).__init__(content, **kwargs)
 
 def audit_tjust(request):
+    config = Configuraciones.objects.filter().order_by('-id')[0]
     tj_all = TipoJustificacion.history.all()
-    context = {'audit_regs': tj_all}
+    context = {'audit_regs': tj_all, 'config':config}
     return render(request, 'auditoria/audit_tjust.html', context)
 
 def audit_tjust_detail(request, pk):
     tjs_historial = TipoJustificacion.history.filter(id=pk)   
-    
-    context = {'audit_regs':tjs_historial, 'detail':True}
+    config = Configuraciones.objects.filter().order_by('-id')[0]
+    context = {'audit_regs':tjs_historial, 'detail':True, 'config':config}
     # return render(request, 'auditoria/audit_tjust.html', context)
     return render(request, 'auditoria/audit_tjust.html', context)
 
@@ -57,14 +59,16 @@ def audit_tjust_detail_json(request, pk, id_history):
     return JSONResponse(data)
 
 def audit_just(request):
+    config = Configuraciones.objects.filter().order_by('-id')[0]
     audit_justs = Justificacion.history.all()
-    context = {'audit_justs': audit_justs}
+    context = {'audit_justs': audit_justs, 'config':config}
     return render(request, 'auditoria/audit_just.html', context)
 
 def audit_just_detail(request, pk):
-    js_historial = Justificacion.history.filter(id=pk)    
+    js_historial = Justificacion.history.filter(id=pk) 
+    config = Configuraciones.objects.filter().order_by('-id')[0]   
 
-    context = {'audit_justs':js_historial, 'detail':True}
+    context = {'audit_justs':js_historial, 'detail':True, 'config':config}
     # return render(request, 'auditoria/audit_tjust.html', context)
     return render(request, 'auditoria/audit_just.html', context)
 
@@ -96,13 +100,15 @@ def audit_just_detail_json(request, pk, id_history):
 
 def audit_asist(request):
     audit_asists = Asistencia.history.all()
-    context = {'audit_asists': audit_asists}
+    config = Configuraciones.objects.filter().order_by('-id')[0]
+    context = {'audit_asists': audit_asists, 'config':config}
     return render(request, 'auditoria/audit_asist.html', context)
 
 def audit_asist_detail(request, pk):
-    js_historial = Asistencia.history.filter(id=pk)    
+    js_historial = Asistencia.history.filter(id=pk) 
+    config = Configuraciones.objects.filter().order_by('-id')[0]   
     print(js_historial)
-    context = {'audit_asists':js_historial, 'detail':True}
+    context = {'audit_asists':js_historial, 'detail':True, 'config':config}
     # return render(request, 'auditoria/audit_tjust.html', context)
     return render(request, 'auditoria/audit_asist.html', context)
 
@@ -134,13 +140,15 @@ def audit_asist_detail_json(request, pk, id_history):
 
 def audit_horario(request):
     audit_horarios = Horario.history.all()
-    context = {'audit_horarios': audit_horarios}
+    config = Configuraciones.objects.filter().order_by('-id')[0]
+    context = {'audit_horarios': audit_horarios, 'config':config}
     return render(request, 'auditoria/audit_horario.html', context)
 
 def audit_horario_detail(request, pk):
-    js_historial = Horario.history.filter(id=pk)    
+    js_historial = Horario.history.filter(id=pk) 
+    config = Configuraciones.objects.filter().order_by('-id')[0]   
     print(js_historial)
-    context = {'audit_horarios':js_historial, 'detail':True}
+    context = {'audit_horarios':js_historial, 'detail':True, 'config':config}
     # return render(request, 'auditoria/audit_tjust.html', context)
     return render(request, 'auditoria/audit_horario.html', context)
 
@@ -172,13 +180,15 @@ def audit_horario_detail_json(request, pk, id_history):
     
 def audit_horario_fijo(request):
     audit_horario_fijos = HorariosFijos.history.all()
-    context = {'audit_horario_fijos': audit_horario_fijos}
+    config = Configuraciones.objects.filter().order_by('-id')[0]
+    context = {'audit_horario_fijos': audit_horario_fijos, 'config':config}
     return render(request, 'auditoria/audit_horario_fijo.html', context)
 
 def audit_horario_fijo_detail(request, pk):
-    js_historial = HorariosFijos.history.filter(id=pk)    
+    js_historial = HorariosFijos.history.filter(id=pk) 
+    config = Configuraciones.objects.filter().order_by('-id')[0]   
     print(js_historial)
-    context = {'audit_horario_fijos':js_historial, 'detail':True}
+    context = {'audit_horario_fijos':js_historial, 'detail':True, 'config':config}
     # return render(request, 'auditoria/audit_tjust.html', context)
     return render(request, 'auditoria/audit_horario_fijo.html', context)
 

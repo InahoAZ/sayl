@@ -52,7 +52,7 @@
             <li role="presentation" class="dropdown" style="padding-top: 5px;">
                 <a href="javascript:;" id="notify-btn" style="padding: 20px;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-bell-o"></i>
-                    <span id="notify-count" class="badge bg-green"></span>
+                    <span id="notify-count" class="badge bg-red"></span>
                 </a>
                 <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
 
@@ -125,7 +125,12 @@
                     notificacion.append(element.html);
 
                 });
-                notify_count.text(response.unread_count)
+                if(response.unread_count != 0){
+                    notify_count.text(response.unread_count)
+                }else{
+                    notify_count.remove()
+                }
+                
 
             }
         });
@@ -138,7 +143,7 @@
                     'action': 'read'
                 },
                 success: function(response) {
-                    notify_count.text(response.unread_count)
+                    notify_count.remove()
                 }
             });
             $.ajax({
@@ -148,7 +153,12 @@
                     'flag': '1'
                 },
                 success: function(response) {
-                    notify_count.text(response.unread_count)
+                    if(response.unread_count != 0){
+                        notify_count.text(response.unread_count)
+                    }else{
+                        notify_count.remove()
+                    }
+                    
 
                 }
             });

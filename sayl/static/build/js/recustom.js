@@ -34,12 +34,9 @@ $(document).ready(function() { //Falta Ordenar por fecha
     $('#max').val('');
     midatatable = $('#midatatable').DataTable({
         "orderCellsTop": true,
-        "displayStart": 5,
         "fixedHeader": true,
-        "lengthMenu": [
-            [5, 10, 25, 50, -1],
-            [5, 10, 25, 50, "Todos"]
-        ],
+        "lengthMenu": [10, 25, 50],
+        pageLength: 5,
         //"dom": '<"row"<"col-md-6"l><"col-md-6"f>><"row"rt><"row"<"col-md-6"i><"col-md-6"p>>',
         "dom": "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -61,6 +58,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
             customize: function(doc) {
                 //El titulo lo saco de un input oculto para poder usar esta misma configuracion para reportes distintos, entonces cambia el titulo segun el reporte.
                 var titulo = $('#titulo_reporte').val();
+                //console.log(titulo)
                 var usuario = $('#usuario_reporte').val();
                 var filtros = [];
                 var inputs = $(".select2");
@@ -115,6 +113,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 var univ = $('#universidad').val()
                 var facultad = $('#facultad').val()
                 var direccion = $('#direccion').val()
+                console.log("REPORTE: ", univ, facultad, direccion)
                 doc['header'] = (function() {
                     return {
                         columns: [{
@@ -176,16 +175,17 @@ $(document).ready(function() { //Falta Ordenar por fecha
                 if (!esVacio) {
                     $("#midatatable").find('tbody tr:first-child td').each(function() {
                         if ($(this).attr('colspan')) {
-                            for (var j = 1; j <= $(this).attr('colspan'); $j++) {
+                            for (var j = 1; j <= $(this).attr('colspan'); j++) {
                                 colCount.push('*');
                             }
                         } else { colCount.push('*'); }
                     });
                     console.log(colCount);
+                    colCount.pop()
                     doc.content[1].table.widths = colCount;
                 }
-
-                //console.log(colCount);
+                //doc.content[1].margin = [100,0,100,0]
+                console.log(colCount);
                 //colCount.push('*'); //Le pongo uno mas porque tengo un td oculto (el id)
 
 
@@ -231,7 +231,8 @@ $(document).ready(function() { //Falta Ordenar por fecha
             var columnas_permitidas = $('.dt_filtrable');
             this.api().columns(columnas_permitidas).every(function() {
                 var column = this;
-                var select = $('<select class="select2"><option value=""></option></select>')
+                console.log("COLUMNA: ", column.header().innerHTML);
+                var select = $('<select class="select2 filtro" name="' + column.header().innerHTML + '"><option value=""></option></select>')
                     .appendTo($(column.footer()).empty())
                     .on('change', function() {
                         var val = $.fn.dataTable.util.escapeRegex(
@@ -241,9 +242,9 @@ $(document).ready(function() { //Falta Ordenar por fecha
                         column
                             .search(val ? '^' + val + '$' : '', true, false)
                             .draw();
-                        console.log(column.index())
+                        //console.log(column.index())
                     });
-                console.log()
+                //console.log()
                 column.data().unique().sort().each(function(d, j) {
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
@@ -251,7 +252,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
             var columnas_rangos = $('.dt_rango_fecha');
             this.api().columns(columnas_rangos).every(function() {
                 var column = this;
-                var select = $('<input class="" id="min">')
+                var select = $('<input class="filtro" name="' + column.header().innerHTML + '" id="min">')
                     .appendTo($(column.footer()).empty())
                     .on('change', function() {
                         var val = $.fn.dataTable.util.escapeRegex(
@@ -262,16 +263,16 @@ $(document).ready(function() { //Falta Ordenar por fecha
                                 var iFini = document.getElementById('min').value;
                                 var rango = iFini.split(' - ');
                                 if (rango.length > 1) {
-                                    var iFini = rango[0]
+                                    var iFini = rango[0];
                                     var iFfin = rango[1];
                                 } else {
                                     var iFfin = '';
                                 }
-                                console.log(iFini, "***", iFfin);
+                                //console.log(iFini, "***", iFfin);
                                 //var iFfin = document.getElementById('max').value;
                                 var iStartDateCol = column.index();
                                 var iEndDateCol = column.index();
-                                console.log("dato: ", aData[column.index()]);
+                                //console.log("dato: ", aData[column.index()]);
                                 iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2);
                                 iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2);
 
@@ -305,7 +306,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
             console.log("LEN: ", columnas_time.length)
             this.api().columns(columnas_time).every(function() {
                 var column = this;
-                var select = $('<input class="col col-md-5" id="hs_min' + column.index() + '"><div class="col col-md-2 text-center"><p><br>-</p></div><input  class="col col-md-5"  id="hs_max' + column.index() + '">')
+                var select = $('<input class="col col-md-5 filtro" id="hs_min' + column.index() + '" name="' + column.header().innerHTML + '"><div class="col col-md-2 text-center"><p><br>-</p></div><input  class="col col-md-5 filtro" id="hs_max' + column.index() + '" name="' + column.header().innerHTML + '">')
                     .appendTo($(column.footer()).empty())
                     .on('change', function() {
                         var val = $.fn.dataTable.util.escapeRegex(
@@ -359,7 +360,7 @@ $(document).ready(function() { //Falta Ordenar por fecha
 
         },
 
-        "pageLength": 100,
+        "pageLength": 5,
         "processing": true,
         'columnDefs': [
             { 'sortable': true, 'searchable': false, 'visible': false, 'type': 'num', 'targets': [0] }
@@ -711,7 +712,19 @@ $(document).ready(function() { //Falta Ordenar por fecha
         $('.to').select2();
         //console.log("oli");
 
-        $('.select2').select2();
+        $('.select2').select2({
+            language: {
+
+                noResults: function() {
+
+                    return "No hay resultado";
+                },
+                searching: function() {
+
+                    return "Buscando..";
+                }
+            }
+        });
         $('#s2').select2();
 
         console.log("la wea");

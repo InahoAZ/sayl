@@ -12,9 +12,14 @@ from .serializers import JustificacionSerializer
 from django.contrib import messages
 from mensajeria.views import mandar_whatsapp, mandar_mail
 import inflect
+from django.utils import timezone
 from datetime import datetime, timedelta
 from sayl.utils import date2timedelta, daterange
 from asistencias.models import Asistencia
+from config.models import Configuraciones
+from notify.signals import notify
+
+
 
 # Create your views here.
 
@@ -30,13 +35,14 @@ class JSONResponse(HttpResponse):
 
 
 def index(request):
+    config = Configuraciones.objects.filter().order_by('-id')[0]
     justificaciones = Justificacion.objects.exclude(estado='Aprobado').exclude(estado='Rechazado').exclude(estado='Anulado por Marcaje')
     print("QUE DICES TIO")
     if request.method == 'POST':
         pk = request.POST.get('id_just')
         observacion = request.POST.get('observacion')
         justificacion = Justificacion.objects.filter(pk=pk).update(observaciones_supervisor=observacion)
-        if "btn-aprobar" in request.POST:            
+        if "btn-aprobar" in request.POST:           
             justificacion = Justificacion.objects.get(pk=pk)
             print(justificacion.fecha_inicio, " - ", justificacion.fecha_fin)
             fecha_fin = justificacion.fecha_fin + timedelta(days=1)            
@@ -49,13 +55,13 @@ def index(request):
         if "btn-rechazar" in request.POST:
             justificacion = Justificacion.objects.filter(pk=pk).update(estado='Rechazado')
 
-    return render(request, 'app_justificacion/index_admin.html', {'justificaciones':justificaciones})
+    return render(request, 'app_justificacion/index_admin.html', {'justificaciones':justificaciones, 'config':config})
 
 def avisar_inasistencia(request):
     form_justificacion = JustificacionForm()
     justificaciones = Justificacion.objects.filter(legajo=request.user)
     users = CustomUser.objects.all().order_by('last_name')
-    
+    config = Configuraciones.objects.filter().order_by('-id')[0]
     #print(justificaciones)
     usuario_actual = request.user
     cargos = usuario_actual.get_cargos()
@@ -114,13 +120,23 @@ def avisar_inasistencia(request):
                     
                     mensaje += " desde: " + desde
                     mensaje += " hasta: " + hasta
-                    
-                    if request.user.suscripto_telefono:             
-                        mandar_whatsapp(avisar_a, mensaje)
-                    if request.user.suscripto_mail:
-                        print("Sus mail")
-                        mandar_mail(avisar_a, "Sobre Aviso de Inasistencia", mensaje)
                     just.save()
+                    try:
+                        if request.user.suscripto_telefono:             
+                            mandar_whatsapp(avisar_a, mensaje)
+                        if request.user.suscripto_mail:
+                            print("Sus mail")
+                            mandar_mail(avisar_a, "Sobre Aviso de Inasistencia", mensaje)
+                    except:
+                        messages.error(request, 'Error al notificar')   
+
+                    
+                    contacto_usuario = []
+                    for pk in avisar_a:
+                        contacto_usuario.append(CustomUser.objects.get(pk=pk))
+                    admins = list(CustomUser.objects.filter(is_superuser=True))
+                    admins += contacto_usuario
+                    notify.send(request.user, recipient_list=admins, actor=request.user, verb='solicitó una justificación', actor_url="/app_justificacion")
                 else:
                     messages.error(request, 'Has ocupado todas tus justificaciones de este tipo por este mes o tu solicitud excede la cantidad de dias permitidos')
                 return redirect('avisar_inasistencia')
@@ -134,6 +150,7 @@ def avisar_inasistencia(request):
         'justificaciones':justificaciones,
         'cargos_user':cargos,
         'users':users,
+        'config':config,
         }
     return render(request, 'app_justificacion/avisar_inasistencia.html',context)
 
@@ -168,8 +185,9 @@ def rechazar_just(request, pk):
     return redirect('/app_justificacion')
 
 def justificaciones_encurso(request):
-    just_encurso = Justificacion.objects.filter(estado="Aprobado").order_by('fecha_solicitud')
-    context = {'just_encurso': just_encurso}
+    just_encurso = Justificacion.objects.filter(estado="Aprobado", fecha_fin__gte=timezone.now()).order_by('fecha_solicitud')
+    config = Configuraciones.objects.filter().order_by('-id')[0]
+    context = {'just_encurso': just_encurso, 'config':config}
     return render(request, 'app_justificacion/justificaciones_encurso.html', context)
 
     

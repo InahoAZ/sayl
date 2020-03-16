@@ -136,8 +136,8 @@ def editar_declaracion_horarios(request, pk):
         horario.cant_modificaciones -= 1
         horario.save()
     else:
-        mensajito = """Ya no se pueden realizar modificaciones a la declaracion de horarios, 
-        por favor para modificar contacte con el supervior de Asistencias y Licencias """
+        mensajito = """Ya no se pueden realizar modificaciones a la declaración de horarios, 
+        por favor para modificar contacte con el supervisor de Asistencias y Licencias """
         messages.error(request, mensajito)
     return redirect('/app_horarios')
 

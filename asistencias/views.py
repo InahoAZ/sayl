@@ -14,20 +14,22 @@ from config.models import Configuraciones
 from dateutil.parser import parse
 from calendario.models import Feriado
 from cargos.models import CargosCache
+from notify.signals import notify
+
 
 
 # Create your views here.
 
 def index(request):
+    config = Configuraciones.objects.filter().order_by('-id')[0]
     print("A ber")
-    config = Configuraciones.objects.last()
-    print(config)
     if request.user.is_superuser:
         asistencias = Asistencia.objects.all()
     else:
         asistencias = Asistencia.objects.filter(legajo=request.user)
+    
     context = {'asistencias':asistencias, 'config':config} 
-    print(asistencias)
+    print(config)
     return render(request,'asistencias/marcajes.html', context)
 
 def simulador_biometrico(request):
@@ -43,17 +45,30 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
 
     #Obtiene el dia de la semana del 1 al 7 y lo transforma en un string del tipo Lunes, Martes, etc.
     dia_de_hoy = int(timezone.now().strftime("%w"))
-    dia_de_hoy = dia_de_semana(dia_de_hoy)    
+    dia_de_hoy = dia_de_semana(dia_de_hoy)   
+    print(dia_de_hoy) 
     corresponde_horario = None
+    #Se trae el tiempo de tolerancia configurado
+    tt = Configuraciones.objects.filter().order_by('-id')[0]
+    mtol = tt.tiempo_tolerancia
+    
+    #tiempo_tolerancia = Configuraciones.objects.get(nombre_config="tiempo_tolerancia")
+    tt = timedelta(minutes=int(mtol))   
+    td = timezone.now() - tt
+    th = timezone.now() + tt
+    print("hf: ", td)
+    print("hf: ", th)
     #print("mis_horarios: ", mis_horarios)
+    print(Horario.objects.filter(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy))
     #Verifico si en el dia de hoy existe algun horario declarado que cumplir:
-    if Horario.objects.prefetch_related('detallehorario').filter(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy, detallehorario__desde__lte=timezone.now(), detallehorario__hasta__gte=timezone.now()).exists():   
+    cargo_actual = CargosCache.objects.get(customuser=request.user, seleccionado=True)
+    if Horario.objects.filter(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy, cargo=cargo_actual).exists():   
         print("Existe")
         
         #Como existe, obtengo el horario del agente que realizo el marcaje en el dia de hoy:
-        cargo_actual = CargosCache.objects.get(customuser=request.user, seleccionado=True)
+        
         print(cargo_actual)
-        mis_horarios = Horario.objects.get(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy, cargo=cargo_actual).distinct()
+        mis_horarios = Horario.objects.get(legajo=request.user, activo=True, detallehorario__dia=dia_de_hoy, cargo=cargo_actual)
         print(mis_horarios)
         #El detalle del horario de hoy:    
         d_horario = DetalleHorario.objects.get(horario=mis_horarios, dia=dia_de_hoy)  
@@ -147,17 +162,19 @@ def simular_marcaje(request): #Tengo que pensarlo como la realidad del biometric
                 marcaje.condicion = "Marcaje Válido"
             else:
                 #Aca iria la logica de las horas a favor
-                if DetalleHorario.objects.filter(horario__legajo=request.user, dia=dia_de_hoy).exclude(desde__gte=timezone.now()).order_by('-hasta').exists():
+                #if DetalleHorario.objects.filter(horario__legajo=request.user, dia=dia_de_hoy).exclude(desde__gte=timezone.now()).order_by('-hasta').exists():
 
-                    print("Arnold: ",DetalleHorario.objects.filter(horario__legajo=request.user, dia=dia_de_hoy).exclude(desde__gte=timezone.now()).order_by('-hasta')[0])
-                    horario_cercano = DetalleHorario.objects.filter(horario__legajo=request.user, dia=dia_de_hoy).exclude(desde__gte=timezone.now()).order_by('-hasta')[0]
-                    print(tol_desde, "---", tol_hasta)
-                    marcaje.hora_salida = horario_cercano.hasta
-                    marcaje.condicion = "Marcaje Válido"
-                    Asistencia.objects.create(fecha_marcaje=timezone.now(), hora_entrada = horario_cercano.hasta, hora_salida=timezone.now().time(), condicion="Horas a Favor", edificio_id=1, legajo=request.user)
-                else:
-                    marcaje.condicion = "Salida Fuera de Horario"
-
+                #     print("Arnold: ",DetalleHorario.objects.filter(horario__legajo=request.user, dia=dia_de_hoy).exclude(desde__gte=timezone.now()).order_by('-hasta')[0])
+                #     horario_cercano = DetalleHorario.objects.filter(horario__legajo=request.user, dia=dia_de_hoy).exclude(desde__gte=timezone.now()).order_by('-hasta')[0]
+                #     print(tol_desde, "---", tol_hasta)
+                #     marcaje.hora_salida = horario_cercano.hasta
+                #     marcaje.condicion = "Marcaje Válido"
+                #     Asistencia.objects.create(fecha_marcaje=timezone.now(), hora_entrada = horario_cercano.hasta, hora_salida=timezone.now().time(), condicion="Horas a Favor", edificio_id=1, legajo=request.user)
+                # else:
+                #     marcaje.condicion = "Salida Fuera de Horario"
+                
+                #Hardcodeada de emergencia. MAÑANA PRESENTO CABEZA
+                marcaje.condicion = "Marcaje Válido"
 
             marcaje.save()
         if marcaje.hora_salida == None and marcaje.condicion == "Entrada Fuera de Horario":
@@ -178,8 +195,9 @@ def corregir_marcaje(request, pk):
         if form.is_valid():
             asist = form.save(commit=False)
             asist.changeReason = 'Correccion de Marcaje'
+            notify.send(request.user, recipient=asist.legajo, actor=request.user, verb='ha corregido su marcaje', actor_url="/asistencias")
             asist.save()
-        return redirect('index')
+        return redirect('/asistencias/')
     context = {'form_corregir_marcaje': form}
     return render(request, 'asistencias/corregir_marcaje.html', context)
 
@@ -238,6 +256,8 @@ def inasistencia_automatica(request):
                 newinasist.condicion = 'Dia no Laborable'
             else:               
                 newinasist.condicion = 'Inasistencia Injustificada'
+                notify.send(request.user, recipient=agente_sinmarcar, actor=agente_sinmarcar, verb='obtuvo una Inasistencia Injustificada', actor_url="/asistencias")
+                
             
             #Edificio harcodeado
             newinasist.edificio = Edificio.objects.get(pk=1)
@@ -258,12 +278,14 @@ def inasistencia_automatica(request):
                 newinasistjust.condicion = 'Inasistencia Justificada'
                 #Edificio harcodeado
                 newinasistjust.edificio = Edificio.objects.get(pk=1)
+                
                 newinasistjust.save()
 
     #Para los agentes que marcaron solo una vez, se le coloca una inconsistencia
     inconsistentes = Asistencia.objects.filter(hora_salida=None)
     for inconsistente in inconsistentes:
         inconsistente.condicion="Inconsistencia de Marcaje"
+        notify.send(request.user, recipient=inconsistente.legajo, actor=inconsistente.legajo, verb='obtuvo una Inconsistencia de Marcaje', actor_url="/asistencias")
         inconsistente.save()
     print("INCONSISTENTES: ", inconsistentes)
 

@@ -82,7 +82,7 @@
           </ul>
         </li>
         {% endif %}
-        
+        {% if request.user.is_superuser %}
         <li><a><i class="fa fa-calendar-o"></i> Calendario <span class="fa fa-chevron-down"></span></a>
           {% if request.user.is_superuser %}
           <ul class="nav child_menu">
@@ -90,7 +90,7 @@
           </ul>
           {% endif %}
         </li>
-        
+        {% endif %}
       </ul>
     </div>    
   </div>

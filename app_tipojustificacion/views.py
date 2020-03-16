@@ -14,6 +14,7 @@ from .serializers import TipoJustificacionSerializer
 from .forms import TipoJustificacionForm
 from sayl.services import *
 from login.models import CustomUser
+from config.models import Configuraciones
 
 from notify.signals import notify
 
@@ -30,6 +31,7 @@ class JSONResponse(HttpResponse):
 
 @login_required
 def index(request):
+    config = Configuraciones.objects.filter().order_by('-id')[0]
     tiposjust = TipoJustificacion.objects.all()
     form_tj = TipoJustificacionForm()
     cargos = get_categorias()
@@ -37,7 +39,7 @@ def index(request):
     if request.method == 'POST' and request.POST['accion'] == 'add':
         notify.send(request.user, recipient_list=admins, actor=request.user, verb='creó un tipo de justificación')        
         agregar_tjust(request)
-    return render(request, 'app_tipojustificacion/index.html', {'tiposjust':tiposjust, 'form_tj':form_tj})
+    return render(request, 'app_tipojustificacion/index.html', {'tiposjust':tiposjust, 'form_tj':form_tj, 'config':config})
 
 def listado_tjust(request):
     return HttpResponse("Listado de Tipos de Justificaciones")

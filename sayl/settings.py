@@ -173,7 +173,7 @@ DEBUG_TOOLBAR_CONFIG = {
     # '...
 }
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/accounts/login'
 LOGOUT_REDIRECT_URL = '/accounts/login'
 
 # # Para simular mandar correos. Los "correos" se guardan en la carpeta sent_emails

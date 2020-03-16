@@ -54,10 +54,14 @@
                             </div>
                         </div>
                         {% endif %}                       
-                            
-                        <div class="row">
-                            {% include 'sayl/filtros.html' %}
-                        </div>
+                        
+                        
+                        <input type="hidden" id="titulo_reporte" value="Tipos de Justificaciones"></input>
+                        <input type="hidden" id="usuario_reporte" value="{{user.last_name}} {{user.first_name}}">                        
+                        <input type="hidden" name="nombre_universidad" id="universidad" value="{{config.nombre_universidad}}">
+                        <input type="hidden" name="nombre_facultad" id="facultad" value="{{config.nombre_facultad}}">
+                        <input type="hidden" name="direccion_facultad" id="direccion" value="{{config.direccion_facultad}}">
+                        <input type="hidden" name="telefono_facultad" value="{{config.telefono_facultad}}"> 
                         <table id="midatatable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>

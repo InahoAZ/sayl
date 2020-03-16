@@ -54,19 +54,17 @@
                             </div>
                         </div>
                         {% endif %}                       
-                            
-                        <div class="row">
-                            {% include 'sayl/filtros.html' %}
-                        </div>
+                        
+                        
                         <table id="midatatable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Pk</th>
+                                    <th class="noExport">Pk</th>
                                     <th>Agente</th>
-                                    <th>Fecha de Marcaje</th>
-                                    <th>Movimiento</th>
-                                    <th>Fecha</th>
-                                    <th>Usuario</th>                                    
+                                    <th class="dt_rango_fecha">Fecha de Marcaje</th>
+                                    <th class="dt_filtrable">Movimiento</th>
+                                    <th class="dt_rango_fecha">Fecha</th>
+                                    <th class="dt_filtrable">Usuario</th>                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,15 +77,23 @@
                                         <td><a href="#" id="{{audit_asist.pk}}" onclick="modal_detail_asis({{audit_asist.id}},{{audit_asist.pk}})">{{audit_asist.legajo.first_name}}</td>
                                     {% endif %}
                                     
-                                    <td>{{audit_asist.fecha_marcaje}}</td>
+                                    <td>{{audit_asist.fecha_marcaje|date:'d-m-Y'}}</td>
                                     <td>{{audit_asist.history_change_reason}}</td>
-                                    <td>{{audit_asist.history_date}}</td>
+                                    <td>{{audit_asist.history_date|date:'d-m-Y'}}</td>
                                     <td>{{audit_asist.history_user}}</td>
                                     
                                 </tr>
                                 
                                 {% endfor %}
                             </tbody>
+                            <tfoot>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tfoot>
                         </table>
                         <div class="modal fade modalDetail" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-lg">

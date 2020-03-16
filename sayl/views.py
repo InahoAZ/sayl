@@ -6,14 +6,19 @@ from login.models import CustomUser
 from asistencias.models import Asistencia
 from app_justificacion.models import Justificacion
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from datetime import date
+from django.db.models import F, Sum
+
 
 
 # Create your views here.
-
+@login_required
 def home(request):
     if request.user.is_authenticated:
         agente = get_agente(request.user.legajo)
         config = Configuraciones.objects.last()
+        
         mis_cargos = get_cargos_api(request.user.legajo)
         usuarios = CustomUser.objects.all()
         cant_asistencias_hoy = (Asistencia.objects
@@ -24,6 +29,29 @@ def home(request):
                                 )
         
         cant_justificacion_hoy = Justificacion.objects.filter(estado='Aprobado', fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now()).count()
+
+        #Tiles no superuser
+
+        #Obtener el numero de semana actual
+        semana_actual = date.today().isocalendar()[1]
+        horas_semanales = (Asistencia.objects
+                            .filter(fecha_marcaje__week=semana_actual, 
+                                    legajo=request.user)
+                            .annotate(trabajado=F('hora_salida') - F('hora_entrada'))                            
+                            .aggregate(total_hs=Sum('trabajado'))
+                            )
+        horas_semanales = str(horas_semanales['total_hs'])[:8]
+
+        inasis_injust = Asistencia.objects.filter(legajo=request.user, condicion="Inasistencia Injustificada").count()
+        inconsist_marcaje = Asistencia.objects.filter(legajo=request.user, condicion="Inconsistencia de Marcaje").count()
+
+        #tiles son los cuadraditos con numeros de la pantalla principal
+        user_tiles = {'horas_semanales':horas_semanales,
+                        'cant_inasist':inasis_injust,
+                        'cant_inconsist':inconsist_marcaje,
+        }
+        
+
 
         #Obtengo los agentes que marcaron el dia de hoy
         agentes_marcaron = CustomUser.objects.filter(asistencia__fecha_marcaje=timezone.now())
@@ -54,7 +82,8 @@ def home(request):
                     'cant_asistencias_hoy':cant_asistencias_hoy,
                     'cant_justificacion_hoy':cant_justificacion_hoy,
                     'cant_sin_marcar': cant_sin_marcar,
-                    'cant_agentes_establecimiento':cant_agentes_establecimiento
+                    'cant_agentes_establecimiento':cant_agentes_establecimiento,
+                    'user_tiles':user_tiles
                     }  
         return render(request, 'sayl/index.html', context)
     return render(request, 'sayl/index.html')

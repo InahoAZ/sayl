@@ -50,6 +50,19 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="" class="control-label col-md-3 col-sm-3 col-xs-12">Avisar a: </label>
+                                        <div class="">
+                                            <select class="select2 col-md-6 col-sm-6 col-xs-12" name="usuarios[]" multiple="multiple">
+                                                {% for user in users %}
+                                                    <option value="{{user.pk}}">{{user.last_name}} {{user.first_name}}</option>
+                                                {% endfor %}
+                                                
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="{{field.id_for_label}}" class="control-label col-md-3 col-sm-3 col-xs-12">{{form_justificacion.fecha_inicio.label}}</label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
                                             <fieldset>
@@ -82,18 +95,7 @@
                                             </fieldset>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="" class="control-label col-md-3 col-sm-3 col-xs-12">Avisar a: </label>
-                                        <div class="">
-                                            <select class="select2 col-md-6 col-sm-6 col-xs-12" name="usuarios[]" multiple="multiple">
-                                                {% for user in users %}
-                                                    <option value="{{user.pk}}">{{user.last_name}} {{user.first_name}}</option>
-                                                {% endfor %}
-                                                
-                                                
-                                            </select>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-default">
                                             <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Notificar
@@ -124,18 +126,23 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
+                                        <input type="hidden" id="titulo_reporte" value="Solicitudes de Justificaciones"></input>
+                                        <input type="hidden" id="usuario_reporte" value="{{user.last_name}} {{user.first_name}}">                        
+                                        <input type="hidden" name="nombre_universidad" id="universidad" value="{{config.nombre_universidad}}">
+                                        <input type="hidden" name="nombre_facultad" id="facultad" value="{{config.nombre_facultad}}">
+                                        <input type="hidden" name="direccion_facultad" id="direccion" value="{{config.direccion_facultad}}">
+                                        <input type="hidden" name="telefono_facultad" value="{{config.telefono_facultad}}"> 
                                         <table id="midatatable" class="table table-striped table-bordered table-hover">
                                             <thead>
                                                 <tr>
                                                     <th class="noExport">Id</th>
-                                                    <th class="dt_filtrable">Descripcion</th>
+                                                    <th class="dt_filtrable">Descripción</th>
                                                     <th class="dt_filtrable">Tipo</th>
                                                     <th class="dt_rango_fecha">Desde</th>
                                                     <th>Hasta</th>
                                                     <th class="dt_filtrable" style="width:10%">Estado</th>
                                                     <th>Observaciones de Supervisor</th>
-                                                    <th>Acciones</th>
-
+                                                    <th class="noExport">Acciones</th>
                                                 </tr>
                                             </thead>
 
@@ -165,6 +172,7 @@
                                                         {% endif %}
                                                     </td>
                                                 </tr>
+                                                {% endfor %}
                                             </tbody>
                                             <tfoot>
                                                 <th></th>
@@ -176,7 +184,7 @@
                                                 <th></th>
                                                 <th></th>
                                             </tfoot>
-                                            {% endfor %}
+                                            
                                         </table>
                                     </div>
                                 </div>

@@ -38,7 +38,7 @@
                     </div>
                     <div class="x_content">
                         <p class="text-muted font-13 m-b-30">
-                            Se detallan los movimientos realizados sobre el Tipo de Justificacion <strong>{{audit_regsolo.motivo}}</strong> .
+                            Se detallan los movimientos realizados sobre el Tipo de Justificación <strong>{{audit_regsolo.motivo}}</strong> .
                         </p>
                         {% if messages %}
                         <div class="row">
@@ -55,17 +55,15 @@
                         </div>
                         {% endif %}
 
-                        <div class="row">
-                            {% include 'sayl/filtros.html' %}
-                        </div>
+                        
                         <table id="midatatable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>Pk</th>
-                                    <th>Tipo de Justificacion</th>
-                                    <th>Movimiento</th>
-                                    <th>Fecha</th>
-                                    <th>Usuario</th>
+                                    <th class="">Tipo de Justificación</th>
+                                    <th class="dt_filtrable">Movimiento</th>
+                                    <th class="dt_rango_fecha">Fecha</th>
+                                    <th class="dt_filtrable">Usuario</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,13 +76,20 @@
                                     <td><a href="#" class="modal_detail" id="{{audit_reg.pk}}" onclick="modal_detail_tjust({{audit_reg.id}},{{audit_reg.pk}})">{{audit_reg.motivo}}</a></td>
                                     {% endif %}
                                     <td>{{audit_reg.history_change_reason}}</td>
-                                    <td>{{audit_reg.history_date}}</td>
+                                    <td>{{audit_reg.history_date|date:'d-m-Y'}}</td>
                                     <td>{{audit_reg.history_user}}</td>
 
                                 </tr>
 
                                 {% endfor %}
                             </tbody>
+                            <tfoot>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tfoot>
                         </table>
                         <div class="row">
                             <div class="col-md-2 col-md-offset-10"><a href="/" class="btn btn-dark"><span class="fa fa-mail-reply"></span> VOLVER</a></div>

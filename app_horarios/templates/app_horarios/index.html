@@ -16,20 +16,8 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Declaracion de Horarios<small></small></h2>
-                        {% if declarado_actual > horas_dedicacion%}
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-danger" aria-valuemin="0" aria-valuemax="{{horas_dedicacion}}" data-transitiongoal="{{horas_dedicacion}}">
-                                <strong>{{declarado_actual}}hs declaradas de {{horas_dedicacion}}hs</strong>
-                            </div>
-                        </div>
-                        {% else %}
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-success" aria-valuemin="0" aria-valuemax="{{horas_dedicacion}}" data-transitiongoal="{{declarado_actual}}">
-                                <strong>{{declarado_actual}}hs declaradas de {{horas_dedicacion}}hs</strong>
-                            </div>
-                        </div>
-                        {% endif %}
+                        <h2>Declaración de Horarios<small></small></h2>
+                        
 
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -51,6 +39,19 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
+                    {% if declarado_actual > horas_dedicacion%}
+                        <div class="progress" style="height: 35; border-radius:5px">
+                            <div class="progress-bar progress-bar-danger" aria-valuemin="0" aria-valuemax="{{horas_dedicacion}}" data-transitiongoal="{{horas_dedicacion}}">
+                                <div style="padding: 6px; font-size: 20px; font-family: helvetica;"><strong>{{declarado_actual}}hs declaradas de {{horas_dedicacion}}hs</strong><div style="padding: 6px;">
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="progress" style="height: 35; border-radius:5px">
+                            <div class="progress-bar progress-bar-success" aria-valuemin="0" aria-valuemax="{{horas_dedicacion}}" data-transitiongoal="{{declarado_actual}}">
+                                <div style="padding: 6px; font-size: 20px; font-family: helvetica;">{{declarado_actual}}hs declaradas de {{horas_dedicacion}}hs</div>
+                            </div>
+                        </div>
+                        {% endif %}
                         {% if messages %}
                         <div class="row">
                             <div class="col-md-10">
@@ -79,7 +80,7 @@
                                             <h4 class="modal-title" id="myModalLabel{{tipojust.pk}}">Declaración de Horarios</h4>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="" method="POST">
+                                            <form action="" method="POST" autocomplete="off">
                                                 <input type="hidden" name="accion" value="add"> {% csrf_token %} {{form_detalle_horario.as_p}}
 
 
@@ -96,11 +97,20 @@
                                 </div>
                             </div>
                             <!--Fin MODAL-->
-                            <div class="col-md-10">
+                            {% if not horario.activo %}
+                            <div class="col-md-12 align-middle" ><a class="btn btn-success" style="float: right;" data-toggle="modal" data-target=".modal_agregar"><span class="glyphicon glyphicon-plus"></span></a></div>
+                            {% endif %}
+                            <div class="col-md-12">
+                                <input type="hidden" id="titulo_reporte" value="Solicitudes de Justificaciones"></input>
+                                <input type="hidden" id="usuario_reporte" value="{{user.last_name}} {{user.first_name}}">                        
+                                <input type="hidden" name="nombre_universidad" id="universidad" value="{{config.nombre_universidad}}">
+                                <input type="hidden" name="nombre_facultad" id="facultad" value="{{config.nombre_facultad}}">
+                                <input type="hidden" name="direccion_facultad" id="direccion" value="{{config.direccion_facultad}}">
+                                <input type="hidden" name="telefono_facultad" value="{{config.telefono_facultad}}"> 
                                 <table id="midatatable" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Pk</th>
+                                            <th class="noExport">Pk</th>
                                             <th>Descripción</th>
                                             <th>Día</th>
                                             <th>Desde</th>
@@ -133,7 +143,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-md-2 align-middle"><a class="btn btn-success" data-toggle="modal" data-target=".modal_agregar"><span class="glyphicon glyphicon-plus"></span></a></div>
+                            
 
 
 
@@ -142,17 +152,23 @@
                                     <div class="form-group">
                                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                                             {% if horario.activo %}
-                                            <a href="/app_horarios/editar_declaracion_horarios/{{horario.pk}}" class="btn btn-primary">Editar Declaración de Horarios</a>
-                                            <a class="btn btn-success disabled" disabled>Finalizar Declaración de Horarios</a> {% else %} {% if declarado_actual == horas_dedicacion %}
-                                            <a href="/app_horarios/editar_declaracion_horarios/{{horario.pk}}" class="btn btn-primary disabled" disabled>Editar Declaración de Horarios</a>
-                                            <a href="/app_horarios/finalizar_declaracion_horarios/{{horario.pk}}" class="btn btn-success">Finalizar Declaración de Horarios</a> {% else %} {% if declarado_actual
-                                            < horas_dedicacion %} <button class="btn btn-primary disabled" disabled>Editar Declaración de Horarios</a>
-                                                <button class="btn btn-success" onclick="msj_finalizar_hs_menor()">Finalizar Declaración de Horarios</a>
+                                                <a href="/app_horarios/editar_declaracion_horarios/{{horario.pk}}" class="btn btn-primary">Editar Declaración de Horarios</a>
+                                                <a class="btn btn-success disabled" disabled>Finalizar Declaración de Horarios</a> 
+                                            {% else %} 
+                                            
+                                                {% if declarado_actual == horas_dedicacion %}
+                                                    <a href="/app_horarios/editar_declaracion_horarios/{{horario.pk}}" class="btn btn-primary disabled" disabled>Editar Declaración de Horarios</a>
+                                                    <a href="/app_horarios/finalizar_declaracion_horarios/{{horario.pk}}" class="btn btn-success">Finalizar Declaración de Horarios</a> 
+                                                {% else %} 
+                                                
+                                                    {% if declarado_actual < horas_dedicacion %} 
+                                                        <button class="btn btn-primary disabled" disabled>Editar Declaración de Horarios</a>
+                                                        <button class="btn btn-success" onclick="msj_finalizar_hs_menor()">Finalizar Declaración de Horarios</a>
                                                     {% else %}
                                                         <button class="btn btn-primary disabled" disabled>Editar Declaración de Horarios</a>
                                                         <button class="btn btn-success" onclick="msj_finalizar_hs_mayor()">Finalizar Declaración de Horarios</a>
                                                     {% endif %}
-                                                
+                                                    
                                                 {% endif %}
                                                     
                                             {% endif %}
@@ -168,8 +184,21 @@
             </div>
         </div>
     </div>
-
-    {% endblock content %} {% block javascripts %} {{ block.super }}
+    <script type="text/javascript" src="{% static '/build/dist/bootstrap-clockpicker.min.js'%}"></script>
+    <script>
+        $('.time').clockpicker({
+            placement: 'bottom', // clock popover placement4
+            align: 'left',       // popover arrow align5
+            donetext: 'Hecho',     // done button text6
+            autoclose: true,    // auto close when minute is selected7
+            vibrate: true        // vibrate the device when dragging clock hand8
+        });
+        console.log("PICKERRRR")
+    </script>
+    {% endblock content %} 
+    
+    
+    {% block javascripts %} {{ block.super }}
     <!-- Datatables -->
     <script src="{% static '/vendors/datatables.net/js/jquery.dataTables.min.js'%}"></script>
     <script src="{% static '/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'%}"></script>

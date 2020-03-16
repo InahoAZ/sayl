@@ -1,20 +1,68 @@
-{% extends 'sayl/base_site.html'%} {% block content %}
+{% extends 'sayl/base_site.html'%}
+{% load staticfiles %}
+{% block content %}
+
 <div class="right_col" role="main">
     <div class="">
-        <div class="page-title">
-            <div class="title_left">
-                <h3>Corregir Marcaje<small></small></h3>
-            </div>
-        </div>
         <div class="clearfix"></div>
         <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <form action="" method="post">
-                    {% csrf_token %} {{ form_corregir_marcaje.as_p}}
-                    <button type="submit">Guardar</button>
-                </form>
+            <div class="col-md-5" style="margin-left:30%">
+                <div class="x_panel">
+                <div class="x_title">
+                <h2>Corregir Marcaje </h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                        </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">                    
+                    <div class="clearfix"></div>
+                    
+                    <div style="margin-left:30%;">                    
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <form action="" method="post" autocomplete="off">                                
+                                {% csrf_token %} {{ form_corregir_marcaje.as_p}} 
+                                <center>                               
+                                <button type="submit" class="btn btn-success" ><i class="fa fa-check"></i> Corregir</button>
+                                </center>
+                            </form>
+                        </div>
+                    
+                    </div>
+                    
+                </div>
             </div>
         </div>
     </div>
-</div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    {% comment %} <link href="{% static 'build/css/bootstrap-material-datetimepicker.css' %}" rel="stylesheet">
+    <script src="{% static '/build/js/bootstrap-material-datetimepicker.js'%}"></script> {% endcomment %}
+    <script type="text/javascript" src="{% static '/build/dist/bootstrap-clockpicker.min.js'%}"></script>
+    <script>
+        $('.time').clockpicker({
+            placement: 'bottom', // clock popover placement4
+            align: 'left',       // popover arrow align5
+            donetext: 'Hecho',     // done button text6
+            autoclose: true,    // auto close when minute is selected7
+            vibrate: true        // vibrate the device when dragging clock hand8
+        });
+    </script>
+    
 {% endblock content %}
+

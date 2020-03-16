@@ -36,6 +36,7 @@
     <!-- Custom Theme Style -->
     <link href="{% static 'build/css/custom.css' %}" rel="stylesheet">
     <link href="{% static 'build/css/recustom.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static '/build/dist/bootstrap-clockpicker.min.css' %}">
     <link href="{% static 'build/js/datatable/datatables.min.css' %}" rel="stylesheet"> {% endblock head %}
 </head>
 
@@ -154,7 +155,7 @@
     <script type="text/javascript" src="{% static '/build/js/vfs_fonts.js'%}"></script>
     <script type="text/javascript" src="{% static '/build/js/jquery.chainedSelect.min.js'%}"></script>
     <script src="{% static '/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'%}"></script>
-
+    <script type="text/javascript" src="{% static '/build/dist/bootstrap-clockpicker.min.js'%}"></script>
 
     <!--<script src="{% static '/vendors/datatables.net/js/jquery.dataTables.min.js'%}"></script>
       <script src="{% static '/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'%}"></script>
@@ -179,6 +180,7 @@
     <script src="{% static 'build/js/alertas.js' %}"></script>
     <script src="{% static 'build/js/recustom.js' %}"></script>
     
+    <!-- jQuery timepicker library -->
     
     {% endblock body %}
 </body>

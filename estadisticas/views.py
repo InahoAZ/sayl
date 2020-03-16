@@ -96,10 +96,10 @@ def estadistica_horas_mes(request):
     data = []
 
 
-    fecha_rango = request.GET.get('fechona')
+    año = request.GET.get('año')
     user_pk = request.GET.get('user_pk_hs')
-    #print("user_pk", user_pk)
-    if user_pk != '-1':
+    print("año", año)
+    if user_pk != '-1' and año != None:
         #print("uno")
         horas = (Asistencia.objects 
                 .filter(legajo__pk=user_pk)          
